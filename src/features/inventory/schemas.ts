@@ -22,3 +22,4 @@ export const stockAdjustmentFormSchema = z.object({
 });
 
 export type StockAdjustmentFormValues = z.infer<typeof stockAdjustmentFormSchema>;
+

@@ -51,3 +51,4 @@ export interface InventoryItem {
   lastAdjustedAt?: string;
   imageUrl?: string;
 }
+

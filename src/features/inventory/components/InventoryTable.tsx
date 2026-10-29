@@ -232,3 +232,4 @@ export function InventoryTable({ items }: InventoryTableProps) {
     </div>
   );
 }
+
