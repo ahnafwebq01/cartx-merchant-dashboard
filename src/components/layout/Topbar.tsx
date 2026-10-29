@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import {
   Menu,
   Bell,
@@ -48,7 +48,9 @@ export function Topbar() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-64 border-r border-border">
-            <Sidebar onItemClick={() => setMobileOpen(false)} />
+            <Suspense fallback={<div className="w-64 h-full bg-card" />}>
+              <Sidebar onItemClick={() => setMobileOpen(false)} />
+            </Suspense>
           </SheetContent>
         </Sheet>
 

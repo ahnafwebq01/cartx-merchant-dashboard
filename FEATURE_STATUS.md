@@ -1,16 +1,16 @@
 # CartX Merchant Dashboard — Feature Status Matrix
 
 **Document Purpose:** Living feature status tracking across all 16 dashboard modules defined in `CARTX_MERCHANT_DASHBOARD.md`.  
-**Last Updated:** October 28, 2026 (Phase 2 Baseline Closure)  
+**Last Updated:** October 29, 2026 (Phase 3 Baseline Closure)  
 
 | # | Module / Capability | Documented Route | Planned Phase | Current Status | Notes |
 |---|---|---|---|---|---|
 | **00** | **Project Setup & Architecture** | `/` | **Phase 1** | **COMPLETED** | `src/` modular layout, Tailwind v4 tokens, shadcn/ui, API client, auth context, layout shell. |
-| **01** | **Overview (Dashboard Home)** | `/dashboard` | **Phase 1 / 2** | **COMPLETED** | Layout shell, status KPI cards, and live backend-driven setup checklist. Real metrics scheduled for Phase 4. |
+| **01** | **Overview (Dashboard Home)** | `/dashboard` | **Phase 1 / 2** | **COMPLETED** | Layout shell, collapsible sidebar (21st.dev inspired), status KPI cards, setup checklist. Real metrics in Phase 4. |
 | **02** | **Store Onboarding Wizard** | `/onboarding/*` | **Phase 2** | **COMPLETED** | 7-step wizard (identity, business, storefront, products, payments, shipping, publish) with debounced slug check. |
 | **03** | **Settings & Store Profile** | `/dashboard/settings` | **Phase 2** | **COMPLETED** | Store profile, business info, contacts, BDT locale, RBAC permission guards, and TanStack Query sync. |
-| **04** | **Products Management** | `/dashboard/products` | Phase 3 | Pending | Product CRUD, categories, collections, variants. |
-| **05** | **Stocks & Inventory** | `/dashboard/inventory` | Phase 3 | Pending | Stock adjustments, low stock alerts, movement log. |
+| **04** | **Products Management** | `/dashboard/products` | **Phase 3** | **COMPLETED (Demo Mode)** | Full CRUD, categories, collections, variants, SKU generator, CSV import/export, local persistence. |
+| **05** | **Stocks & Inventory** | `/dashboard/inventory` | **Phase 3** | **COMPLETED (Demo Mode)** | Stock adjustments (restock, damaged, lost, correction), health meters, movement audit logs. |
 | **06** | **Sales & Orders** | `/dashboard/orders` | Phase 4 | Pending | Order listing, details, fulfillment, invoice printing. |
 | **07** | **Customers Database** | `/dashboard/customers` | Phase 4 | Pending | Customer profiles, tags, groups, purchase history. |
 | **08** | **Payments & Finance** | `/dashboard/payments` | Phase 5 | Pending | Gateway settings (bKash, Nagad), transaction logs. |
@@ -25,15 +25,47 @@
 
 ---
 
-## Detailed Phase 2 Implementation Deliverables
+## Detailed Phase 3 Implementation Deliverables (Products & Inventory)
 
-- [x] **Step 1: Store & Account Identity** (`/onboarding/store`): Name, subdomain slug with live debounced validation, business structure, owner name, email, BD phone.
-- [x] **Step 2: Business Information** (`/onboarding/business`): Physical address, 24 Bangladesh districts select, city/area, postal code, business category.
-- [x] **Step 3: Storefront Setup** (`/onboarding/storefront`): Store description, brand color palette picker, 3 theme selections, honest image upload notice.
-- [x] **Step 4: First Product** (`/onboarding/products`): Minimum product name, BDT positive price, stock quantity, category.
-- [x] **Step 5: Payment Setup** (`/onboarding/payments`): Cash on Delivery toggle, digital payment provider status, zero-trust credential notice.
-- [x] **Step 6: Shipping & Delivery** (`/onboarding/shipping`): Inside Dhaka rate, Outside Dhaka rate, optional free delivery threshold.
-- [x] **Step 7: Preview & Publish** (`/onboarding/publish`): Comprehensive review grid, required steps validation gate, manual publish confirmation, live storefront URL.
-- [x] **Settings Tabs** (`/dashboard/settings`): Profile, Business, Contacts, Locale & Timezone with TanStack Query mutations and dirty-state discard.
-- [x] **Dashboard Checklist**: Derived from real backend state with percentage progress bar and truthful offline alerts.
-- [x] **Unit Testing**: 19 automated tests passing via Vitest (`tests/foundation.test.ts` & `tests/phase2-onboarding-settings.test.ts`).
+- [x] **Products Data Table & Management** (`/dashboard/products`):
+  - [x] Responsive data table with row selection checkboxes, product thumbnail, SKU badge, BDT pricing with discount display, stock badge, status badge, updated date, and dropdown actions.
+  - [x] Status filter tabs (All, Active, Draft, Archived).
+  - [x] Search input filtering across title, SKU, category, and brand.
+  - [x] Category dropdown filter and Stock level filter (In Stock, Low Stock, Out of Stock).
+  - [x] Multi-column sorting (Newest, Oldest, Price: Low-High, Price: High-Low, Stock: Low-High, Title: A-Z).
+  - [x] Pagination controls with rows-per-page selector (5, 10, 20, 50).
+  - [x] Bulk actions bar (Bulk Archive, Bulk Delete with alert dialog confirmation).
+  - [x] Quick View modal (`ProductDetailsModal`) showing full specifications, images, and variants.
+  - [x] CSV Catalog Export & CSV Bulk Import parser with duplicate SKU detection and error reporting.
+  - [x] Reset Demo Data confirmation dialog restoring baseline 12 Bangladeshi products.
+- [x] **Product Creation & Editing Forms** (`/dashboard/products/new`, `/dashboard/products/[productId]/edit`):
+  - [x] 8-section form: Basic Information, Media (with 8 curated Bangladesh demo presets), BDT Pricing & profit margin calculator, Inventory tracking & SKU auto-generator, Variants matrix, Shipping weight, SEO metadata, and Publishing status.
+  - [x] Zod validation schema + React Hook Form.
+  - [x] Route wrapped in `<Suspense>` for seamless Next.js 16 Partial Prerendering (PPR).
+- [x] **Categories & Collections Management** (`/dashboard/products/categories`, `/dashboard/products/collections`):
+  - [x] Taxonomy listing table with product counts, slugs, and descriptions.
+  - [x] Add Category dialog with auto-slug generator.
+  - [x] Collections manager for seasonal and promotional merchandising groups (Eid Collection, New Arrivals, Best Sellers).
+- [x] **Stocks & Inventory Overview** (`/dashboard/inventory`):
+  - [x] 4 KPI Metric Cards (Total Tracked Products, Units in Stock, Low Stock Alerts, Out of Stock Items).
+  - [x] Stock Table with 21st.dev-inspired visual stock health / capacity meter bars (green/amber/red).
+  - [x] Reorder threshold monitors and status badges.
+- [x] **Stock Adjustments & Audit Trail** (`/dashboard/inventory/adjustments`):
+  - [x] Tamper-evident movement log recording timestamp, product, SKU, adjustment type, quantity change (+/-), before/after stock balance, reason, reference ID, and actor.
+  - [x] Quick Stock Adjustment modal (`StockAdjustmentDialog`) with live calculation preview and 5 adjustment types (Restock, Return Restock, Damaged, Lost, Manual Correction).
+- [x] **Collapsible Sidebar Layout (21st.dev reference pattern)**:
+  - [x] Enhanced `Sidebar.tsx` and `DashboardLayout.tsx` supporting smooth collapse between `w-64` and `w-16`.
+  - [x] Icon-only collapsed mode with shadcn `Tooltip` overlays showing titles and nested subitems.
+  - [x] Collapse/expand toggle button in sidebar footer.
+- [x] **Unit Testing & QA**:
+  - [x] Created `tests/phase3-products-inventory.test.ts` (18 automated tests).
+  - [x] 37/37 tests passing across entire repository test suite (100% pass rate).
+  - [x] 0 ESLint errors; 0 TypeScript errors; 21/21 routes prerendered cleanly via Turbopack build.
+
+---
+
+## Demo Mode Disclosures & Future Backend Integration
+
+1. **Storage Mode**: Products, categories, and inventory movements are persisted in `localStorage` under `cartx_demo_products_v1`, `cartx_demo_categories_v1`, and `cartx_demo_inventory_movements_v1` with an in-memory fallback for SSR/testing.
+2. **Backend Replacement Boundary**: All data operations are encapsulated in `src/features/products/services/mockProducts.ts` behind typed React Query hooks (`useProductsQuery`, `useCreateProductMutation`, `useStockAdjustmentMutation`). When the shared Express API is deployed, this service can be swapped with real HTTP calls without altering UI components.
+3. **Image Uploads**: Media accepts image URLs and local demo presets. Direct binary image upload to S3/Cloudinary will be enabled once the presigned URL backend endpoint (`POST /uploads/presigned-url`) is deployed.

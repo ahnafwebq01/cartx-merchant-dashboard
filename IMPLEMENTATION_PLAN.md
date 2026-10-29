@@ -4,7 +4,7 @@
 **Module:** Merchant Dashboard (`cartx-merchant-dashboard`)  
 **Target Market:** Bangladesh (BDT ৳, Bengali & English)  
 **Authoritative Specification:** `CARTX_MERCHANT_DASHBOARD.md` (Version 1.0)  
-**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Pending Approval  
+**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Pending  
 
 ---
 
@@ -81,13 +81,22 @@ flowchart LR
 
 ---
 
-### Phase 3: Products & Inventory Management (UP NEXT)
-- [ ] Product CRUD with category, variant matrix, and SKU generator
-- [ ] Image uploader integration (S3/Cloudinary presigned URL contract)
-- [ ] Stock adjustments, movement logs, and low-stock alerts
-- [ ] CSV bulk product import/export
+### Phase 3: Products & Inventory Management (COMPLETED - Demo Mode)
+- [x] Product CRUD with category, variant matrix, and SKU generator (`/dashboard/products`)
+- [x] Product search, multi-column sorting, category filters, and stock level filtering
+- [x] Responsive product data table with row selection and bulk actions (Archive, Delete)
+- [x] 8-section product form with Zod validation, BDT pricing, and margin calculations
+- [x] Curated Bangladeshi demo image presets and URL inputs
+- [x] Categories taxonomy management and collections curator
+- [x] Stocks & Inventory Overview (`/dashboard/inventory`) with 4 KPI cards and 21st.dev health meters
+- [x] Stock adjustments modal with 5 change types (restock, return, damaged, lost, correction)
+- [x] Inventory movement audit trail (`/dashboard/inventory/adjustments`)
+- [x] CSV bulk product import parser and catalog export
+- [x] Collapsible sidebar layout shell (adapted from 21st.dev collapsible sidebar reference)
+- [x] Full automated test suite in `tests/phase3-products-inventory.test.ts` (18 tests, 37 total across suite)
+- [x] Local browser persistence via `localStorage` with SSR-safe memory fallbacks
 
-### Phase 4: Orders & Customer Records
+### Phase 4: Orders & Customer Records (UP NEXT)
 - [ ] Order list with multi-column filters, search, and bulk operations
 - [ ] Order details page, fulfillment workflows, and status state machine
 - [ ] Customer database, order history, tags, and notes

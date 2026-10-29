@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState, Suspense } from "react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
+import { cn } from "@/lib/utils";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -10,14 +11,28 @@ interface DashboardLayoutProps {
 
 /**
  * Reusable Dashboard Shell Layout for CartX Merchant Dashboard.
- * Integrates persistent desktop sidebar, mobile drawer, sticky topbar, and accessible main container.
+ * Integrates persistent desktop sidebar with collapsible support (21st.dev inspired),
+ * mobile drawer, sticky topbar, and accessible main container.
  */
 export function DashboardLayout({ children }: DashboardLayoutProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
-      {/* Desktop Persistent Sidebar */}
-      <div className="hidden md:flex md:w-64 md:flex-col shrink-0">
-        <Sidebar className="h-full" />
+      {/* Desktop Persistent Sidebar with Collapsible Width */}
+      <div
+        className={cn(
+          "hidden md:flex flex-col shrink-0 transition-all duration-300",
+          isCollapsed ? "md:w-16" : "md:w-64"
+        )}
+      >
+        <Suspense fallback={<div className="w-64 h-full bg-card border-r border-border" />}>
+          <Sidebar
+            className="h-full"
+            isCollapsed={isCollapsed}
+            onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+          />
+        </Suspense>
       </div>
 
       {/* Main Content Area */}
@@ -30,4 +45,3 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     </div>
   );
 }
-

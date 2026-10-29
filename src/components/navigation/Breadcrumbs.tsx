@@ -9,11 +9,11 @@ export interface BreadcrumbItem {
 }
 
 interface BreadcrumbsProps {
-  items: BreadcrumbItem[];
+  items?: BreadcrumbItem[];
   className?: string;
 }
 
-export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
+export function Breadcrumbs({ items = [], className }: BreadcrumbsProps) {
   return (
     <nav aria-label="Breadcrumb" className={cn("flex items-center text-sm", className)}>
       <ol className="flex items-center space-x-2">

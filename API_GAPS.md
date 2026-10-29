@@ -2,7 +2,7 @@
 
 **Document Purpose:** Transparently record backend endpoints, contracts, or third-party provider specifications that are currently pending deployment or implementation in the shared Express.js backend.  
 **Baseline:** `CARTX_MERCHANT_DASHBOARD.md` (Version 1.0)  
-**Last Updated:** October 28, 2026 (Phase 2 Closure)  
+**Last Updated:** October 29, 2026 (Phase 3 Baseline Closure)  
 
 ---
 
@@ -16,13 +16,40 @@ The frontend integration boundary for Phase 2 has been fully implemented and typ
 - `PUT /stores/current` (Store settings update)
 - `POST /stores/current/publish` (Store publication)
 
-### Remaining Backend Deployment Dependencies:
-1. **Local / Staging Backend Server**: The shared Express API instance must be running and listening at `NEXT_PUBLIC_API_BASE_URL` (default: `http://localhost:5000/api/v1`) with CORS configured to accept requests from `http://localhost:3000`.
-2. **Session Identification**: Active user session must pass `Authorization: Bearer <token>` or session cookies with tenant validation.
+---
+
+## 2. Phase 3 Contracts Status (Products & Inventory)
+
+Phase 3 frontend features are fully functional using a local storage service (`src/features/products/services/mockProducts.ts`) and React Query hooks. When the shared Express backend is ready, the following endpoints will be hooked into the typed client:
+
+| Planned Endpoint | Method | Purpose | Frontend Hook / Consumer |
+|---|---|---|---|
+| `/api/v1/products` | `GET` | Paginated product listing with filters | `useProductsQuery(params)` |
+| `/api/v1/products` | `POST` | Create product with validation | `useCreateProductMutation()` |
+| `/api/v1/products/:id` | `GET` | Single product detail | `useProductQuery(id)` |
+| `/api/v1/products/:id` | `PATCH` | Update product details | `useUpdateProductMutation()` |
+| `/api/v1/products/:id` | `DELETE` | Permanent product deletion | `useDeleteProductMutation()` |
+| `/api/v1/products/:id/archive` | `POST` | Soft-archive product | `useArchiveProductMutation()` |
+| `/api/v1/products/:id/duplicate` | `POST` | Duplicate product as draft | `useDuplicateProductMutation()` |
+| `/api/v1/products/bulk/archive` | `POST` | Bulk archive multiple products | `useBulkArchiveMutation()` |
+| `/api/v1/products/bulk/delete` | `POST` | Bulk delete multiple products | `useBulkDeleteMutation()` |
+| `/api/v1/categories` | `GET` | List store taxonomy categories | `useCategoriesQuery()` |
+| `/api/v1/categories` | `POST` | Create new category | `useCreateCategoryMutation()` |
+| `/api/v1/inventory` | `GET` | Inventory items & stock stats | `useInventoryItemsQuery()`, `useInventoryStatsQuery()` |
+| `/api/v1/inventory/movements` | `GET` | Audit trail of inventory movements | `useInventoryMovementsQuery()` |
+| `/api/v1/inventory/adjustments` | `POST` | Record stock adjustment | `useStockAdjustmentMutation()` |
 
 ---
 
-## 2. Authentication & Session Management Gaps
+## 3. Storage & File Upload Contracts
+
+| Pending Contract | Description | Impact on Frontend | Required Resolution |
+|---|---|---|---|
+| **Presigned URL Uploads** | Endpoint `/api/v1/uploads/presigned-url` for direct client upload of product images and store logos to S3/Cloudinary. | Product creation currently accepts web image URLs and local demo presets. Direct binary file upload requires presigned S3 URLs. | Backend to generate presigned S3/Cloudinary upload URLs with content-type and size restrictions. |
+
+---
+
+## 4. Authentication & Session Management Gaps
 
 | Pending Contract | Description | Impact on Frontend | Required Resolution |
 |---|---|---|---|
@@ -31,15 +58,7 @@ The frontend integration boundary for Phase 2 has been fully implemented and typ
 
 ---
 
-## 3. Storage & File Upload Contracts (Required for Phase 3)
-
-| Pending Contract | Description | Impact on Frontend | Required Resolution |
-|---|---|---|---|
-| **Presigned URL Uploads** | Endpoint `/api/v1/uploads/presigned-url` for direct client upload of product images and store logos to S3/Cloudinary. | Product and store branding modules currently accept public image URLs; direct file uploads require presigned URL generation. | Backend to generate presigned S3/Cloudinary upload URLs with content-type and size restrictions. |
-
----
-
-## 4. Local Integrations Contracts (Required for Phase 5)
+## 5. Local Integrations Contracts (Required for Phase 5)
 
 | Pending Contract | Description | Impact on Frontend | Required Resolution |
 |---|---|---|---|
