@@ -98,7 +98,9 @@ export function InventoryMovementHistory({
                 <TableHead className="min-w-[200px]">Product & SKU</TableHead>
                 <TableHead className="w-28">Type</TableHead>
                 <TableHead className="w-24 text-center">Change</TableHead>
-                <TableHead className="w-32 text-center">Balance (Before → After)</TableHead>
+                <TableHead className="w-32 text-center">
+                  Balance (Before → After)
+                </TableHead>
                 <TableHead className="min-w-[220px]">Reason & Note</TableHead>
                 <TableHead className="w-32 text-right">Actor</TableHead>
               </TableRow>
@@ -107,7 +109,10 @@ export function InventoryMovementHistory({
             <TableBody>
               {filtered.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="h-36 text-center text-xs text-muted-foreground">
+                  <TableCell
+                    colSpan={7}
+                    className="h-36 text-center text-xs text-muted-foreground"
+                  >
                     No adjustment movements found.
                   </TableCell>
                 </TableRow>
@@ -127,8 +132,12 @@ export function InventoryMovementHistory({
                     {/* Product & SKU */}
                     <TableCell>
                       <div className="flex flex-col">
-                        <span className="font-medium text-foreground">{m.productName}</span>
-                        <span className="text-muted-foreground text-[10px] font-mono">{m.sku}</span>
+                        <span className="font-medium text-foreground">
+                          {m.productName}
+                        </span>
+                        <span className="text-muted-foreground text-[10px] font-mono">
+                          {m.sku}
+                        </span>
                       </div>
                     </TableCell>
 
@@ -142,11 +151,13 @@ export function InventoryMovementHistory({
                           m.quantityChange > 0
                             ? "text-emerald-600"
                             : m.quantityChange < 0
-                            ? "text-destructive"
-                            : "text-muted-foreground"
+                              ? "text-destructive"
+                              : "text-muted-foreground"
                         }
                       >
-                        {m.quantityChange > 0 ? `+${m.quantityChange}` : m.quantityChange}
+                        {m.quantityChange > 0
+                          ? `+${m.quantityChange}`
+                          : m.quantityChange}
                       </span>
                     </TableCell>
 
@@ -155,14 +166,18 @@ export function InventoryMovementHistory({
                       <div className="inline-flex items-center gap-1.5 text-muted-foreground">
                         <span>{m.beforeQuantity}</span>
                         <ArrowRight className="h-3 w-3" />
-                        <span className="font-semibold text-foreground">{m.afterQuantity}</span>
+                        <span className="font-semibold text-foreground">
+                          {m.afterQuantity}
+                        </span>
                       </div>
                     </TableCell>
 
                     {/* Reason */}
                     <TableCell>
                       <div className="space-y-0.5">
-                        <p className="text-foreground leading-tight">{m.reason}</p>
+                        <p className="text-foreground leading-tight">
+                          {m.reason}
+                        </p>
                         {m.referenceId && (
                           <span className="text-[10px] text-muted-foreground font-mono block">
                             Ref: {m.referenceId}

@@ -121,9 +121,16 @@ export function ProductForm({
   const trackInventoryWatch = watch("trackInventory");
   const variants = watch("variants") || [];
 
-  // Profit Margin calculation
-  const profit = priceWatch > 0 && costWatch > 0 ? priceWatch - costWatch : 0;
-  const marginPercent = priceWatch > 0 && costWatch > 0 ? Math.round((profit / priceWatch) * 100) : null;
+  const salePriceWatch = watch("salePrice");
+
+  // Profit Margin calculation based on effective retail/selling price
+  const effectivePrice =
+    typeof salePriceWatch === "number" && !isNaN(salePriceWatch) && salePriceWatch > 0
+      ? salePriceWatch
+      : priceWatch;
+  const profit = effectivePrice > 0 && costWatch > 0 ? effectivePrice - costWatch : 0;
+  const marginPercent =
+    effectivePrice > 0 && costWatch > 0 ? Math.round((profit / effectivePrice) * 100) : null;
 
   // Auto-generate slug from title
   const handleAutoSlug = () => {
@@ -401,10 +408,18 @@ export function ProductForm({
                   <Input
                     type="number"
                     step="1"
-                    {...register("salePrice", { valueAsNumber: true })}
+                    {...register("salePrice", {
+                      setValueAs: (v) =>
+                        v === "" || v === null || (typeof v === "number" && isNaN(v))
+                          ? undefined
+                          : Number(v),
+                    })}
                     placeholder="Optional discount price"
                     className="text-xs"
                   />
+                  {errors.salePrice && (
+                    <p className="text-[11px] text-destructive">{errors.salePrice.message}</p>
+                  )}
                 </div>
 
                 {/* Cost Per Item */}
@@ -413,7 +428,12 @@ export function ProductForm({
                   <Input
                     type="number"
                     step="1"
-                    {...register("costPrice", { valueAsNumber: true })}
+                    {...register("costPrice", {
+                      setValueAs: (v) =>
+                        v === "" || v === null || (typeof v === "number" && isNaN(v))
+                          ? undefined
+                          : Number(v),
+                    })}
                     placeholder="Wholesale/Manufacturing cost"
                     className="text-xs"
                   />
@@ -716,7 +736,12 @@ export function ProductForm({
                 <Input
                   type="number"
                   step="0.05"
-                  {...register("weight", { valueAsNumber: true })}
+                  {...register("weight", {
+                    setValueAs: (v) =>
+                      v === "" || v === null || (typeof v === "number" && isNaN(v))
+                        ? undefined
+                        : Number(v),
+                  })}
                   placeholder="0.5"
                   className="text-xs"
                 />

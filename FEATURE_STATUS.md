@@ -58,8 +58,8 @@
   - [x] Icon-only collapsed mode with shadcn `Tooltip` overlays showing titles and nested subitems.
   - [x] Collapse/expand toggle button in sidebar footer.
 - [x] **Unit Testing & QA**:
-  - [x] Created `tests/phase3-products-inventory.test.ts` (18 automated tests).
-  - [x] 37/37 tests passing across entire repository test suite (100% pass rate).
+  - [x] Created `tests/phase3-products-inventory.test.ts` (25 automated tests covering schemas, CRUD, stock adjustments, pagination clamping, dynamic categories, collections persistence, safe storage parsing, and CSV import/export).
+  - [x] 44/44 tests passing across entire repository test suite (100% pass rate).
   - [x] 0 ESLint errors; 0 TypeScript errors; 21/21 routes prerendered cleanly via Turbopack build.
 
 ---

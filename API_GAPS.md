@@ -35,6 +35,8 @@ Phase 3 frontend features are fully functional using a local storage service (`s
 | `/api/v1/products/bulk/delete` | `POST` | Bulk delete multiple products | `useBulkDeleteMutation()` |
 | `/api/v1/categories` | `GET` | List store taxonomy categories | `useCategoriesQuery()` |
 | `/api/v1/categories` | `POST` | Create new category | `useCreateCategoryMutation()` |
+| `/api/v1/collections` | `GET` | List merchandising collections | `useCollectionsQuery()` |
+| `/api/v1/collections` | `POST` | Create merchandising collection | `useCreateCollectionMutation()` |
 | `/api/v1/inventory` | `GET` | Inventory items & stock stats | `useInventoryItemsQuery()`, `useInventoryStatsQuery()` |
 | `/api/v1/inventory/movements` | `GET` | Audit trail of inventory movements | `useInventoryMovementsQuery()` |
 | `/api/v1/inventory/adjustments` | `POST` | Record stock adjustment | `useStockAdjustmentMutation()` |

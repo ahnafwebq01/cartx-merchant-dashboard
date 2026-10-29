@@ -1,6 +1,7 @@
 import type {
   Product,
   ProductCategory,
+  ProductCollection,
   ProductFilterParams,
   PaginatedResult,
 } from "../types";
@@ -14,6 +15,42 @@ import type {
 const PRODUCTS_STORAGE_KEY = "cartx_demo_products_v1";
 const CATEGORIES_STORAGE_KEY = "cartx_demo_categories_v1";
 const MOVEMENTS_STORAGE_KEY = "cartx_demo_inventory_movements_v1";
+const COLLECTIONS_STORAGE_KEY = "cartx_demo_collections_v1";
+
+export const INITIAL_COLLECTIONS: ProductCollection[] = [
+  {
+    id: "col-1",
+    title: "Eid Ul Fitr Collection",
+    slug: "eid-collection",
+    description: "Curated premium festive sarees, designer panjabis, and celebratory accessories.",
+    productCount: 4,
+    published: true,
+  },
+  {
+    id: "col-2",
+    title: "New Arrivals (Autumn 2026)",
+    slug: "new-arrivals",
+    description: "Freshly added items across apparel, leather goods, and organic foods.",
+    productCount: 6,
+    published: true,
+  },
+  {
+    id: "col-3",
+    title: "Bangladeshi Heritage Crafts",
+    slug: "heritage-crafts",
+    description: "Handcrafted traditional products made by artisan communities across rural Bangladesh.",
+    productCount: 5,
+    published: true,
+  },
+  {
+    id: "col-4",
+    title: "Best Sellers",
+    slug: "best-sellers",
+    description: "Top-rated items with highest repeat order customer satisfaction.",
+    productCount: 8,
+    published: true,
+  },
+];
 
 export const INITIAL_CATEGORIES: ProductCategory[] = [
   {
@@ -545,10 +582,37 @@ class MockProductService {
   private memoryProducts: Product[] = JSON.parse(JSON.stringify(INITIAL_PRODUCTS));
   private memoryCategories: ProductCategory[] = JSON.parse(JSON.stringify(INITIAL_CATEGORIES));
   private memoryMovements: InventoryMovement[] = JSON.parse(JSON.stringify(INITIAL_MOVEMENTS));
+  private memoryCollections: ProductCollection[] = JSON.parse(JSON.stringify(INITIAL_COLLECTIONS));
 
   private getStorage(): Storage | null {
     if (typeof window === "undefined") return null;
     return window.localStorage;
+  }
+
+  private safeParse<T>(raw: string | null, fallback: T): T {
+    if (!raw) return fallback;
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(fallback) && !Array.isArray(parsed)) {
+        return fallback;
+      }
+      if (parsed === null || parsed === undefined) {
+        return fallback;
+      }
+      return parsed;
+    } catch {
+      return fallback;
+    }
+  }
+
+  private safeSetItem(key: string, data: unknown): void {
+    const storage = this.getStorage();
+    if (!storage) return;
+    try {
+      storage.setItem(key, JSON.stringify(data));
+    } catch {
+      // Safe fallback for quota or private browsing exceptions
+    }
   }
 
   // --- Products CRUD ---
@@ -616,18 +680,19 @@ class MockProductService {
       }
     });
 
-    // Pagination
+    // Pagination with safe bounds clamping
     const page = Math.max(1, params?.page || 1);
     const limit = Math.max(1, params?.limit || 10);
     const total = filtered.length;
-    const totalPages = Math.ceil(total / limit) || 1;
-    const startIndex = (page - 1) * limit;
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+    const safePage = Math.min(page, totalPages);
+    const startIndex = (safePage - 1) * limit;
     const items = filtered.slice(startIndex, startIndex + limit);
 
     return {
       items,
       total,
-      page,
+      page: safePage,
       limit,
       totalPages,
     };
@@ -671,7 +736,11 @@ class MockProductService {
     return newProduct;
   }
 
-  public updateProduct(id: string, updates: Partial<Product>): Product {
+  public updateProduct(
+    id: string,
+    updates: Partial<Product>,
+    options?: { skipMovementLog?: boolean }
+  ): Product {
     const products = this.loadAllProducts();
     const index = products.findIndex((p) => p.id === id);
     if (index === -1) {
@@ -686,8 +755,12 @@ class MockProductService {
       updatedAt: now,
     };
 
-    // If stock changed directly via product edit, log movement
-    if (updates.stock !== undefined && updates.stock !== current.stock) {
+    // If stock changed directly via product edit and not skipped, log movement
+    if (
+      !options?.skipMovementLog &&
+      updates.stock !== undefined &&
+      updates.stock !== current.stock
+    ) {
       const diff = updates.stock - current.stock;
       this.recordMovement({
         id: `mov-${Date.now().toString(36)}`,
@@ -717,6 +790,17 @@ class MockProductService {
 
   public archiveProduct(id: string): Product {
     return this.updateProduct(id, { status: "archived" });
+  }
+
+  public unarchiveProduct(id: string): Product {
+    return this.updateProduct(id, { status: "active" });
+  }
+
+  public toggleArchiveProduct(id: string): Product {
+    const prod = this.getProductById(id);
+    if (!prod) throw new Error("Product not found");
+    const newStatus = prod.status === "archived" ? "active" : "archived";
+    return this.updateProduct(id, { status: newStatus });
   }
 
   public duplicateProduct(id: string): Product {
@@ -763,23 +847,28 @@ class MockProductService {
 
   public getCategories(): ProductCategory[] {
     const storage = this.getStorage();
+    let categories: ProductCategory[] = [];
     if (!storage) {
       if (!this.memoryCategories) {
         this.memoryCategories = JSON.parse(JSON.stringify(INITIAL_CATEGORIES));
       }
-      return this.memoryCategories;
-    }
-
-    try {
+      categories = this.memoryCategories;
+    } else {
       const raw = storage.getItem(CATEGORIES_STORAGE_KEY);
       if (!raw) {
-        storage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(INITIAL_CATEGORIES));
-        return JSON.parse(JSON.stringify(INITIAL_CATEGORIES));
+        this.safeSetItem(CATEGORIES_STORAGE_KEY, INITIAL_CATEGORIES);
+        categories = JSON.parse(JSON.stringify(INITIAL_CATEGORIES));
+      } else {
+        categories = this.safeParse(raw, INITIAL_CATEGORIES);
       }
-      return JSON.parse(raw);
-    } catch {
-      return JSON.parse(JSON.stringify(INITIAL_CATEGORIES));
     }
+
+    // Dynamic state synchronization: calculate real-time product counts for each category
+    const products = this.loadAllProducts();
+    return categories.map((cat) => ({
+      ...cat,
+      productCount: products.filter((p) => p.category === cat.name).length,
+    }));
   }
 
   public createCategory(data: Omit<ProductCategory, "id" | "productCount">): ProductCategory {
@@ -790,13 +879,44 @@ class MockProductService {
       productCount: 0,
     };
     categories.push(newCategory);
-    const storage = this.getStorage();
-    if (storage) {
-      storage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(categories));
-    } else {
-      this.memoryCategories = categories;
-    }
+    this.memoryCategories = categories;
+    this.safeSetItem(CATEGORIES_STORAGE_KEY, categories);
     return newCategory;
+  }
+
+  // --- Collections CRUD ---
+
+  public getCollections(): ProductCollection[] {
+    const storage = this.getStorage();
+    if (!storage) {
+      if (!this.memoryCollections) {
+        this.memoryCollections = JSON.parse(JSON.stringify(INITIAL_COLLECTIONS));
+      }
+      return JSON.parse(JSON.stringify(this.memoryCollections));
+    }
+
+    const raw = storage.getItem(COLLECTIONS_STORAGE_KEY);
+    if (!raw) {
+      this.safeSetItem(COLLECTIONS_STORAGE_KEY, INITIAL_COLLECTIONS);
+      return JSON.parse(JSON.stringify(INITIAL_COLLECTIONS));
+    }
+    return this.safeParse(raw, INITIAL_COLLECTIONS);
+  }
+
+  public createCollection(
+    data: Omit<ProductCollection, "id" | "productCount">
+  ): ProductCollection {
+    const collections = this.getCollections();
+    const newCollection: ProductCollection = {
+      ...data,
+      id: `col-${Date.now().toString(36)}`,
+      productCount: 0,
+      published: data.published ?? true,
+    };
+    collections.unshift(newCollection);
+    this.memoryCollections = collections;
+    this.safeSetItem(COLLECTIONS_STORAGE_KEY, collections);
+    return newCollection;
   }
 
   // --- Inventory & Stock Adjustments ---
@@ -881,10 +1001,14 @@ class MockProductService {
     const actualChange = afterQuantity - beforeQuantity;
     const now = new Date().toISOString();
 
-    // Update product stock
-    this.updateProduct(product.id, {
-      stock: afterQuantity,
-    });
+    // Update product stock without duplicate movement logging
+    this.updateProduct(
+      product.id,
+      {
+        stock: afterQuantity,
+      },
+      { skipMovementLog: true }
+    );
 
     const movement: InventoryMovement = {
       id: `mov-${Date.now().toString(36)}`,
@@ -915,28 +1039,20 @@ class MockProductService {
       return this.memoryMovements;
     }
 
-    try {
-      const raw = storage.getItem(MOVEMENTS_STORAGE_KEY);
-      if (!raw) {
-        storage.setItem(MOVEMENTS_STORAGE_KEY, JSON.stringify(INITIAL_MOVEMENTS));
-        return JSON.parse(JSON.stringify(INITIAL_MOVEMENTS));
-      }
-      return JSON.parse(raw);
-    } catch {
+    const raw = storage.getItem(MOVEMENTS_STORAGE_KEY);
+    if (!raw) {
+      this.safeSetItem(MOVEMENTS_STORAGE_KEY, INITIAL_MOVEMENTS);
       return JSON.parse(JSON.stringify(INITIAL_MOVEMENTS));
     }
+    return this.safeParse(raw, INITIAL_MOVEMENTS);
   }
 
   private recordMovement(movement: InventoryMovement): void {
     const movements = this.getInventoryMovements();
     movements.unshift(movement);
-    const storage = this.getStorage();
-    if (storage) {
-      // Keep most recent 100 movements
-      storage.setItem(MOVEMENTS_STORAGE_KEY, JSON.stringify(movements.slice(0, 100)));
-    } else {
-      this.memoryMovements = movements.slice(0, 100);
-    }
+    const trimmed = movements.slice(0, 100);
+    this.memoryMovements = trimmed;
+    this.safeSetItem(MOVEMENTS_STORAGE_KEY, trimmed);
   }
 
   // --- Reset Demo Data ---
@@ -945,13 +1061,12 @@ class MockProductService {
     this.memoryProducts = JSON.parse(JSON.stringify(INITIAL_PRODUCTS));
     this.memoryCategories = JSON.parse(JSON.stringify(INITIAL_CATEGORIES));
     this.memoryMovements = JSON.parse(JSON.stringify(INITIAL_MOVEMENTS));
+    this.memoryCollections = JSON.parse(JSON.stringify(INITIAL_COLLECTIONS));
 
-    const storage = this.getStorage();
-    if (!storage) return;
-
-    storage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(INITIAL_PRODUCTS));
-    storage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(INITIAL_CATEGORIES));
-    storage.setItem(MOVEMENTS_STORAGE_KEY, JSON.stringify(INITIAL_MOVEMENTS));
+    this.safeSetItem(PRODUCTS_STORAGE_KEY, INITIAL_PRODUCTS);
+    this.safeSetItem(CATEGORIES_STORAGE_KEY, INITIAL_CATEGORIES);
+    this.safeSetItem(MOVEMENTS_STORAGE_KEY, INITIAL_MOVEMENTS);
+    this.safeSetItem(COLLECTIONS_STORAGE_KEY, INITIAL_COLLECTIONS);
   }
 
   // --- CSV Import / Export Utilities ---
@@ -998,17 +1113,17 @@ class MockProductService {
 
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i];
-      // Basic CSV splitter respecting quotes
+      // RFC-compliant CSV splitter respecting double quotes
       const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map((p) =>
-        p.replace(/^"|"$/g, "").trim()
+        p.replace(/^"|"$/g, "").replace(/""/g, '"').trim()
       );
 
-      if (parts.length < 6) {
-        errors.push(`Row ${i + 1}: Insufficient columns (expected at least SKU, Title, Category, Price, Stock).`);
+      if (parts.length < 4) {
+        errors.push(`Row ${i + 1}: Insufficient columns (expected at least SKU, Title, Category, Regular Price).`);
         continue;
       }
 
-      const [sku, title, category, priceStr, salePriceStr, stockStr] = parts;
+      const [sku, title, category, priceStr, salePriceStr, stockStr, lowStockStr, statusStr, brandStr] = parts;
       if (!sku || !title || !category) {
         errors.push(`Row ${i + 1}: SKU, Title, and Category are mandatory.`);
         continue;
@@ -1020,36 +1135,64 @@ class MockProductService {
       }
 
       const price = parseFloat(priceStr);
-      const stock = parseInt(stockStr, 10);
-
       if (isNaN(price) || price <= 0) {
         errors.push(`Row ${i + 1}: Invalid price "${priceStr}". Must be positive number.`);
         continue;
       }
 
-      if (isNaN(stock) || stock < 0) {
-        errors.push(`Row ${i + 1}: Invalid stock "${stockStr}". Must be non-negative integer.`);
-        continue;
+      let salePrice: number | undefined = undefined;
+      if (salePriceStr && salePriceStr.trim() !== "") {
+        const parsedSalePrice = parseFloat(salePriceStr);
+        if (isNaN(parsedSalePrice) || parsedSalePrice < 0) {
+          errors.push(`Row ${i + 1}: Invalid sale price "${salePriceStr}". Must be non-negative number.`);
+          continue;
+        }
+        if (parsedSalePrice > price) {
+          errors.push(`Row ${i + 1}: Sale price (${parsedSalePrice}) cannot exceed regular price (${price}).`);
+          continue;
+        }
+        salePrice = parsedSalePrice;
       }
 
-      const salePrice = salePriceStr && !isNaN(parseFloat(salePriceStr)) ? parseFloat(salePriceStr) : undefined;
-      const slug = title
+      let stock = 0;
+      if (stockStr && stockStr.trim() !== "") {
+        const parsedStock = parseInt(stockStr, 10);
+        if (isNaN(parsedStock) || parsedStock < 0) {
+          errors.push(`Row ${i + 1}: Invalid stock "${stockStr}". Must be non-negative integer.`);
+          continue;
+        }
+        stock = parsedStock;
+      }
+
+      let lowStockThreshold = 5;
+      if (lowStockStr && lowStockStr.trim() !== "") {
+        const parsedThreshold = parseInt(lowStockStr, 10);
+        if (!isNaN(parsedThreshold) && parsedThreshold >= 0) {
+          lowStockThreshold = parsedThreshold;
+        }
+      }
+
+      const status: "active" | "draft" | "archived" =
+        statusStr === "draft" || statusStr === "archived" ? statusStr : "active";
+
+      const baseSlug = title
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-|-$/g, "");
+        .replace(/^-|-$/g, "") || "product";
 
       this.createProduct({
         title,
-        slug: `${slug}-${Date.now().toString(36)}`,
+        slug: `${baseSlug}-${Date.now().toString(36)}-${Math.floor(Math.random() * 1000)}`,
         sku,
         category,
+        brand: brandStr || undefined,
         price,
         salePrice,
         stock,
-        lowStockThreshold: 5,
+        lowStockThreshold,
         trackInventory: true,
         allowBackorders: false,
-        status: "active",
+        status,
         images: [],
       });
 
@@ -1071,25 +1214,17 @@ class MockProductService {
       return this.memoryProducts;
     }
 
-    try {
-      const raw = storage.getItem(PRODUCTS_STORAGE_KEY);
-      if (!raw) {
-        storage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(INITIAL_PRODUCTS));
-        return JSON.parse(JSON.stringify(INITIAL_PRODUCTS));
-      }
-      return JSON.parse(raw);
-    } catch {
+    const raw = storage.getItem(PRODUCTS_STORAGE_KEY);
+    if (!raw) {
+      this.safeSetItem(PRODUCTS_STORAGE_KEY, INITIAL_PRODUCTS);
       return JSON.parse(JSON.stringify(INITIAL_PRODUCTS));
     }
+    return this.safeParse(raw, INITIAL_PRODUCTS);
   }
 
   private saveAllProducts(products: Product[]): void {
-    const storage = this.getStorage();
-    if (!storage) {
-      this.memoryProducts = products;
-      return;
-    }
-    storage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(products));
+    this.memoryProducts = products;
+    this.safeSetItem(PRODUCTS_STORAGE_KEY, products);
   }
 }
 

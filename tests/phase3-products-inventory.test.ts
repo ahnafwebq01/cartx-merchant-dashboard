@@ -76,6 +76,28 @@ describe("Phase 3: Products & Inventory Specification & Service Tests", () => {
       }
     });
 
+    it("rejects promotional sale price greater than regular price", () => {
+      const invalidSalePrice = {
+        title: "Dhakai Jamdani Saree",
+        slug: "dhakai-jamdani-saree",
+        sku: "JMD-099",
+        category: "Women's Fashion",
+        price: 5000,
+        salePrice: 6000, // Invalid: sale price > regular price
+        stock: 10,
+        lowStockThreshold: 2,
+        trackInventory: true,
+        allowBackorders: false,
+        status: "active" as const,
+      };
+
+      const result = productFormSchema.safeParse(invalidSalePrice);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some((i) => i.path.includes("salePrice"))).toBe(true);
+      }
+    });
+
     it("validates category form schemas", () => {
       const validCategory = {
         name: "Traditional Jewelry",
@@ -93,7 +115,7 @@ describe("Phase 3: Products & Inventory Specification & Service Tests", () => {
       expect(categoryFormSchema.safeParse(invalidCategory).success).toBe(false);
     });
 
-    it("validates stock adjustment schemas", () => {
+    it("validates stock adjustment schemas including manual correction to 0 units", () => {
       const validAdjustment = {
         productId: "prod-001",
         type: "restock" as const,
@@ -102,6 +124,33 @@ describe("Phase 3: Products & Inventory Specification & Service Tests", () => {
         referenceId: "PO-991",
       };
       expect(stockAdjustmentFormSchema.safeParse(validAdjustment).success).toBe(true);
+
+      // Manual correction can legitimately set stock to 0 (e.g. physical count 0 units)
+      const validZeroManualCorrection = {
+        productId: "prod-001",
+        type: "manual_correction" as const,
+        quantity: 0,
+        reason: "Warehouse physical count reconciliation",
+      };
+      expect(stockAdjustmentFormSchema.safeParse(validZeroManualCorrection).success).toBe(true);
+
+      // But manual correction cannot be negative
+      const invalidNegativeCorrection = {
+        productId: "prod-001",
+        type: "manual_correction" as const,
+        quantity: -5,
+        reason: "Invalid correction",
+      };
+      expect(stockAdjustmentFormSchema.safeParse(invalidNegativeCorrection).success).toBe(false);
+
+      // Damaged/restock cannot have quantity 0
+      const invalidRestockZero = {
+        productId: "prod-001",
+        type: "restock" as const,
+        quantity: 0,
+        reason: "Test",
+      };
+      expect(stockAdjustmentFormSchema.safeParse(invalidRestockZero).success).toBe(false);
 
       const invalidAdjustment = {
         productId: "",
@@ -197,13 +246,58 @@ describe("Phase 3: Products & Inventory Specification & Service Tests", () => {
       expect(duplicate.status).toBe("draft");
       expect(duplicate.sku).toContain("-CPY");
 
-      // 4. Archive
+      // 4. Archive & Unarchive
       const archived = mockProductService.archiveProduct(newProd.id);
       expect(archived.status).toBe("archived");
+
+      const unarchived = mockProductService.unarchiveProduct(newProd.id);
+      expect(unarchived.status).toBe("active");
+
+      const toggled = mockProductService.toggleArchiveProduct(newProd.id);
+      expect(toggled.status).toBe("archived");
 
       // 5. Delete
       mockProductService.deleteProduct(newProd.id);
       expect(mockProductService.getProductById(newProd.id)).toBeNull();
+    });
+
+    it("safely clamps page to totalPages when requested page exceeds totalPages", () => {
+      // Catalog has 12 items, at limit 10 there are 2 pages.
+      // Requesting page 5 should safely clamp to page 2 instead of returning empty slice
+      const result = mockProductService.getProducts({ page: 5, limit: 10 });
+      expect(result.page).toBe(2);
+      expect(result.totalPages).toBe(2);
+      expect(result.items.length).toBe(2);
+      expect(result.total).toBe(12);
+    });
+
+    it("dynamically synchronizes category product counts when products are created or deleted", () => {
+      const categoriesBefore = mockProductService.getCategories();
+      const wfBefore = categoriesBefore.find((c) => c.name === "Women's Fashion")!;
+      const countBefore = wfBefore.productCount; // 3
+
+      const newProduct = mockProductService.createProduct({
+        title: "Katan Silk Festive Saree",
+        slug: "katan-silk-festive-saree",
+        sku: "KTN-001",
+        category: "Women's Fashion",
+        price: 8500,
+        stock: 5,
+        lowStockThreshold: 2,
+        trackInventory: true,
+        allowBackorders: false,
+        status: "active",
+        images: [],
+      });
+
+      const categoriesAfterCreate = mockProductService.getCategories();
+      const wfAfterCreate = categoriesAfterCreate.find((c) => c.name === "Women's Fashion")!;
+      expect(wfAfterCreate.productCount).toBe(countBefore + 1);
+
+      mockProductService.deleteProduct(newProduct.id);
+      const categoriesAfterDelete = mockProductService.getCategories();
+      const wfAfterDelete = categoriesAfterDelete.find((c) => c.name === "Women's Fashion")!;
+      expect(wfAfterDelete.productCount).toBe(countBefore);
     });
 
     it("performs bulk archive and bulk delete operations", () => {
@@ -269,7 +363,7 @@ describe("Phase 3: Products & Inventory Specification & Service Tests", () => {
       expect(movement.quantityChange).toBe(-5);
     });
 
-    it("handles manual correction to exact stock balance", () => {
+    it("handles manual correction to exact stock balance and zero units", () => {
       const movement = mockProductService.adjustStock({
         productId: "prod-005", // Out of stock (0)
         type: "manual_correction",
@@ -283,6 +377,35 @@ describe("Phase 3: Products & Inventory Specification & Service Tests", () => {
 
       const updated = mockProductService.getProductById("prod-005")!;
       expect(updated.stock).toBe(20);
+
+      // Now manual correction back to 0 units
+      const zeroMovement = mockProductService.adjustStock({
+        productId: "prod-005",
+        type: "manual_correction",
+        quantityChange: 0,
+        reason: "Stock depleted and verified zero count",
+      });
+      expect(zeroMovement.beforeQuantity).toBe(20);
+      expect(zeroMovement.afterQuantity).toBe(0);
+      expect(zeroMovement.quantityChange).toBe(-20);
+      expect(mockProductService.getProductById("prod-005")!.stock).toBe(0);
+    });
+
+    it("adjustStock logs exactly one movement and avoids duplicate movement records", () => {
+      const movementsBefore = mockProductService.getInventoryMovements().length;
+
+      const movement = mockProductService.adjustStock({
+        productId: "prod-001",
+        type: "restock",
+        quantityChange: 5,
+        reason: "Single lot delivery verification",
+      });
+
+      const movementsAfter = mockProductService.getInventoryMovements();
+      // Must be exactly one additional movement logged
+      expect(movementsAfter.length).toBe(movementsBefore + 1);
+      expect(movementsAfter[0].id).toBe(movement.id);
+      expect(movementsAfter[0].reason).toBe("Single lot delivery verification");
     });
   });
 
@@ -294,15 +417,16 @@ describe("Phase 3: Products & Inventory Specification & Service Tests", () => {
       expect(csv).toContain("TEA-SYL-004");
     });
 
-    it("imports valid CSV products and detects duplicate SKUs", () => {
+    it("imports valid CSV products, unescapes quotes, and detects duplicate SKUs", () => {
       const testCsv = `SKU,Title,Category,Regular Price (BDT),Sale Price (BDT),Stock,Low Stock Threshold,Status,Brand
-NEW-ITEM-01,"Silk Jamdani Scarf",Women's Fashion,1200,999,20,5,active,Aarong
+NEW-ITEM-01,"Silk ""Premium"" Scarf",Women's Fashion,1200,999,20,5,active,Aarong
 NEW-ITEM-02,"Handmade Brass Utensil",Home & Living,2500,,10,3,active,Dhamrai`;
 
       const result = mockProductService.importProductsCSV(testCsv);
       expect(result.imported).toBe(2);
       expect(result.errors.length).toBe(0);
-      expect(mockProductService.getProducts({ search: "NEW-ITEM-01" }).total).toBe(1);
+      const importedScarf = mockProductService.getProducts({ search: "NEW-ITEM-01" }).items[0];
+      expect(importedScarf.title).toBe('Silk "Premium" Scarf');
 
       // Attempt importing duplicate SKU
       const duplicateCsv = `SKU,Title,Category,Regular Price (BDT),Sale Price (BDT),Stock,Low Stock Threshold,Status,Brand
@@ -311,6 +435,83 @@ NEW-ITEM-01,"Duplicate Jamdani",Women's Fashion,1500,,5,2,active,Test`;
       const dupResult = mockProductService.importProductsCSV(duplicateCsv);
       expect(dupResult.imported).toBe(0);
       expect(dupResult.errors.some((e) => e.includes("Duplicate SKU"))).toBe(true);
+    });
+
+    it("rejects CSV row if promotional sale price exceeds regular price", () => {
+      const invalidSaleCsv = `SKU,Title,Category,Regular Price (BDT),Sale Price (BDT),Stock,Low Stock Threshold,Status,Brand
+INV-SALE-01,"Faulty Discount Dress",Women's Fashion,1000,1500,10,3,active,Test`;
+
+      const result = mockProductService.importProductsCSV(invalidSaleCsv);
+      expect(result.imported).toBe(0);
+      expect(result.errors.some((e) => e.includes("cannot exceed regular price"))).toBe(true);
+    });
+  });
+
+  describe("5. Collections Persistence & Safe Storage Engine", () => {
+    it("persists collections, supports collection creation, and restores on resetDemoData", () => {
+      const initialCollections = mockProductService.getCollections();
+      expect(initialCollections.length).toBeGreaterThan(0);
+      expect(initialCollections.some((c) => c.slug === "eid-collection")).toBe(true);
+
+      // Create new collection
+      const newCol = mockProductService.createCollection({
+        title: "Pohela Boishakh Festive",
+        slug: "pohela-boishakh-festive",
+        description: "Red and white traditional sarees and panjabis",
+        published: true,
+      });
+
+      expect(newCol.id).toBeDefined();
+      expect(newCol.title).toBe("Pohela Boishakh Festive");
+      expect(mockProductService.getCollections().length).toBe(initialCollections.length + 1);
+      expect(mockProductService.getCollections()[0].title).toBe("Pohela Boishakh Festive");
+
+      // Reset Demo Data
+      mockProductService.resetDemoData();
+      expect(mockProductService.getCollections().length).toBe(initialCollections.length);
+    });
+
+    it("safely handles corrupted or malformed JSON in localStorage without throwing", () => {
+      const originalWindow = (global as unknown as { window?: unknown }).window;
+      const fakeStorage: Record<string, string> = {
+        cartx_demo_products_v1: "INVALID_JSON_CORRUPTED{",
+        cartx_demo_categories_v1: "null",
+        cartx_demo_inventory_movements_v1: '"string-instead-of-array"',
+        cartx_demo_collections_v1: "undefined",
+      };
+
+      (global as unknown as { window: { localStorage: Storage } }).window = {
+        localStorage: {
+          getItem: (key: string) => fakeStorage[key] || null,
+          setItem: (key: string, val: string) => {
+            fakeStorage[key] = val;
+          },
+          removeItem: (key: string) => {
+            delete fakeStorage[key];
+          },
+          clear: () => {},
+          length: 4,
+          key: () => null,
+        },
+      };
+
+      expect(() => mockProductService.getProducts()).not.toThrow();
+      expect(mockProductService.getProducts().total).toBe(12);
+
+      expect(() => mockProductService.getCategories()).not.toThrow();
+      expect(mockProductService.getCategories().length).toBeGreaterThan(0);
+
+      expect(() => mockProductService.getInventoryMovements()).not.toThrow();
+      expect(mockProductService.getInventoryMovements().length).toBeGreaterThan(0);
+
+      expect(() => mockProductService.getCollections()).not.toThrow();
+      expect(mockProductService.getCollections().length).toBeGreaterThan(0);
+
+      if (originalWindow) {
+        (global as unknown as { window?: unknown }).window = originalWindow;
+      } else {
+        delete (global as unknown as { window?: unknown }).window;
+      }
     });
   });
 });

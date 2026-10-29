@@ -77,8 +77,10 @@ export function StockAdjustmentDialog({
   useEffect(() => {
     if (item) {
       setValue("productId", item.id);
+    } else if (allItems.length > 0 && !selectedProductId) {
+      setValue("productId", allItems[0].id);
     }
-  }, [item, setValue]);
+  }, [item, allItems, selectedProductId, setValue]);
 
   const onSubmit = (values: StockAdjustmentFormValues) => {
     mutation.mutate(
@@ -175,7 +177,7 @@ export function StockAdjustmentDialog({
             </label>
             <Input
               type="number"
-              min="1"
+              min={selectedType === "manual_correction" ? "0" : "1"}
               step="1"
               {...register("quantity", { valueAsNumber: true })}
               className="text-xs"

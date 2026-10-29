@@ -93,7 +93,7 @@ flowchart LR
 - [x] Inventory movement audit trail (`/dashboard/inventory/adjustments`)
 - [x] CSV bulk product import parser and catalog export
 - [x] Collapsible sidebar layout shell (adapted from 21st.dev collapsible sidebar reference)
-- [x] Full automated test suite in `tests/phase3-products-inventory.test.ts` (18 tests, 37 total across suite)
+- [x] Full automated test suite in `tests/phase3-products-inventory.test.ts` (25 tests, 44 total across suite)
 - [x] Local browser persistence via `localStorage` with SSR-safe memory fallbacks
 
 ### Phase 4: Orders & Customer Records (UP NEXT)
@@ -133,6 +133,6 @@ flowchart LR
 |---|---|---|
 | Strict TypeScript Compilation | `npm run type-check` | **PASS** (0 errors) |
 | ESLint Code Quality | `npm run lint` | **PASS** (0 errors) |
-| Automated Unit Testing | `npm run test` | **PASS** (19/19 passed) |
-| Next.js Production Build | `npm run build` | **PASS** (14 static routes generated) |
+| Automated Unit Testing | `npm run test` | **PASS** (44/44 passed) |
+| Next.js Production Build | `npm run build` | **PASS** (21 static/PPR routes generated) |
 | Boundary & Secrets Discipline | Zero client secrets / zero fake success | **PASS** |

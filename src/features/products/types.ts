@@ -62,6 +62,7 @@ export interface ProductCollection {
   slug: string;
   description?: string;
   productCount: number;
+  published?: boolean;
 }
 
 export type ProductSortBy =
