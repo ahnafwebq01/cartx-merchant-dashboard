@@ -52,26 +52,74 @@
 
 ---
 
-## 3. Endpoints Matrix (Planned by Phase)
+## 3. Endpoints Matrix & Contracts
 
-### Auth & Store Context (Phase 1 / Phase 2 Baseline)
-| Method | Endpoint | Description | Status |
-|---|---|---|---|
-| `POST` | `/auth/login` | Merchant credentials authentication | Contract Planned |
-| `POST` | `/auth/refresh` | Refresh short-lived access token | Contract Planned |
-| `GET` | `/auth/me` | Fetch active user profile and store memberships | Contract Planned |
-| `POST` | `/auth/logout` | Revoke session and invalidate tokens | Contract Planned |
+### 3.1 Onboarding & Store Creation (Phase 2 Integrated)
 
-### Onboarding & Store Profile (Phase 2)
-| Method | Endpoint | Description | Status |
-|---|---|---|---|
-| `POST` | `/stores/onboarding` | Initialize new store wizard draft | Contract Planned |
-| `PATCH` | `/stores/onboarding/:step` | Save onboarding step progress | Contract Planned |
-| `GET` | `/stores/current` | Get active store profile and settings | Contract Planned |
-| `PUT` | `/stores/current` | Update store business information | Contract Planned |
-| `POST` | `/stores/current/publish` | Complete onboarding and publish storefront | Contract Planned |
+#### `GET /stores/onboarding`
+- **Purpose**: Fetches active onboarding progress and draft form data.
+- **Headers**: `Authorization: Bearer <token>`, optional `X-Store-Id`
+- **Response**: `ApiResponse<OnboardingDraft>`
 
-### Commerce Operations (Phases 3–5)
+#### `PATCH /stores/onboarding/:step`
+- **Purpose**: Persists data for a specific onboarding step (1 to 6).
+- **Parameters**: `step` (integer 1..6)
+- **Request Body Examples**:
+  - Step 1: `{ storeName, storeSlug, businessType, ownerName, contactEmail, contactPhone }`
+  - Step 2: `{ businessAddress, district, cityArea, postalCode, businessCategory, tradeLicenseNo }`
+  - Step 3: `{ storeDescription, brandColor, themeId, logoUrl }`
+  - Step 4: `{ productName, price, initialStock, category, imageUrl }`
+  - Step 5: `{ cashOnDelivery, onlineProvider, providerStatus }`
+  - Step 6: `{ insideDhakaRate, outsideDhakaRate, freeShippingThreshold, courierPartner }`
+- **Response**: `ApiResponse<OnboardingDraft>`
+
+#### `GET /stores/check-slug?slug=...`
+- **Purpose**: Validates availability of a requested subdomain slug.
+- **Query Params**: `slug` (string, min 3 chars)
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "available": true,
+      "slug": "dhaka-crafts",
+      "message": "Subdomain is available"
+    }
+  }
+  ```
+
+#### `POST /stores/current/publish`
+- **Purpose**: Validates all prerequisite steps and publishes the store to the public storefront domain.
+- **Headers**: `Authorization: Bearer <token>`, `X-Store-Id: <storeId>`
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "success": true,
+      "storefrontUrl": "https://dhaka-crafts.cartx.com.bd",
+      "publishedAt": "2026-10-28T14:48:00.000Z"
+    }
+  }
+  ```
+
+---
+
+### 3.2 Store Profile & Settings (Phase 2 Integrated)
+
+#### `GET /stores/current`
+- **Purpose**: Fetches active store configuration, address, contacts, and locale settings.
+- **Headers**: `Authorization: Bearer <token>`, `X-Store-Id: <storeId>`
+- **Response**: `ApiResponse<StoreSettings>`
+
+#### `PUT /stores/current`
+- **Purpose**: Updates store profile and configuration.
+- **Request Body**: Partial or full `StoreSettings` (`name`, `description`, `businessCategory`, `businessAddress`, `district`, `cityArea`, `postalCode`, `ownerName`, `contactEmail`, `contactPhone`, `currency`, `locale`, `timezone`).
+- **Response**: `ApiResponse<StoreSettings>`
+
+---
+
+### 3.3 Planned Endpoints (Phase 3–5)
 | Module | Endpoint Group | Description |
 |---|---|---|
 | **Products** | `/products` | CRUD, categories, variants, inventory items |
@@ -79,24 +127,3 @@
 | **Customers** | `/customers` | Customer records, groups, order history |
 | **Payments** | `/payments` | Transactions, gateway credentials, refund requests |
 | **Shipping** | `/shipping` | Shipping zones, rates, courier integration webhooks |
-
----
-
-## 4. Frontend API Client Usage
-
-The frontend uses the centralized singleton `apiClient` located at `src/lib/api/client.ts`:
-
-```ts
-import { apiClient } from "@/lib/api/client";
-
-// Example GET with automatic tenant header injection
-const response = await apiClient.get<StoreSummary>("/stores/current");
-console.log(response.data.name);
-
-// Example POST with typed request body
-const result = await apiClient.post<Product>("/products", {
-  name: "Sample Product",
-  price: 1500,
-});
-```
-

@@ -6,13 +6,13 @@ import {
   Store,
   Layers,
   ShieldCheck,
-  CheckCircle2,
   ArrowRight,
 } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { DashboardSetupChecklist } from "@/features/onboarding/components/DashboardSetupChecklist";
 
 export default function DashboardPage() {
   return (
@@ -47,13 +47,13 @@ export default function DashboardPage() {
             <Layers className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">Phase 1 Complete</div>
+            <div className="text-2xl font-bold text-foreground">Phase 2 Active</div>
             <p className="text-xs text-muted-foreground mt-1">
-              Foundational setup & design tokens established
+              Onboarding wizard & store settings operational
             </p>
             <div className="mt-3">
               <Badge variant="success" className="text-[10px]">
-                Ready for Phase 2
+                Phase 2 Complete
               </Badge>
             </div>
           </CardContent>
@@ -96,61 +96,8 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Setup Checklist Foundation Card */}
-      <Card className="border-border">
-        <CardHeader>
-          <CardTitle>Merchant Onboarding Roadmap</CardTitle>
-          <CardDescription>
-            Foundational milestones per CARTX_MERCHANT_DASHBOARD.md specification.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/40 border border-border">
-              <CheckCircle2 className="h-5 w-5 text-success shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-medium text-foreground">Phase 1: Project Setup & Architecture</h4>
-                  <Badge variant="success" className="text-[10px]">Completed</Badge>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Next.js App Router, Tailwind CSS v4 design tokens, shadcn/ui components, typed API client, and responsive dashboard shell.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 p-3 rounded-lg border border-border">
-              <div className="h-5 w-5 rounded-full border-2 border-primary/40 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="h-2 w-2 rounded-full bg-primary" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-medium text-foreground">Phase 2: Merchant Onboarding & Store Profile</h4>
-                  <Badge variant="outline" className="text-[10px]">Up Next</Badge>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Multi-step store setup wizard (/onboarding/*), store business profile, and storefront preferences.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 p-3 rounded-lg border border-border opacity-70">
-              <div className="h-5 w-5 rounded-full border-2 border-border flex items-center justify-center shrink-0 mt-0.5">
-                <span className="h-2 w-2 rounded-full bg-muted-foreground/30" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-medium text-foreground">Phase 3–5: Commerce Operations</h4>
-                  <Badge variant="secondary" className="text-[10px]">Planned</Badge>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Product catalog CRUD, inventory movements, order fulfillment, local courier integrations (Steadfast, Pathao), and payment gateways.
-                </p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Real Backend-Driven Setup Checklist */}
+      <DashboardSetupChecklist />
     </div>
   );
 }
