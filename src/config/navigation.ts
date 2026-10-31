@@ -86,19 +86,25 @@ export const NAVIGATION_ITEMS: NavItem[] = [
     title: "Payments & Finance",
     href: "/dashboard/payments",
     icon: CreditCard,
-    permission: "reports.view",
+    permission: "payments.view",
     children: [
-      { title: "Transactions", href: "/dashboard/payments" },
+      { title: "Overview", href: "/dashboard/payments" },
+      { title: "Transactions", href: "/dashboard/payments/transactions" },
       { title: "Payment Methods", href: "/dashboard/payments/methods" },
+      { title: "Refunds", href: "/dashboard/payments/refunds" },
+      { title: "Settings", href: "/dashboard/payments/settings" },
     ],
   },
   {
     title: "Shipping & Delivery",
     href: "/dashboard/shipping",
     icon: Truck,
+    permission: "shipping.view",
     children: [
-      { title: "Shipping Overview", href: "/dashboard/shipping" },
+      { title: "Overview", href: "/dashboard/shipping" },
+      { title: "Shipments", href: "/dashboard/shipping/shipments" },
       { title: "Courier Integrations", href: "/dashboard/shipping/couriers" },
+      { title: "Settings", href: "/dashboard/shipping/settings" },
     ],
   },
   {

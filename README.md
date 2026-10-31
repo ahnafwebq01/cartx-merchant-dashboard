@@ -17,7 +17,7 @@
 
 ## 2. Current Implementation Status (Demo Mode)
 
-The project currently operates in **high-fidelity client-side demo mode** (Phases 1 through 4 complete). All features use localized in-memory and browser `localStorage` persistence (`mockOrders`, `mockCustomers`, `mockProducts`) with SSR-safe fallbacks and TanStack Query state synchronization. No external backend or credentials are required to run and test the complete dashboard.
+The project currently operates in **high-fidelity client-side demo mode** (Phases 1 through 5 complete). All features use localized in-memory and browser `localStorage` persistence (`mockOrders`, `mockCustomers`, `mockProducts`, `mockPayments`, `mockShipping`) with SSR-safe fallbacks and TanStack Query state synchronization. No external backend or credentials are required to run and test the complete dashboard.
 
 | Milestone | Status | Details |
 |---|---|---|
@@ -25,7 +25,7 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
 | **Phase 2: Onboarding & Store Profile** | **Completed** | 7-step wizard (`/onboarding/*`), settings management (`/dashboard/settings`). |
 | **Phase 3: Products & Inventory** | **Completed (Demo Mode)** | Product CRUD, variant matrix, SKU generation, inventory adjustments, CSV import/export. |
 | **Phase 4: Sales, Orders & Customers** | **Completed (Demo Mode)** | Order fulfillment state machine, returns, printable invoice, customer CRM, segmentation. |
-| **Phase 5: Payments & Shipping Logistics** | *Pending* | Bangladesh gateways (bKash, Nagad) and couriers (Steadfast, Pathao). |
+| **Phase 5: Payments & Shipping Logistics** | **Completed (Demo Mode)** | bKash, Nagad, SSLCommerz, COD adapters, courier consignments (Steadfast, Pathao, RedX). |
 | **Phases 6–9: Storefront, Marketing, Billing, App** | *Pending* | Future roadmap items per [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md). |
 
 ---
@@ -72,6 +72,19 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
 - 7-step guided setup wizard with debounced store slug availability checking.
 - Store profile, business registration details, and locale configuration.
 
+### Payments & Finance (`/dashboard/payments`)
+- **Gateway Adapters:** Typed provider boundaries for bKash Tokenized Checkout, Nagad Direct, SSLCommerz, and Cash on Delivery.
+- **Transactions Ledger (`/dashboard/payments/transactions`):** Multi-filter search, status badges, Monospace TrxID, date ranges, and CSV export.
+- **Refunds Management (`/dashboard/payments/refunds`):** Idempotent refund requests with balance checking, audit attribution, and order sync.
+- **Payment Methods (`/dashboard/payments/methods`):** Gateway configuration with sandbox/live modes and zero-trust credential security.
+
+### Shipping & Courier Logistics (`/dashboard/shipping`)
+- **Courier Adapters:** Typed provider boundaries for Steadfast Courier, Pathao, and RedX.
+- **Shipments Ledger (`/dashboard/shipping/shipments`):** Status tracking, courier filters, and CSV export.
+- **Consignment Booking:** Automated consignment creation from eligible orders with duplicate active parcel prevention.
+- **Live Tracking:** Interactive timeline stepper with location and timestamp attribution.
+- **Shipping Rates (`/dashboard/shipping/settings`):** Inside Dhaka (৳60), outside Dhaka (৳120), free shipping threshold, and COD fee rules.
+
 ---
 
 ## 5. Main Application Routes
@@ -100,6 +113,15 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
   │   └── /collections                 # Merchandising collections
   ├── /inventory                       # Stocks overview & health meters
   │   └── /adjustments                 # Tamper-evident inventory movement log
+  ├── /payments                        # Payments overview & KPI cards
+  │   ├── /transactions                # Full payment transactions ledger
+  │   ├── /methods                     # Gateway connections (bKash, Nagad, etc.)
+  │   ├── /refunds                     # Refund requests & processed records
+  │   └── /settings                    # Currency & webhook reference
+  ├── /shipping                        # Shipping overview & logistics KPIs
+  │   ├── /shipments                   # Courier consignments & tracking
+  │   ├── /couriers                    # Courier network setups (Steadfast, Pathao, RedX)
+  │   └── /settings                    # Delivery charges & zone rules
   └── /settings                        # Store profile & regional preferences
 ```
 

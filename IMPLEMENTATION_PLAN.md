@@ -4,7 +4,7 @@
 **Module:** Merchant Dashboard (`cartx-merchant-dashboard`)  
 **Target Market:** Bangladesh (BDT ৳, Bengali & English)  
 **Authoritative Specification:** `CARTX_MERCHANT_DASHBOARD.md` (Version 1.0)  
-**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Complete (Demo Mode) • Phase 5 Pending  
+**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Complete (Demo Mode) • Phase 5 Complete (Demo Mode) • Phase 6 Pending  
 
 ---
 
@@ -104,12 +104,42 @@ flowchart LR
 - [x] Printable invoices formatted for Bangladesh merchants (`window.print()`)
 - [x] Full automated test suite in `tests/phase4-orders-customers.test.ts` (25 tests, 69 total across suite)
 
-### Phase 5: Local Payments & Courier Logistics (UP NEXT)
-- [ ] Bangladesh payment gateways (bKash, Nagad, SSLCommerz) connection settings
-- [ ] Bangladesh courier integrations (Steadfast, Pathao, RedX)
-- [ ] Automated shipment generation and tracking webhooks
+### Phase 5: Local Payments & Courier Logistics (COMPLETED - Demo Mode)
+- [x] **Payment Provider Adapters & Service Boundaries**:
+  - [x] bKash Tokenized Checkout adapter (`BkashPaymentAdapter`) simulating createPayment, executePayment, and demo OTP/PIN callbacks.
+  - [x] Nagad Direct Checkout adapter (`NagadPaymentAdapter`) with payment reference ID and challenge URL boundaries.
+  - [x] SSLCommerz Gateway adapter (`SslcommerzPaymentAdapter`) with session keys, gateway redirect URLs, and Order Validation IPN handling.
+  - [x] Cash on Delivery adapter (`CodPaymentAdapter`) preserving core Bangladesh COD fulfillment workflows.
+  - [x] Provider-agnostic adapter registry (`paymentAdapterRegistry`).
+- [x] **Payments & Finance Dashboard Management**:
+  - [x] Payment overview and financial KPI cards (`/dashboard/payments`) with volume, pending, refunds, and active methods.
+  - [x] Transactions ledger (`/dashboard/payments/transactions`) with multi-field search, filter tabs, date presets, sorting, pagination, and CSV export.
+  - [x] Transaction details modal (`PaymentTransactionDetailsModal`) with TrxID, order link, customer info, and demo verification trigger.
+  - [x] Payment methods configuration (`/dashboard/payments/methods`) with environment toggle, account ID, and zero-trust credentials notice.
+  - [x] Refund request & refund audit ledger (`/dashboard/payments/refunds`) with refundable balance protection, reason requirement, and idempotency keys.
+  - [x] Payment settings & webhook reference (`/dashboard/payments/settings`).
+- [x] **Courier Provider Adapters & Service Boundaries**:
+  - [x] Steadfast Courier adapter (`SteadfastCourierAdapter`) normalizing raw statuses (`in_review`, `in_transit`, `delivered`, `cancelled`).
+  - [x] Pathao Courier adapter (`PathaoCourierAdapter`) normalizing Merchant API statuses (`Pickup_Requested`, `Picked_Up`, `In_Transit`, `Delivered`).
+  - [x] RedX Delivery adapter (`RedxCourierAdapter`) normalizing Parcel API statuses (`ready_for_pickup`, `pickup_done`, `in_transit`, `delivered`).
+  - [x] Courier adapter registry (`courierAdapterRegistry`).
+- [x] **Shipping & Courier Management Dashboard**:
+  - [x] Shipping overview and logistics KPI cards (`/dashboard/shipping`).
+  - [x] Shipment listing (`/dashboard/shipping/shipments`) with status filter tabs, courier filter, search, pagination, and CSV export.
+  - [x] Shipment details & tracking timeline modal (`ShipmentDetailsModal`) with interactive transit stepper and cancellation safety.
+  - [x] Consignment creation workflow (`CreateShipmentDialog`) pre-filled from eligible orders with duplicate active parcel prevention.
+  - [x] Courier connection settings (`/dashboard/shipping/couriers`) with default warehouse pickup addresses.
+  - [x] Shipping zones & delivery rates settings (`/dashboard/shipping/settings`) for Dhaka (৳60), Outside Dhaka (৳120), free shipping threshold, and COD fee.
+- [x] **Cross-Module Order Integration**:
+  - [x] Order details (`/dashboard/orders/[orderId]`) logistics card enhanced with live shipment tracking and consignment creation shortcut.
+  - [x] Financial summary card integrated with transaction references, refund status, and gateway refund trigger.
+  - [x] Strict invariant preservation: payment verification does NOT imply delivery; consignment creation does NOT imply delivery.
+- [x] **Automated Testing & Quality Gates**:
+  - [x] Created `tests/phase5-payments-shipping.test.ts` with 37 tests covering schemas, adapters, duplicate prevention, idempotency, refunds, status normalization, cancellation rules, and order integration.
+  - [x] **106 / 106 automated tests passing** across entire repository test suite (100% pass rate).
+  - [x] **0 ESLint errors**; **0 TypeScript errors**; **36 / 36 routes** prerendered cleanly via Turbopack build.
 
-### Phase 6: Storefront & Domain Management
+### Phase 6: Storefront & Domain Management (UP NEXT)
 - [ ] Storefront theme library and visual customization
 - [ ] Custom domain management and SSL status
 - [ ] CMS pages and legal policies
@@ -134,7 +164,7 @@ flowchart LR
 | Gate | Check Command | Status |
 |---|---|---|
 | Strict TypeScript Compilation | `npm run type-check` | **PASS** (0 errors) |
-| ESLint Code Quality | `npm run lint` | **PASS** (0 errors) |
-| Automated Unit Testing | `npm run test` | **PASS** (69/69 passed) |
-| Next.js Production Build | `npm run build` | **PASS** (27 static/PPR routes generated) |
+| ESLint Code Quality | `npm run lint` | **PASS** (0 errors, 5 legacy compiler warnings) |
+| Automated Unit Testing | `npm run test` | **PASS** (106/106 passed across 5 test suites) |
+| Next.js Production Build | `npm run build` | **PASS** (36 static/PPR routes generated) |
 | Boundary & Secrets Discipline | Zero client secrets / zero fake success | **PASS** |

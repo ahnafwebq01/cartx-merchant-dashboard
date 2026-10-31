@@ -27,6 +27,10 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<MerchantRole, Permission[]> = {
     "team.manage",
     "billing.manage",
     "settings.manage",
+    "payments.view",
+    "payments.manage",
+    "shipping.view",
+    "shipping.manage",
   ],
   admin: [
     "products.view",
@@ -48,6 +52,10 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<MerchantRole, Permission[]> = {
     "integrations.manage",
     "team.manage",
     "settings.manage",
+    "payments.view",
+    "payments.manage",
+    "shipping.view",
+    "shipping.manage",
   ],
   order_manager: [
     "orders.view",
@@ -55,6 +63,8 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<MerchantRole, Permission[]> = {
     "orders.cancel",
     "refunds.request",
     "customers.view",
+    "shipping.view",
+    "shipping.manage",
   ],
   product_manager: [
     "products.view",
@@ -79,11 +89,14 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<MerchantRole, Permission[]> = {
     "orders.view",
     "refunds.request",
     "reports.view",
+    "payments.view",
+    "payments.manage",
   ],
   support: [
     "orders.view",
     "orders.update_status",
     "customers.view",
+    "shipping.view",
   ],
 };
 

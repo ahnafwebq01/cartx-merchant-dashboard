@@ -34,7 +34,7 @@ export function CustomerFilterToolbar({
 }: CustomerFilterToolbarProps) {
   const currentSegment = filters.segment || "all";
   const hasActiveFilters = Boolean(
-    filters.search || filters.segment !== "all" || filters.city || filters.tag
+    filters.search || filters.segment !== "all" || filters.city || filters.tag,
   );
 
   return (
@@ -66,7 +66,9 @@ export function CustomerFilterToolbar({
           <Input
             placeholder="Search by customer name, phone, email, city..."
             value={filters.search || ""}
-            onChange={(e) => onFilterChange({ search: e.target.value, page: 1 })}
+            onChange={(e) =>
+              onFilterChange({ search: e.target.value, page: 1 })
+            }
             className="pl-8 text-xs h-9"
           />
         </div>
@@ -130,4 +132,3 @@ export function CustomerFilterToolbar({
     </div>
   );
 }
-

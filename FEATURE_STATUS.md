@@ -13,8 +13,8 @@
 | **05** | **Stocks & Inventory** | `/dashboard/inventory` | **Phase 3** | **COMPLETED (Demo Mode)** | Stock adjustments (restock, damaged, lost, correction), health meters, movement audit logs. |
 | **06** | **Sales & Orders** | `/dashboard/orders` | **Phase 4** | **COMPLETED (Demo Mode)** | Order listing, details, fulfillment lifecycle, timeline, printable invoice, status state machine. |
 | **07** | **Customers Database** | `/dashboard/customers` | **Phase 4** | **COMPLETED (Demo Mode)** | Customer profiles, tags, groups, lifetime value metrics, purchase history, and notes. |
-| **08** | **Payments & Finance** | `/dashboard/payments` | Phase 5 | Pending | Gateway settings (bKash, Nagad), transaction logs. |
-| **09** | **Shipping & Delivery** | `/dashboard/shipping` | Phase 5 | Pending | Courier setups (Steadfast, Pathao), tracking, zones. |
+| **08** | **Payments & Finance** | `/dashboard/payments` | **Phase 5** | **COMPLETED (Demo Mode)** | bKash, Nagad, SSLCommerz, COD adapters, transactions ledger, refunds, payment method configuration. |
+| **09** | **Shipping & Delivery** | `/dashboard/shipping` | **Phase 5** | **COMPLETED (Demo Mode)** | Steadfast, Pathao, RedX courier adapters, consignments, live tracking stepper, shipping rates & zones. |
 | **10** | **Online Store & Themes** | `/dashboard/store` | Phase 6 | Pending | Theme customizer, pages, custom domain, navigation. |
 | **11** | **Marketing & Promotions** | `/dashboard/marketing` | Phase 7 | Pending | Coupons, automatic discounts, flash sales. |
 | **12** | **Analytics & Reports** | `/dashboard/analytics` | Phase 7 | Pending | Sales analytics, product report, CSV export. |
@@ -94,13 +94,50 @@
   - [x] Real-time customer metric recalculation synchronized with order lifecycle events (total orders, total spend, AOV).
 - [x] **Automated Testing & Quality Gates**:
   - [x] Created `tests/phase4-orders-customers.test.ts` with 25 unit tests covering Zod schemas, state machine transitions, cancellation restock rules, customer sync, search, filters, sorting, clamped pagination, CSV export, and demo reset.
-  - [x] **69 / 69 unit tests passing** across entire repository test suite (100% pass rate).
-  - [x] **0 ESLint errors**; **0 TypeScript errors**; **27 / 27 routes** prerendered cleanly via Turbopack build.
+  - [x] **69 / 69 unit tests passing** across Phase 4 baseline.
+
+---
+
+## Detailed Phase 5 Implementation Deliverables (Payments & Logistics)
+
+- [x] **Payments & Finance Dashboard** (`/dashboard/payments`, `/dashboard/payments/transactions`, `/dashboard/payments/methods`, `/dashboard/payments/refunds`, `/dashboard/payments/settings`):
+  - [x] 4 KPI Cards: Gross Settled Volume (৳), Pending Payments, Refunds Processed (৳), Active Gateways.
+  - [x] Paginated transactions table with search, status tabs (All, Successful, Pending, Failed, Refunded), gateway filter (bKash, Nagad, SSLCommerz, COD), date presets, and CSV export.
+  - [x] Transaction details modal (`PaymentTransactionDetailsModal`) with TrxID, order link, customer info, and demo verification trigger.
+  - [x] Payment methods configuration (`PaymentMethodCard`, `ConfigurePaymentMethodDialog`) with environment toggles (Sandbox/Live) and zero-trust credential notice.
+  - [x] Refunds management table (`RefundsTable`) and request refund dialog (`RequestRefundDialog`) with available balance validation and idempotency protection.
+  - [x] Payment settings view with platform currency rules (BDT ৳) and official IPN/webhook callback endpoints.
+- [x] **Payment Provider Adapters Architecture**:
+  - [x] bKash Tokenized Checkout adapter (`BkashPaymentAdapter`) simulating createPayment, executePayment, and demo OTP/PIN callbacks.
+  - [x] Nagad Direct Checkout adapter (`NagadPaymentAdapter`) with payment reference ID and challenge URL boundaries.
+  - [x] SSLCommerz Gateway adapter (`SslcommerzPaymentAdapter`) with session keys, gateway redirect URLs, and Order Validation IPN handling.
+  - [x] Cash on Delivery adapter (`CodPaymentAdapter`) preserving core Bangladesh COD fulfillment workflows.
+  - [x] Central adapter registry (`paymentAdapterRegistry`).
+- [x] **Shipping & Courier Logistics Dashboard** (`/dashboard/shipping`, `/dashboard/shipping/shipments`, `/dashboard/shipping/couriers`, `/dashboard/shipping/settings`):
+  - [x] 4 KPI Cards: In Transit Parcels, Successfully Delivered, Pending Pickup, Active COD to Collect (৳).
+  - [x] Paginated shipments table with status tabs, courier filter (Steadfast, Pathao, RedX), search, pagination, and CSV export.
+  - [x] Consignment details and tracking timeline modal (`ShipmentDetailsModal`) with interactive transit stepper and cancellation safety.
+  - [x] Consignment creation workflow (`CreateShipmentDialog`) pre-filled from eligible orders with duplicate active parcel prevention.
+  - [x] Courier connection settings (`CourierCard`, `ConfigureCourierDialog`) with default warehouse pickup addresses.
+  - [x] Shipping zones & delivery rates settings (`ShippingRatesForm`) for Dhaka (৳60), Outside Dhaka (৳120), free shipping threshold, and COD fee.
+- [x] **Courier Provider Adapters Architecture**:
+  - [x] Steadfast Courier adapter (`SteadfastCourierAdapter`) normalizing raw statuses (`in_review`, `in_transit`, `delivered`, `cancelled`).
+  - [x] Pathao Courier adapter (`PathaoCourierAdapter`) normalizing Merchant API statuses (`Pickup_Requested`, `Picked_Up`, `In_Transit`, `Delivered`).
+  - [x] RedX Delivery adapter (`RedxCourierAdapter`) normalizing Parcel API statuses (`ready_for_pickup`, `pickup_done`, `in_transit`, `delivered`).
+  - [x] Central adapter registry (`courierAdapterRegistry`).
+- [x] **Cross-Module Order Integration**:
+  - [x] Order details (`/dashboard/orders/[orderId]`) logistics card enhanced with live shipment tracking and consignment creation shortcut.
+  - [x] Financial summary card integrated with transaction references, refund status, and gateway refund trigger.
+  - [x] Strict invariant preservation: payment verification does NOT imply delivery; consignment creation does NOT imply delivery.
+- [x] **Automated Testing & Quality Gates**:
+  - [x] Created `tests/phase5-payments-shipping.test.ts` with 37 tests covering schemas, adapters, duplicate prevention, idempotency, refunds, status normalization, cancellation rules, and order integration.
+  - [x] **106 / 106 automated tests passing** across entire repository test suite (100% pass rate).
+  - [x] **0 ESLint errors**; **0 TypeScript errors**; **36 / 36 routes** prerendered cleanly via Turbopack build.
 
 ---
 
 ## Demo Mode Disclosures & Future Backend Integration
 
-1. **Storage Mode**: Products, categories, and inventory movements are persisted in `localStorage` under `cartx_demo_products_v1`, `cartx_demo_categories_v1`, and `cartx_demo_inventory_movements_v1` with an in-memory fallback for SSR/testing.
-2. **Backend Replacement Boundary**: All data operations are encapsulated in `src/features/products/services/mockProducts.ts` behind typed React Query hooks (`useProductsQuery`, `useCreateProductMutation`, `useStockAdjustmentMutation`). When the shared Express API is deployed, this service can be swapped with real HTTP calls without altering UI components.
-3. **Image Uploads**: Media accepts image URLs and local demo presets. Direct binary image upload to S3/Cloudinary will be enabled once the presigned URL backend endpoint (`POST /uploads/presigned-url`) is deployed.
+1. **Storage Mode**: Products, categories, inventory, orders, customers, payment transactions, refunds, and shipments are persisted in browser `localStorage` (`cartx_demo_*`) with in-memory fallbacks for SSR/testing.
+2. **Backend Replacement Boundary**: All data operations are encapsulated in typed feature services (`mockProducts.ts`, `mockOrders.ts`, `mockCustomers.ts`, `mockPayments.ts`, `mockShipping.ts`) behind React Query hooks. When the shared Express API is deployed, these services can be connected to real HTTP endpoints without altering UI components.
+3. **Payment & Courier Credentials**: Zero-trust architecture strictly prevents storing secret API passwords, signing keys, or private tokens in browser storage or client bundles. Real gateway connections require the shared backend proxy endpoints.

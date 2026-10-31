@@ -1,5 +1,6 @@
 import type {
   Order,
+  OrderDelivery,
   OrderFilterParams,
   OrderKPIStats,
   OrderStatus,
@@ -1496,6 +1497,92 @@ class MockOrderService {
     this.saveOrders(list);
     mockCustomerService.recalculateCustomerMetrics(order.customerId, list);
 
+    return list[idx];
+  }
+
+  public updateOrderDelivery(
+    orderId: string,
+    deliveryUpdate: Partial<OrderDelivery>,
+    actor: string = "Logistics Engine"
+  ): Order {
+    const list = this.loadOrders();
+    const idx = list.findIndex((o) => o.id === orderId);
+    if (idx === -1) throw new Error(`Order ${orderId} not found`);
+
+    const order = list[idx];
+    const now = new Date().toISOString();
+    const updatedDelivery: OrderDelivery = {
+      ...order.delivery,
+      ...deliveryUpdate,
+    };
+
+    const updatedTimeline = [
+      ...order.timeline,
+      {
+        id: `evt-${Date.now().toString(36)}`,
+        status: order.orderStatus,
+        title: `Shipment Linked with ${deliveryUpdate.courier || order.delivery.courier}`,
+        description: `Tracking number: ${deliveryUpdate.trackingNumber || "assigned"}. Consignment ID: ${
+          deliveryUpdate.consignmentId || "N/A"
+        }`,
+        actor,
+        timestamp: now,
+      },
+    ];
+
+    list[idx] = {
+      ...order,
+      delivery: updatedDelivery,
+      timeline: updatedTimeline,
+      updatedAt: now,
+    };
+
+    this.saveOrders(list);
+    return list[idx];
+  }
+
+  public recordPaymentRefund(
+    orderId: string,
+    refundAmount: number,
+    refundReference?: string,
+    reason?: string,
+    actor: string = "Merchant Admin"
+  ): Order {
+    const list = this.loadOrders();
+    const idx = list.findIndex((o) => o.id === orderId);
+    if (idx === -1) throw new Error(`Order ${orderId} not found`);
+
+    const order = list[idx];
+    const now = new Date().toISOString();
+    const newAmountPaid = Math.max(0, order.amountPaid - refundAmount);
+    const newAmountDue = Math.max(0, order.grandTotal - newAmountPaid);
+    const newPaymentStatus: PaymentStatus =
+      newAmountPaid === 0 ? "refunded" : "partially_refunded";
+
+    const updatedTimeline = [
+      ...order.timeline,
+      {
+        id: `evt-${Date.now().toString(36)}`,
+        status: order.orderStatus,
+        title: `Payment Refund Processed (৳${refundAmount})`,
+        description: `Refund of ৳${refundAmount} recorded.${
+          reason ? ` Reason: ${reason}.` : ""
+        }${refundReference ? ` Ref: ${refundReference}.` : ""}`,
+        actor,
+        timestamp: now,
+      },
+    ];
+
+    list[idx] = {
+      ...order,
+      paymentStatus: newPaymentStatus,
+      amountPaid: newAmountPaid,
+      amountDue: newAmountDue,
+      timeline: updatedTimeline,
+      updatedAt: now,
+    };
+
+    this.saveOrders(list);
     return list[idx];
   }
 

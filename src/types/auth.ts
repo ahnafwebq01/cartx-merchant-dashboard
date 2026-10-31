@@ -34,7 +34,11 @@ export type Permission =
   | "integrations.manage"
   | "team.manage"
   | "billing.manage"
-  | "settings.manage";
+  | "settings.manage"
+  | "payments.view"
+  | "payments.manage"
+  | "shipping.view"
+  | "shipping.manage";
 
 /**
  * Basic user profile representation

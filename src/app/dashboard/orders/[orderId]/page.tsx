@@ -240,6 +240,7 @@ function OrderDetailsContent() {
           <OrderDeliveryCard
             delivery={order.delivery}
             orderStatus={order.orderStatus}
+            order={order}
           />
         </div>
       </div>
