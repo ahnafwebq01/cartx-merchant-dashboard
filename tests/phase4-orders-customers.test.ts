@@ -1,23 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import {
-  mockOrderService,
-  INITIAL_ORDERS,
-} from "../src/features/orders/services/mockOrders";
-import {
-  mockCustomerService,
-  INITIAL_CUSTOMERS,
-} from "../src/features/customers/services/mockCustomers";
+import { mockOrderService } from "../src/features/orders/services/mockOrders";
+import { mockCustomerService } from "../src/features/customers/services/mockCustomers";
 import { mockProductService } from "../src/features/products/services/mockProducts";
 import {
   cancelOrderSchema,
   returnOrderSchema,
-  orderStatusTransitionSchema,
 } from "../src/features/orders/schemas";
-import {
-  customerFormSchema,
-  customerTagSchema,
-} from "../src/features/customers/schemas";
-import { VALID_ORDER_STATUS_TRANSITIONS } from "../src/features/orders/types";
+import { customerFormSchema } from "../src/features/customers/schemas";
 
 describe("Phase 4: Sales & Orders Management", () => {
   beforeEach(() => {
@@ -206,9 +195,7 @@ describe("Phase 4: Sales & Orders Management", () => {
       expect(productAfter!.stock).toBe(stockBefore + targetItem.quantity);
 
       // Verify movement was logged in inventory movements
-      const movements = mockProductService.getInventoryMovements(
-        targetItem.productId,
-      );
+      const movements = mockProductService.getInventoryMovements();
       expect(movements.some((m) => m.referenceId === order!.orderNumber)).toBe(
         true,
       );

@@ -2,7 +2,6 @@
 
 import React, { useState, Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { ErrorState } from "@/components/feedback/ErrorState";
@@ -26,7 +25,7 @@ import {
   useAddOrderNoteMutation,
 } from "@/features/orders/hooks";
 import type { OrderStatus } from "@/features/orders/types";
-import { ArrowLeft, Printer } from "lucide-react";
+import { Printer } from "lucide-react";
 
 function OrderDetailsContent() {
   const params = useParams();
