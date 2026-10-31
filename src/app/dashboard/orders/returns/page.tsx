@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableHeader,
@@ -13,16 +13,13 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useOrdersQuery } from "@/features/orders/hooks";
 import { OrderStatusBadge } from "@/features/orders/components/OrderStatusBadge";
 import { PaymentStatusBadge } from "@/features/orders/components/PaymentStatusBadge";
 import {
   RotateCcw,
   Eye,
-  CheckCircle2,
   DollarSign,
-  AlertCircle,
   Package,
 } from "lucide-react";
 

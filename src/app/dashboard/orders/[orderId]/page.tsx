@@ -2,6 +2,7 @@
 
 import React, { useState, Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { ErrorState } from "@/components/feedback/ErrorState";
@@ -25,7 +26,7 @@ import {
   useAddOrderNoteMutation,
 } from "@/features/orders/hooks";
 import type { OrderStatus } from "@/features/orders/types";
-import { Printer } from "lucide-react";
+import { ArrowLeft, Printer } from "lucide-react";
 
 function OrderDetailsContent() {
   const params = useParams();
@@ -80,7 +81,7 @@ function OrderDetailsContent() {
 
   const handleCancelOrder = async (
     reason: string,
-    restockInventory: boolean
+    restockInventory: boolean,
   ) => {
     await cancelMutation.mutateAsync({
       orderId: order.id,
@@ -92,7 +93,7 @@ function OrderDetailsContent() {
 
   const handleReturnOrder = async (
     reason: string,
-    restockInventory: boolean
+    restockInventory: boolean,
   ) => {
     await returnMutation.mutateAsync({
       orderId: order.id,
@@ -131,7 +132,7 @@ function OrderDetailsContent() {
             day: "numeric",
             hour: "2-digit",
             minute: "2-digit",
-          }
+          },
         )}`}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard" },
@@ -169,12 +170,16 @@ function OrderDetailsContent() {
       <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-lg bg-card border border-border shadow-xs">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Fulfillment Status:</span>
+            <span className="text-xs text-muted-foreground">
+              Fulfillment Status:
+            </span>
             <OrderStatusBadge status={order.orderStatus} />
           </div>
           <div className="h-4 w-px bg-border hidden sm:block" />
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Payment Status:</span>
+            <span className="text-xs text-muted-foreground">
+              Payment Status:
+            </span>
             <PaymentStatusBadge
               status={order.paymentStatus}
               method={order.paymentMethod}
@@ -183,7 +188,9 @@ function OrderDetailsContent() {
         </div>
 
         <div className="text-right">
-          <span className="text-xs text-muted-foreground block">Grand Total</span>
+          <span className="text-xs text-muted-foreground block">
+            Grand Total
+          </span>
           <span className="text-lg font-bold font-mono text-primary">
             ৳{order.grandTotal.toLocaleString("en-BD")}
           </span>

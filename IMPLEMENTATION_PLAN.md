@@ -4,7 +4,7 @@
 **Module:** Merchant Dashboard (`cartx-merchant-dashboard`)  
 **Target Market:** Bangladesh (BDT ৳, Bengali & English)  
 **Authoritative Specification:** `CARTX_MERCHANT_DASHBOARD.md` (Version 1.0)  
-**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Pending  
+**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Complete (Demo Mode) • Phase 5 Pending  
 
 ---
 

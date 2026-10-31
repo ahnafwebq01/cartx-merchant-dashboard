@@ -8,7 +8,7 @@ import { Truck, Navigation, Calendar, Info } from "lucide-react";
 
 interface OrderDeliveryCardProps {
   delivery: OrderDelivery;
-  orderStatus: OrderStatus;
+  orderStatus?: OrderStatus;
 }
 
 export function OrderDeliveryCard({
@@ -39,6 +39,15 @@ export function OrderDeliveryCard({
             {delivery.courier}
           </span>
         </div>
+
+        {orderStatus && (
+          <div className="flex justify-between items-center text-muted-foreground">
+            <span>Fulfillment Stage:</span>
+            <span className="capitalize font-medium text-foreground">
+              {orderStatus.replace(/_/g, " ")}
+            </span>
+          </div>
+        )}
 
         {delivery.trackingNumber ? (
           <div className="flex justify-between items-center bg-muted/40 p-2 rounded border border-border/60">

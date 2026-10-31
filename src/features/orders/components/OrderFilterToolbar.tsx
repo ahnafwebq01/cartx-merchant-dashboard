@@ -12,11 +12,10 @@ import {
 } from "@/components/ui/select";
 import type {
   OrderFilterParams,
-  OrderStatus,
   PaymentMethod,
   PaymentStatus,
 } from "../types";
-import { Search, X, SlidersHorizontal } from "lucide-react";
+import { Search, X } from "lucide-react";
 
 interface OrderFilterToolbarProps {
   filters: OrderFilterParams;
@@ -70,6 +69,11 @@ export function OrderFilterToolbar({
               }`}
             >
               {tab.label}
+              {tab.id === "all" && totalOrders > 0 && (
+                <span className="ml-1 opacity-80 font-mono text-[11px]">
+                  ({totalOrders})
+                </span>
+              )}
             </button>
           );
         })}

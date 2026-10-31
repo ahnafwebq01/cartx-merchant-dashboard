@@ -160,7 +160,9 @@ export function OrderListTable({
               <TableRow>
                 <TableHead className="w-10 text-center">
                   <Checkbox
-                    checked={isAllSelected}
+                    checked={
+                      isAllSelected ? true : isSomeSelected ? "indeterminate" : false
+                    }
                     onCheckedChange={(checked) => onSelectAll(Boolean(checked))}
                     aria-label="Select all orders"
                   />

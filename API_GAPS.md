@@ -2,7 +2,7 @@
 
 **Document Purpose:** Transparently record backend endpoints, contracts, or third-party provider specifications that are currently pending deployment or implementation in the shared Express.js backend.  
 **Baseline:** `CARTX_MERCHANT_DASHBOARD.md` (Version 1.0)  
-**Last Updated:** October 29, 2026 (Phase 3 Baseline Closure)  
+**Last Updated:** October 31, 2026 (Phase 4 Final Audit & Repository Verification)  
 
 ---
 
@@ -76,7 +76,7 @@ Phase 4 features are fully operational using mock browser persistence (`mockOrde
 
 ---
 
-## 4. Authentication & Session Management Gaps
+## 5. Authentication & Session Management Gaps
 
 | Pending Contract | Description | Impact on Frontend | Required Resolution |
 |---|---|---|---|
@@ -85,7 +85,7 @@ Phase 4 features are fully operational using mock browser persistence (`mockOrde
 
 ---
 
-## 5. Local Integrations Contracts (Required for Phase 5)
+## 6. Local Integrations Contracts (Required for Phase 5)
 
 | Pending Contract | Description | Impact on Frontend | Required Resolution |
 |---|---|---|---|

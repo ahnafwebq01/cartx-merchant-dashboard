@@ -1,12 +1,23 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { mockOrderService } from "../src/features/orders/services/mockOrders";
-import { mockCustomerService } from "../src/features/customers/services/mockCustomers";
+import {
+  mockOrderService,
+  INITIAL_ORDERS,
+} from "../src/features/orders/services/mockOrders";
+import {
+  mockCustomerService,
+  INITIAL_CUSTOMERS,
+} from "../src/features/customers/services/mockCustomers";
 import { mockProductService } from "../src/features/products/services/mockProducts";
 import {
   cancelOrderSchema,
   returnOrderSchema,
+  orderStatusTransitionSchema,
 } from "../src/features/orders/schemas";
-import { customerFormSchema } from "../src/features/customers/schemas";
+import {
+  customerFormSchema,
+  customerTagSchema,
+} from "../src/features/customers/schemas";
+import { VALID_ORDER_STATUS_TRANSITIONS } from "../src/features/orders/types";
 
 describe("Phase 4: Sales & Orders Management", () => {
   beforeEach(() => {
@@ -86,11 +97,11 @@ describe("Phase 4: Sales & Orders Management", () => {
       for (const order of orders) {
         const computedSubtotal = order.items.reduce(
           (sum, i) => sum + i.price * i.quantity,
-          0
+          0,
         );
         expect(order.subtotal).toBe(computedSubtotal);
         expect(order.grandTotal).toBe(
-          order.subtotal - order.discount + order.shippingFee + order.tax
+          order.subtotal - order.discount + order.shippingFee + order.tax,
         );
         if (order.paymentStatus !== "refunded") {
           expect(order.amountPaid + order.amountDue).toBe(order.grandTotal);
@@ -108,16 +119,18 @@ describe("Phase 4: Sales & Orders Management", () => {
         "ord-1001",
         "confirmed",
         "Admin",
-        "Payment verified"
+        "Payment verified",
       );
       expect(confirmed.orderStatus).toBe("confirmed");
-      expect(confirmed.timeline.some((e) => e.status === "confirmed")).toBe(true);
+      expect(confirmed.timeline.some((e) => e.status === "confirmed")).toBe(
+        true,
+      );
 
       // confirmed -> processing
       const processing = mockOrderService.transitionOrderStatus(
         "ord-1001",
         "processing",
-        "Warehouse"
+        "Warehouse",
       );
       expect(processing.orderStatus).toBe("processing");
 
@@ -125,7 +138,7 @@ describe("Phase 4: Sales & Orders Management", () => {
       const ready = mockOrderService.transitionOrderStatus(
         "ord-1001",
         "ready_to_ship",
-        "Packing Desk"
+        "Packing Desk",
       );
       expect(ready.orderStatus).toBe("ready_to_ship");
 
@@ -133,7 +146,7 @@ describe("Phase 4: Sales & Orders Management", () => {
       const shipped = mockOrderService.transitionOrderStatus(
         "ord-1001",
         "shipped",
-        "Steadfast Courier"
+        "Steadfast Courier",
       );
       expect(shipped.orderStatus).toBe("shipped");
       expect(shipped.fulfillmentStatus).toBe("fulfilled");
@@ -142,7 +155,7 @@ describe("Phase 4: Sales & Orders Management", () => {
       const delivered = mockOrderService.transitionOrderStatus(
         "ord-1001",
         "delivered",
-        "Rider"
+        "Rider",
       );
       expect(delivered.orderStatus).toBe("delivered");
     });
@@ -150,17 +163,17 @@ describe("Phase 4: Sales & Orders Management", () => {
     it("prevents illegal order status transitions", () => {
       // Cannot jump from pending directly to delivered
       expect(() =>
-        mockOrderService.transitionOrderStatus("ord-1001", "delivered")
+        mockOrderService.transitionOrderStatus("ord-1001", "delivered"),
       ).toThrowError(/Cannot transition order/);
 
       // Cannot regress delivered order to confirmed
       expect(() =>
-        mockOrderService.transitionOrderStatus("ord-1006", "confirmed")
+        mockOrderService.transitionOrderStatus("ord-1006", "confirmed"),
       ).toThrowError(/Cannot transition order/);
 
       // Cannot transition cancelled order
       expect(() =>
-        mockOrderService.transitionOrderStatus("ord-1008", "shipped")
+        mockOrderService.transitionOrderStatus("ord-1008", "shipped"),
       ).toThrowError(/Cannot transition order/);
     });
 
@@ -169,26 +182,36 @@ describe("Phase 4: Sales & Orders Management", () => {
       expect(order).toBeDefined();
       const targetItem = order!.items[0];
 
-      const productBefore = mockProductService.getProductById(targetItem.productId);
+      const productBefore = mockProductService.getProductById(
+        targetItem.productId,
+      );
       const stockBefore = productBefore!.stock;
 
       const cancelled = mockOrderService.cancelOrder(
         "ord-1001",
         "Customer changed delivery destination outside coverage zone",
         "Staff",
-        true
+        true,
       );
 
       expect(cancelled.orderStatus).toBe("cancelled");
-      expect(cancelled.cancellationReason).toContain("Customer changed delivery destination");
+      expect(cancelled.cancellationReason).toContain(
+        "Customer changed delivery destination",
+      );
 
       // Verify stock was restored
-      const productAfter = mockProductService.getProductById(targetItem.productId);
+      const productAfter = mockProductService.getProductById(
+        targetItem.productId,
+      );
       expect(productAfter!.stock).toBe(stockBefore + targetItem.quantity);
 
       // Verify movement was logged in inventory movements
-      const movements = mockProductService.getInventoryMovements();
-      expect(movements.some((m) => m.referenceId === order!.orderNumber)).toBe(true);
+      const movements = mockProductService.getInventoryMovements(
+        targetItem.productId,
+      );
+      expect(movements.some((m) => m.referenceId === order!.orderNumber)).toBe(
+        true,
+      );
     });
 
     it("handles customer returns on shipped orders with restock and refunds", () => {
@@ -199,7 +222,7 @@ describe("Phase 4: Sales & Orders Management", () => {
         "ord-1005",
         "Package damaged in courier transit",
         "Returns Officer",
-        true
+        true,
       );
 
       expect(returned.orderStatus).toBe("returned");
@@ -245,9 +268,11 @@ describe("Phase 4: Sales & Orders Management", () => {
 
       const withNote = mockCustomerService.addCustomerNote(
         "cust-001",
-        "Customer confirmed new billing address over phone."
+        "Customer confirmed new billing address over phone.",
       );
-      expect(withNote.internalNotes).toContain("Customer confirmed new billing address");
+      expect(withNote.internalNotes).toContain(
+        "Customer confirmed new billing address",
+      );
     });
 
     it("synchronizes customer totalOrders and totalSpend when orders are cancelled", () => {
@@ -259,13 +284,15 @@ describe("Phase 4: Sales & Orders Management", () => {
         "ord-1001",
         "Cancellation test",
         "Admin",
-        true
+        true,
       );
 
       const customerAfter = mockCustomerService.getCustomerById("cust-001");
       // Cancelled order should be excluded from active purchase count and spend
       expect(customerAfter!.totalOrders).toBe(initialOrdersCount - 1);
-      expect(customerAfter!.totalSpend).toBeLessThan(customerBefore!.totalSpend);
+      expect(customerAfter!.totalSpend).toBeLessThan(
+        customerBefore!.totalSpend,
+      );
     });
   });
 
@@ -292,17 +319,25 @@ describe("Phase 4: Sales & Orders Management", () => {
 
     it("filters orders by payment status and order status", () => {
       const paidOrders = mockOrderService.getOrders({ paymentStatus: "paid" });
-      expect(paidOrders.orders.every((o) => o.paymentStatus === "paid")).toBe(true);
+      expect(paidOrders.orders.every((o) => o.paymentStatus === "paid")).toBe(
+        true,
+      );
 
-      const pendingOrders = mockOrderService.getOrders({ orderStatus: "pending" });
-      expect(pendingOrders.orders.every((o) => o.orderStatus === "pending")).toBe(true);
+      const pendingOrders = mockOrderService.getOrders({
+        orderStatus: "pending",
+      });
+      expect(
+        pendingOrders.orders.every((o) => o.orderStatus === "pending"),
+      ).toBe(true);
     });
 
     it("sorts orders by total amount descending and date descending", () => {
-      const sortedByTotal = mockOrderService.getOrders({ sortBy: "total_desc" });
+      const sortedByTotal = mockOrderService.getOrders({
+        sortBy: "total_desc",
+      });
       for (let i = 0; i < sortedByTotal.orders.length - 1; i++) {
         expect(sortedByTotal.orders[i].grandTotal).toBeGreaterThanOrEqual(
-          sortedByTotal.orders[i + 1].grandTotal
+          sortedByTotal.orders[i + 1].grandTotal,
         );
       }
     });
@@ -315,7 +350,9 @@ describe("Phase 4: Sales & Orders Management", () => {
 
     it("filters customers by segment and city", () => {
       const vips = mockCustomerService.getCustomers({ segment: "high_value" });
-      expect(vips.customers.every((c) => c.segment === "high_value")).toBe(true);
+      expect(vips.customers.every((c) => c.segment === "high_value")).toBe(
+        true,
+      );
 
       const dhakaOnly = mockCustomerService.getCustomers({ city: "Dhaka" });
       expect(dhakaOnly.customers.every((c) => c.city === "Dhaka")).toBe(true);
@@ -350,7 +387,7 @@ describe("Phase 4: Sales & Orders Management", () => {
       const res = mockOrderService.bulkUpdateStatus(
         ["ord-1001", "ord-1006"],
         "confirmed",
-        "Admin"
+        "Admin",
       );
 
       expect(res.updatedCount).toBe(1);
@@ -364,22 +401,30 @@ describe("Phase 4: Sales & Orders Management", () => {
       const res = mockOrderService.bulkCancelOrders(
         ["ord-1001", "ord-1002"],
         "Bulk inventory stock recount cancellation",
-        "Admin"
+        "Admin",
       );
 
       expect(res.cancelledCount).toBe(2);
-      expect(mockOrderService.getOrderById("ord-1001")?.orderStatus).toBe("cancelled");
-      expect(mockOrderService.getOrderById("ord-1002")?.orderStatus).toBe("cancelled");
+      expect(mockOrderService.getOrderById("ord-1001")?.orderStatus).toBe(
+        "cancelled",
+      );
+      expect(mockOrderService.getOrderById("ord-1002")?.orderStatus).toBe(
+        "cancelled",
+      );
     });
   });
 
   describe("Storage Parsing & Error Recovery", () => {
     it("handles resetDemoOrders and restores baseline cleanly", () => {
       mockOrderService.cancelOrder("ord-1001", "Temp cancel", "Admin");
-      expect(mockOrderService.getOrderById("ord-1001")?.orderStatus).toBe("cancelled");
+      expect(mockOrderService.getOrderById("ord-1001")?.orderStatus).toBe(
+        "cancelled",
+      );
 
       mockOrderService.resetDemoOrders();
-      expect(mockOrderService.getOrderById("ord-1001")?.orderStatus).toBe("pending");
+      expect(mockOrderService.getOrderById("ord-1001")?.orderStatus).toBe(
+        "pending",
+      );
     });
   });
 });
