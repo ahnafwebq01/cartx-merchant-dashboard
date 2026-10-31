@@ -11,8 +11,8 @@
 | **03** | **Settings & Store Profile** | `/dashboard/settings` | **Phase 2** | **COMPLETED** | Store profile, business info, contacts, BDT locale, RBAC permission guards, and TanStack Query sync. |
 | **04** | **Products Management** | `/dashboard/products` | **Phase 3** | **COMPLETED (Demo Mode)** | Full CRUD, categories, collections, variants, SKU generator, CSV import/export, local persistence. |
 | **05** | **Stocks & Inventory** | `/dashboard/inventory` | **Phase 3** | **COMPLETED (Demo Mode)** | Stock adjustments (restock, damaged, lost, correction), health meters, movement audit logs. |
-| **06** | **Sales & Orders** | `/dashboard/orders` | Phase 4 | Pending | Order listing, details, fulfillment, invoice printing. |
-| **07** | **Customers Database** | `/dashboard/customers` | Phase 4 | Pending | Customer profiles, tags, groups, purchase history. |
+| **06** | **Sales & Orders** | `/dashboard/orders` | **Phase 4** | **COMPLETED (Demo Mode)** | Order listing, details, fulfillment lifecycle, timeline, printable invoice, status state machine. |
+| **07** | **Customers Database** | `/dashboard/customers` | **Phase 4** | **COMPLETED (Demo Mode)** | Customer profiles, tags, groups, lifetime value metrics, purchase history, and notes. |
 | **08** | **Payments & Finance** | `/dashboard/payments` | Phase 5 | Pending | Gateway settings (bKash, Nagad), transaction logs. |
 | **09** | **Shipping & Delivery** | `/dashboard/shipping` | Phase 5 | Pending | Courier setups (Steadfast, Pathao), tracking, zones. |
 | **10** | **Online Store & Themes** | `/dashboard/store` | Phase 6 | Pending | Theme customizer, pages, custom domain, navigation. |
@@ -59,8 +59,43 @@
   - [x] Collapse/expand toggle button in sidebar footer.
 - [x] **Unit Testing & QA**:
   - [x] Created `tests/phase3-products-inventory.test.ts` (25 automated tests covering schemas, CRUD, stock adjustments, pagination clamping, dynamic categories, collections persistence, safe storage parsing, and CSV import/export).
-  - [x] 44/44 tests passing across entire repository test suite (100% pass rate).
-  - [x] 0 ESLint errors; 0 TypeScript errors; 21/21 routes prerendered cleanly via Turbopack build.
+  - [x] 44/44 tests passing across Phase 3 baseline.
+
+---
+
+## Detailed Phase 4 Implementation Deliverables (Sales & Orders, Customers)
+
+- [x] **Orders Data Table & Workflow** (`/dashboard/orders`):
+  - [x] Responsive data table with selection checkboxes, order number monospace link, BD date/time, customer details, line item previews, payment badges, fulfillment badges, BDT total (৳), and row actions.
+  - [x] Order status tabs (All, Pending, Processing, In Transit, Delivered, Cancelled / Returns).
+  - [x] Multi-field search (order ID, customer name, phone, courier tracking ID, item title/SKU).
+  - [x] Filters for payment status (Paid, Unpaid, Pending, Refunded), payment method (COD, bKash, Nagad, SSLCommerz, Bank), courier (Steadfast, Pathao, RedX, Paperfly), and date timeframe presets.
+  - [x] Multi-column sorting (Date, Total, Order #) and pagination controls with rows-per-page selector (5, 10, 20, 50).
+  - [x] Bulk actions bar (Mark as Confirmed, Mark as Processing, Export CSV, Bulk Cancel with confirmation dialog).
+  - [x] CSV Catalog Export for orders.
+  - [x] Reset Demo Data dialog restoring baseline 15 Bangladeshi orders.
+- [x] **Order Details & Fulfillment Lifecycle** (`/dashboard/orders/[orderId]`):
+  - [x] Dynamic route wrapped in `<Suspense>` for Next.js 16 Partial Prerendering (PPR).
+  - [x] 21st.dev-inspired visual fulfillment journey stepper (Placed -> Confirmed -> Processing -> Packed -> Shipped -> Delivered) and vertical audit trail event log.
+  - [x] Ordered items card with product thumbnail fallback, SKU badge, variant display, unit price, quantity, and line total.
+  - [x] Financial summary card with subtotal, discount, courier shipping fee, grand total, amount paid, and amount due.
+  - [x] Customer details card with phone dial link, email, delivery address, and direct link to customer profile.
+  - [x] Logistics card with courier name, tracking number, estimated delivery, and dispatch timestamps.
+  - [x] Private internal staff notes card with note addition form and actor/timestamp attribution.
+  - [x] Strict status transition engine enforcing valid lifecycle transitions, restock rules, and cancellation reason validation.
+  - [x] Professional Bangladesh merchant printable invoice modal (`window.print()`).
+- [x] **Returns & Refunds Management** (`/dashboard/orders/returns`):
+  - [x] Dedicated return tracking table displaying return reasons, refund status, restocked inventory counts, and return value.
+- [x] **Customer Database & Segmentation** (`/dashboard/customers`, `/dashboard/customers/[customerId]`, `/dashboard/customers/groups`):
+  - [x] Customer listing table with avatars, phone numbers, total orders, lifetime spend (৳), AOV (৳), last order date, tags, and profile navigation.
+  - [x] 21st.dev-inspired customer profile card (#7093) with contact shortcuts, addresses, metrics tiles, customer tags management modal, and private staff notes.
+  - [x] Order history table linking customer directly to their placed orders.
+  - [x] Automated segmentation into New, Repeat, High-Value / VIP, and Inactive customer groups.
+  - [x] Real-time customer metric recalculation synchronized with order lifecycle events (total orders, total spend, AOV).
+- [x] **Automated Testing & Quality Gates**:
+  - [x] Created `tests/phase4-orders-customers.test.ts` with 25 unit tests covering Zod schemas, state machine transitions, cancellation restock rules, customer sync, search, filters, sorting, clamped pagination, CSV export, and demo reset.
+  - [x] **69 / 69 unit tests passing** across entire repository test suite (100% pass rate).
+  - [x] **0 ESLint errors**; **0 TypeScript errors**; **27 / 27 routes** prerendered cleanly via Turbopack build.
 
 ---
 

@@ -96,13 +96,15 @@ flowchart LR
 - [x] Full automated test suite in `tests/phase3-products-inventory.test.ts` (25 tests, 44 total across suite)
 - [x] Local browser persistence via `localStorage` with SSR-safe memory fallbacks
 
-### Phase 4: Orders & Customer Records (UP NEXT)
-- [ ] Order list with multi-column filters, search, and bulk operations
-- [ ] Order details page, fulfillment workflows, and status state machine
-- [ ] Customer database, order history, tags, and notes
-- [ ] Printable invoices and packing slips
+### Phase 4: Orders & Customer Records (COMPLETED - Demo Mode)
+- [x] Order list with multi-column filters, search, and bulk operations (`/dashboard/orders`)
+- [x] Order details page, fulfillment workflows, and status state machine (`/dashboard/orders/[orderId]`)
+- [x] Returns & refunds management (`/dashboard/orders/returns`)
+- [x] Customer database, profile card, order history, tags, notes, and segmentation (`/dashboard/customers`, `/dashboard/customers/[customerId]`, `/dashboard/customers/groups`)
+- [x] Printable invoices formatted for Bangladesh merchants (`window.print()`)
+- [x] Full automated test suite in `tests/phase4-orders-customers.test.ts` (25 tests, 69 total across suite)
 
-### Phase 5: Local Payments & Courier Logistics
+### Phase 5: Local Payments & Courier Logistics (UP NEXT)
 - [ ] Bangladesh payment gateways (bKash, Nagad, SSLCommerz) connection settings
 - [ ] Bangladesh courier integrations (Steadfast, Pathao, RedX)
 - [ ] Automated shipment generation and tracking webhooks
@@ -133,6 +135,6 @@ flowchart LR
 |---|---|---|
 | Strict TypeScript Compilation | `npm run type-check` | **PASS** (0 errors) |
 | ESLint Code Quality | `npm run lint` | **PASS** (0 errors) |
-| Automated Unit Testing | `npm run test` | **PASS** (44/44 passed) |
-| Next.js Production Build | `npm run build` | **PASS** (21 static/PPR routes generated) |
+| Automated Unit Testing | `npm run test` | **PASS** (69/69 passed) |
+| Next.js Production Build | `npm run build` | **PASS** (27 static/PPR routes generated) |
 | Boundary & Secrets Discipline | Zero client secrets / zero fake success | **PASS** |

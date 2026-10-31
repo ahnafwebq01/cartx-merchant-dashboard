@@ -43,7 +43,32 @@ Phase 3 frontend features are fully functional using a local storage service (`s
 
 ---
 
-## 3. Storage & File Upload Contracts
+## 3. Phase 4 Contracts Status (Orders & Customers)
+
+Phase 4 features are fully operational using mock browser persistence (`mockOrders.ts` and `mockCustomers.ts`) and React Query hooks. When the shared Express backend is ready, the following endpoints will be connected to the typed client:
+
+| Planned Endpoint | Method | Purpose | Frontend Hook / Consumer |
+|---|---|---|---|
+| `/api/v1/orders` | `GET` | Paginated orders listing with search and filters | `useOrdersQuery(params)` |
+| `/api/v1/orders/:id` | `GET` | Single order details with items and timeline | `useOrderQuery(id)` |
+| `/api/v1/orders/:id/status` | `POST` | Validated status transition | `useTransitionOrderStatusMutation()` |
+| `/api/v1/orders/:id/cancel` | `POST` | Cancel order with reason and optional restock | `useCancelOrderMutation()` |
+| `/api/v1/orders/:id/return` | `POST` | Return order with reason and refund | `useReturnOrderMutation()` |
+| `/api/v1/orders/:id/payment` | `PATCH` | Update payment status and gateway ref | `useMarkPaymentStatusMutation()` |
+| `/api/v1/orders/:id/notes` | `POST` | Append private merchant staff note | `useAddOrderNoteMutation()` |
+| `/api/v1/orders/bulk/status` | `POST` | Bulk transition eligible orders | `useBulkUpdateStatusMutation()` |
+| `/api/v1/orders/bulk/cancel` | `POST` | Bulk cancel eligible orders | `useBulkCancelOrdersMutation()` |
+| `/api/v1/orders/stats` | `GET` | Storewide orders KPI statistics | `useOrderStatsQuery()` |
+| `/api/v1/customers` | `GET` | Paginated customer database with filters | `useCustomersQuery(params)` |
+| `/api/v1/customers/:id` | `GET` | Customer profile, addresses and lifetime metrics | `useCustomerQuery(id)` |
+| `/api/v1/customers` | `POST` | Create new customer record | `useCreateCustomerMutation()` |
+| `/api/v1/customers/:id/tags` | `PATCH` | Update segmentation tags | `useUpdateCustomerTagsMutation()` |
+| `/api/v1/customers/:id/notes` | `POST` | Append customer profile note | `useAddCustomerNoteMutation()` |
+| `/api/v1/customers/stats` | `GET` | Customer segments & LTV stats | `useCustomerStatsQuery()` |
+
+---
+
+## 4. Storage & File Upload Contracts
 
 | Pending Contract | Description | Impact on Frontend | Required Resolution |
 |---|---|---|---|
