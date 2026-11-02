@@ -7,7 +7,10 @@ import {
   isParentItemActive,
   type NavItem,
 } from "@/config/navigation";
-import { DEFAULT_ROLE_PERMISSIONS, hasPermission } from "@/lib/permissions/rbac";
+import {
+  DEFAULT_ROLE_PERMISSIONS,
+  hasPermission,
+} from "@/lib/permissions/rbac";
 
 describe("Sidebar Navigation Configuration & Routing Logic", () => {
   const allSubHrefs: string[] = [];
@@ -24,10 +27,12 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
     });
   });
 
-  const allConfiguredRoutes = Array.from(new Set([...allDirectHrefs, ...allSubHrefs]));
+  const allConfiguredRoutes = Array.from(
+    new Set([...allDirectHrefs, ...allSubHrefs]),
+  );
 
   describe("Route Inventory & Completeness", () => {
-    it("should include all 6 required logical navigation groups", () => {
+    it("should include all 7 required logical navigation groups", () => {
       const groupIds = NAVIGATION_GROUPS.map((g) => g.id);
       expect(groupIds).toEqual([
         "overview",
@@ -35,6 +40,7 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         "sales",
         "payments-finance",
         "shipping-logistics",
+        "storefront",
         "store-management",
       ]);
     });
@@ -61,6 +67,10 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         "/dashboard/shipping/shipments",
         "/dashboard/shipping/couriers",
         "/dashboard/shipping/settings",
+        "/dashboard/store",
+        "/dashboard/store/themes",
+        "/dashboard/store/pages",
+        "/dashboard/store/domains",
         "/dashboard/settings",
         "/onboarding",
       ];
@@ -68,7 +78,7 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
       expectedImplementedRoutes.forEach((route) => {
         expect(
           allConfiguredRoutes.includes(route),
-          `Expected route ${route} to be present in navigation configuration`
+          `Expected route ${route} to be present in navigation configuration`,
         ).toBe(true);
       });
     });
@@ -90,15 +100,12 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
       expect(leafLinks.length).toBe(uniqueLeafLinks.size);
     });
 
-    it("should NOT contain any unimplemented Phase 6-9 routes to avoid 404s", () => {
+    it("should NOT contain any unimplemented Phase 7-9 routes to avoid 404s", () => {
       const unimplementedRoadmapRoutes = [
         "/dashboard/analytics",
         "/dashboard/marketing",
         "/dashboard/marketing/coupons",
         "/dashboard/marketing/campaigns",
-        "/dashboard/store",
-        "/dashboard/store/themes",
-        "/dashboard/store/domains",
         "/dashboard/apps",
         "/dashboard/mobile-app",
         "/dashboard/team",
@@ -137,23 +144,42 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
     it("should export backwards-compatible NAVIGATION_ITEMS list", () => {
       expect(Array.isArray(NAVIGATION_ITEMS)).toBe(true);
       expect(NAVIGATION_ITEMS.length).toBeGreaterThan(0);
-      expect(NAVIGATION_ITEMS.find((item) => item.href === "/dashboard")).toBeDefined();
+      expect(
+        NAVIGATION_ITEMS.find((item) => item.href === "/dashboard"),
+      ).toBeDefined();
     });
   });
 
   describe("Active Route Matching Logic", () => {
     it("should only match /dashboard on exact match and never for subpaths", () => {
       expect(isRouteActive("/dashboard", "/dashboard", true)).toBe(true);
-      expect(isRouteActive("/dashboard/products", "/dashboard", true)).toBe(false);
-      expect(isRouteActive("/dashboard/orders", "/dashboard", true)).toBe(false);
-      expect(isRouteActive("/dashboard/settings", "/dashboard", true)).toBe(false);
+      expect(isRouteActive("/dashboard/products", "/dashboard", true)).toBe(
+        false,
+      );
+      expect(isRouteActive("/dashboard/orders", "/dashboard", true)).toBe(
+        false,
+      );
+      expect(isRouteActive("/dashboard/settings", "/dashboard", true)).toBe(
+        false,
+      );
     });
 
     it("should correctly match nested catalog routes", () => {
-      expect(isRouteActive("/dashboard/products/new", "/dashboard/products/new")).toBe(true);
-      expect(isRouteActive("/dashboard/products/new", "/dashboard/products")).toBe(true);
-      expect(isRouteActive("/dashboard/products", "/dashboard/products/new")).toBe(false);
-      expect(isRouteActive("/dashboard/products/categories", "/dashboard/products/categories")).toBe(true);
+      expect(
+        isRouteActive("/dashboard/products/new", "/dashboard/products/new"),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/products/new", "/dashboard/products"),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/products", "/dashboard/products/new"),
+      ).toBe(false);
+      expect(
+        isRouteActive(
+          "/dashboard/products/categories",
+          "/dashboard/products/categories",
+        ),
+      ).toBe(true);
     });
 
     it("should correctly match dynamic parameterized order routes to parent item", () => {
@@ -171,10 +197,14 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
       expect(isParentItemActive(ordersItem, "/dashboard/orders")).toBe(true);
 
       // Returns page
-      expect(isParentItemActive(ordersItem, "/dashboard/orders/returns")).toBe(true);
+      expect(isParentItemActive(ordersItem, "/dashboard/orders/returns")).toBe(
+        true,
+      );
 
       // Parameterized / dynamic order details page: /dashboard/orders/[orderId]
-      expect(isParentItemActive(ordersItem, "/dashboard/orders/ord-2026-001")).toBe(true);
+      expect(
+        isParentItemActive(ordersItem, "/dashboard/orders/ord-2026-001"),
+      ).toBe(true);
 
       // Unrelated route
       expect(isParentItemActive(ordersItem, "/dashboard/products")).toBe(false);
@@ -191,7 +221,12 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         ],
       };
 
-      expect(isParentItemActive(productsItem, "/dashboard/products/prod-bangladesh-saree/edit")).toBe(true);
+      expect(
+        isParentItemActive(
+          productsItem,
+          "/dashboard/products/prod-bangladesh-saree/edit",
+        ),
+      ).toBe(true);
     });
 
     it("should correctly match dynamic customer routes to parent item", () => {
@@ -205,7 +240,9 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         ],
       };
 
-      expect(isParentItemActive(customersItem, "/dashboard/customers/cust-bd-01")).toBe(true);
+      expect(
+        isParentItemActive(customersItem, "/dashboard/customers/cust-bd-01"),
+      ).toBe(true);
     });
   });
 
@@ -220,7 +257,9 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
           if (item.children) {
             item.children.forEach((child) => {
               if (child.permission) {
-                expect(hasPermission(ownerPermissions, child.permission)).toBe(true);
+                expect(hasPermission(ownerPermissions, child.permission)).toBe(
+                  true,
+                );
               }
             });
           }
@@ -230,13 +269,15 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
 
     it("should restrict inventory manager from managing store settings", () => {
       const inventoryPermissions = DEFAULT_ROLE_PERMISSIONS.inventory_manager;
-      const settingsItem = NAVIGATION_GROUPS.find((g) => g.id === "store-management")?.items.find(
-        (i) => i.href === "/dashboard/settings"
-      );
+      const settingsItem = NAVIGATION_GROUPS.find(
+        (g) => g.id === "store-management",
+      )?.items.find((i) => i.href === "/dashboard/settings");
 
       expect(settingsItem).toBeDefined();
       expect(settingsItem?.permission).toBe("settings.manage");
-      expect(hasPermission(inventoryPermissions, "settings.manage")).toBe(false);
+      expect(hasPermission(inventoryPermissions, "settings.manage")).toBe(
+        false,
+      );
       expect(hasPermission(inventoryPermissions, "inventory.view")).toBe(true);
     });
   });

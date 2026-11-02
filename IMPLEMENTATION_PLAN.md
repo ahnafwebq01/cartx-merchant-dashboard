@@ -4,7 +4,7 @@
 **Module:** Merchant Dashboard (`cartx-merchant-dashboard`)  
 **Target Market:** Bangladesh (BDT ৳, Bengali & English)  
 **Authoritative Specification:** `CARTX_MERCHANT_DASHBOARD.md` (Version 1.0)  
-**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Complete (Demo Mode) • Phase 5 Complete (Demo Mode) • Phase 6 Pending  
+**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Complete (Demo Mode) • Phase 5 Complete (Demo Mode) • Phase 6 Complete (Demo Mode) • Phase 7 Pending  
 
 ---
 
@@ -139,12 +139,35 @@ flowchart LR
   - [x] **106 / 106 automated tests passing** across entire repository test suite (100% pass rate).
   - [x] **0 ESLint errors**; **0 TypeScript errors**; **36 / 36 routes** prerendered cleanly via Turbopack build.
 
-### Phase 6: Storefront & Domain Management (UP NEXT)
-- [ ] Storefront theme library and visual customization
-- [ ] Custom domain management and SSL status
-- [ ] CMS pages and legal policies
+### Phase 6: Storefront & Domain Management (COMPLETED - Demo Mode)
+- [x] **Storefront Overview Dashboard** (`/dashboard/store`):
+  - [x] Status switch (Active, Draft, Maintenance, Offline) with live preview link and copy shortcut.
+  - [x] Active theme card, typography/color swatches, and customization shortcut.
+  - [x] Domain configuration summary and recent activity trail.
+- [x] **Theme Library & Visual Customizer** (`/dashboard/store/themes`, `/dashboard/store/themes/customize`):
+  - [x] 4 Curated themes (Modern Commerce, Minimal Boutique, Express Superstore, Artisan Craft).
+  - [x] Split-pane interactive customizer with Colors, Typography, Homepage Sections, and Header tabs.
+  - [x] Responsive viewport switchers: Desktop (100%), Tablet (768px), and Mobile (375px).
+  - [x] Real-time live canvas preview updating instantly via React Hook Form `useWatch`.
+  - [x] Reset customizations to theme defaults with confirmation.
+- [x] **Domain Management & DNS Instructions** (`/dashboard/store/domains`):
+  - [x] Default CartX storefront subdomain (`green-harvest.cartx.com.bd`) with permanent Active status.
+  - [x] Custom domain registration form with Zod FQDN validation.
+  - [x] Truthful demo mode boundaries: verification labeled as *Demo Mode — Verification Pending* and SSL as *Demo / Not Active*.
+  - [x] Interactive DNS instructions modal with copyable CNAME and A record rows.
+- [x] **CMS Pages & Legal Policy Templates** (`/dashboard/store/pages`, `/dashboard/store/pages/new`, `/dashboard/store/pages/[pageId]/edit`):
+  - [x] CMS pages listing with status tabs, search, and delete confirmations.
+  - [x] 4 Bangladesh legal templates (Privacy Policy, Terms & Conditions, 7-Day Refund Policy, Shipping Policy).
+  - [x] Prominent legal disclaimer callout identifying templates as non-legal draft advice.
+  - [x] Markdown content editor, auto-slug generator, status toggle, and SEO metadata.
+- [x] **Sidebar Navigation & Quality Gates**:
+  - [x] Integrated Storefront navigation group with 4 nested items protected by `storefront.manage` RBAC permission.
+  - [x] Active route and subroute highlighting for deep routes.
+  - [x] Created `tests/phase6-storefront.test.ts` (34 tests).
+  - [x] **154 / 154 automated unit tests passing** (100% pass rate).
+  - [x] **0 ESLint errors**; **0 TypeScript errors**; **43 / 43 routes** compiled cleanly via Turbopack build.
 
-### Phase 7: Marketing, Promotions & Analytics
+### Phase 7: Marketing, Promotions & Analytics (UP NEXT)
 - [ ] Coupon codes, automatic cart discounts, and flash sales
 - [ ] Sales charts, order volume trends, and exportable reports
 
@@ -163,6 +186,10 @@ flowchart LR
 
 | Gate | Check Command | Status |
 |---|---|---|
+| **TypeScript Strictness** | `npm run type-check` | **PASS (0 errors)** |
+| **ESLint Quality & Rules** | `npm run lint` | **PASS (0 errors, 0 warnings)** |
+| **Automated Test Suite** | `npm run test` | **PASS (154/154 unit tests passing)** |
+| **Production Build** | `npm run build` | **PASS (43/43 routes prerendered)** |
 | Strict TypeScript Compilation | `npm run type-check` | **PASS** (0 errors) |
 | ESLint Code Quality | `npm run lint` | **PASS** (0 errors, 5 legacy compiler warnings) |
 | Automated Unit Testing | `npm run test` | **PASS** (106/106 passed across 5 test suites) |

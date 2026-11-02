@@ -8,6 +8,7 @@ import {
   Truck,
   Settings,
   Rocket,
+  Globe,
   type LucideIcon,
 } from "lucide-react";
 import type { Permission } from "@/types/auth";
@@ -187,6 +188,26 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
           { title: "Shipments & Tracking", href: "/dashboard/shipping/shipments", permission: "shipping.view" },
           { title: "Courier Integrations", href: "/dashboard/shipping/couriers", permission: "shipping.manage" },
           { title: "Shipping Settings", href: "/dashboard/shipping/settings", permission: "shipping.manage" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "storefront",
+    title: "Storefront",
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Storefront",
+        href: "/dashboard/store",
+        icon: Globe,
+        permission: "storefront.manage",
+        children: [
+          { title: "Store Overview", href: "/dashboard/store", permission: "storefront.manage" },
+          { title: "Themes & Customization", href: "/dashboard/store/themes", permission: "storefront.manage" },
+          { title: "Pages", href: "/dashboard/store/pages", permission: "storefront.manage" },
+          { title: "Domains", href: "/dashboard/store/domains", permission: "storefront.manage" },
         ],
       },
     ],

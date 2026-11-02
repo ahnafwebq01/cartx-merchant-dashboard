@@ -17,7 +17,7 @@
 
 ## 2. Current Implementation Status (Demo Mode)
 
-The project currently operates in **high-fidelity client-side demo mode** (Phases 1 through 5 complete). All features use localized in-memory and browser `localStorage` persistence (`mockOrders`, `mockCustomers`, `mockProducts`, `mockPayments`, `mockShipping`) with SSR-safe fallbacks and TanStack Query state synchronization. No external backend or credentials are required to run and test the complete dashboard.
+The project currently operates in **high-fidelity client-side demo mode** (Phases 1 through 6 complete). All features use localized in-memory and browser `localStorage` persistence (`mockOrders`, `mockCustomers`, `mockProducts`, `mockPayments`, `mockShipping`, `mockStorefront`) with SSR-safe fallbacks and TanStack Query state synchronization. No external backend or credentials are required to run and test the complete dashboard.
 
 | Milestone | Status | Details |
 |---|---|---|
@@ -26,8 +26,8 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
 | **Phase 3: Products & Inventory** | **Completed (Demo Mode)** | Product CRUD, variant matrix, SKU generation, inventory adjustments, CSV import/export. |
 | **Phase 4: Sales, Orders & Customers** | **Completed (Demo Mode)** | Order fulfillment state machine, returns, printable invoice, customer CRM, segmentation. |
 | **Phase 5: Payments & Shipping Logistics** | **Completed (Demo Mode)** | bKash, Nagad, SSLCommerz, COD adapters, courier consignments (Steadfast, Pathao, RedX). |
-| **Phase 6: UX Polish & Consistency Audit** | **Completed** | Full UI/UX audit, standardized headers, responsive tables, accessible dialogs, safety alerts ([Report](./docs/PHASE_6_UX_POLISH_AUDIT_REPORT.md)). |
-| **Phases 7–9: Storefront, Marketing, Billing, App** | *Pending* | Future roadmap items per [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md). |
+| **Phase 6: Storefront & Domain Management** | **Completed (Demo Mode)** | Theme library, visual customizer with live canvas, custom domain FQDN setup, DNS guide, CMS & legal policies. |
+| **Phases 7–9: Marketing, Analytics, Billing, App** | *Pending* | Future roadmap items per [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md). |
 
 ---
 
@@ -86,6 +86,13 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
 - **Live Tracking:** Interactive timeline stepper with location and timestamp attribution.
 - **Shipping Rates (`/dashboard/shipping/settings`):** Inside Dhaka (৳60), outside Dhaka (৳120), free shipping threshold, and COD fee rules.
 
+### Storefront & Domain Management (`/dashboard/store`)
+- **Storefront Overview:** Live URL banner with one-click copy, status switch (Active, Draft, Maintenance, Offline), active theme summary, and recent audit activity trail.
+- **Theme Library (`/dashboard/store/themes`):** Curated catalog with 4 distinct retail designs (Modern Commerce, Minimal Boutique, Express Superstore, Artisan Craft) with live preview and instant activation.
+- **Theme Customizer (`/dashboard/store/themes/customize`):** Split-pane visual customizer with responsive viewport switchers (Desktop, Tablet, Mobile) and live real-time canvas updating via `useWatch`.
+- **Domain Configuration (`/dashboard/store/domains`):** Default CartX subdomain management, custom domain registration with Zod FQDN validation, and interactive DNS setup guide (CNAME & A records).
+- **CMS Pages & Legal Policies (`/dashboard/store/pages`):** Full CMS page CRUD with 4 localized Bangladesh legal templates (Privacy Policy, Terms & Conditions, 7-Day Refund Policy, Shipping Policy) and consumer protection disclaimers.
+
 ---
 
 ## 5. Main Application Routes
@@ -123,6 +130,13 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
   │   ├── /shipments                   # Courier consignments & tracking
   │   ├── /couriers                    # Courier network setups (Steadfast, Pathao, RedX)
   │   └── /settings                    # Delivery charges & zone rules
+  ├── /store                           # Storefront overview & status
+  │   ├── /themes                      # Theme library & gallery
+  │   │   └── /customize               # Split-pane visual customizer & preview canvas
+  │   ├── /domains                     # Custom domain setup & DNS guide
+  │   └── /pages                       # CMS pages & legal policy management
+  │       ├── /new                     # Create new page & legal templates
+  │       └── /[pageId]/edit           # Page editor & revision
   └── /settings                        # Store profile & regional preferences
 ```
 
@@ -188,6 +202,9 @@ npm run test
 - `tests/phase2-onboarding-settings.test.ts` — Onboarding wizard schemas, slug validation regex, settings form logic.
 - `tests/phase3-products-inventory.test.ts` — Product schemas, inventory calculations, movement logging, CSV parsing.
 - `tests/phase4-orders-customers.test.ts` — Order lifecycle state machine, cancellation rules, stock restocking, customer statistics recalculation, and filters.
+- `tests/phase5-payments-shipping.test.ts` — Gateway and courier adapters, transactions, refunds, shipments, and live tracking.
+- `tests/phase6-storefront.test.ts` — Theme customization, domain validation, CMS pages CRUD, and truthful demo boundaries.
+- `tests/sidebar-navigation.test.ts` — 7 logical navigation groups and 26 implemented dashboard routes.
 
 ---
 

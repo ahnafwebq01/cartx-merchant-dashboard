@@ -104,7 +104,45 @@ Phase 5 frontend capabilities operate through typed adapter and service boundari
 
 ---
 
-## 5. Storage & File Upload Contracts
+## 5. Phase 6 Contracts Status (Storefront & Domain Management)
+
+Phase 6 frontend features are fully functional in high-fidelity client demo mode using local browser storage (`src/features/storefront/services/mockStorefront.ts`) and React Query hooks. When the shared Express backend is ready, the following REST endpoints will be connected to the typed client:
+
+### Theme & Storefront Endpoints
+
+| Planned Endpoint                               | Method   | Purpose                                                                | Frontend Hook / Consumer                 |
+| ---------------------------------------------- | -------- | ---------------------------------------------------------------------- | ---------------------------------------- |
+| `/api/v1/storefront/overview`                  | `GET`    | Storefront status, active theme, domain routing, and recent activity   | `useStorefrontOverviewQuery()`           |
+| `/api/v1/storefront/status`                    | `PATCH`  | Update operational status (`active`, `draft`, `maintenance`, `offline`)| `useUpdateStorefrontStatusMutation()`    |
+| `/api/v1/storefront/themes`                    | `GET`    | List theme catalog with version and presets                            | `useThemesQuery()`                       |
+| `/api/v1/storefront/themes/active`             | `GET`    | Active storefront theme and custom configuration                       | `useActiveThemeQuery()`                  |
+| `/api/v1/storefront/themes/:id/customize`      | `PATCH`  | Save visual customizations (colors, typography, sections, header)      | `useUpdateThemeCustomizationMutation()`  |
+| `/api/v1/storefront/themes/:id/activate`       | `POST`   | Switch active theme for customer storefront                            | `useActivateThemeMutation()`             |
+| `/api/v1/storefront/themes/:id/reset`          | `POST`   | Reset theme customizations to factory baseline                         | `useResetThemeCustomizationMutation()`   |
+
+### Domain & DNS Verification Endpoints
+
+| Planned Endpoint                               | Method   | Purpose                                                                | Frontend Hook / Consumer                 |
+| ---------------------------------------------- | -------- | ---------------------------------------------------------------------- | ---------------------------------------- |
+| `/api/v1/storefront/domains`                   | `GET`    | List configured default and custom domain routing records              | `useDomainsQuery()`                      |
+| `/api/v1/storefront/domains`                   | `POST`   | Register custom domain for reverse proxy routing                       | `useAddCustomDomainMutation()`           |
+| `/api/v1/storefront/domains/:id`               | `DELETE` | Remove custom domain routing from tenant boundary                      | `useRemoveCustomDomainMutation()`        |
+| `/api/v1/storefront/domains/:id/verify`        | `POST`   | Authoritative DNS lookup against nameservers for CNAME / A records     | `useVerifyDomainMutation()`              |
+| `/api/v1/storefront/domains/:id/ssl`           | `GET`    | Check server-side SSL certificate issuance (Let's Encrypt / Cloudflare)| Future SSL Polling Query                 |
+
+### CMS Pages & Legal Policy Endpoints
+
+| Planned Endpoint                               | Method   | Purpose                                                                | Frontend Hook / Consumer                 |
+| ---------------------------------------------- | -------- | ---------------------------------------------------------------------- | ---------------------------------------- |
+| `/api/v1/storefront/pages`                     | `GET`    | List CMS pages and legal policies with search and status filters       | `usePagesQuery(params)`                  |
+| `/api/v1/storefront/pages/:id`                 | `GET`    | Retrieve single CMS page content, metadata, and revision history       | `usePageQuery(id)`                       |
+| `/api/v1/storefront/pages`                     | `POST`   | Create new CMS page or legal policy with unique slug validation        | `useCreatePageMutation()`                |
+| `/api/v1/storefront/pages/:id`                 | `PATCH`  | Update page title, slug, content, or publication status                | `useUpdatePageMutation()`                |
+| `/api/v1/storefront/pages/:id`                 | `DELETE` | Delete CMS page from storefront navigation                             | `useDeletePageMutation()`                |
+
+---
+
+## 6. Storage & File Upload Contracts
 
 | Pending Contract          | Description                                                                                                           | Impact on Frontend                                                                                                              | Required Resolution                                                                              |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -112,7 +150,7 @@ Phase 5 frontend capabilities operate through typed adapter and service boundari
 
 ---
 
-## 6. Authentication & Session Management Gaps
+## 7. Authentication & Session Management Gaps
 
 | Pending Contract               | Description                                                                                      | Impact on Frontend                                                                      | Required Resolution                                                                        |
 | ------------------------------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -121,7 +159,7 @@ Phase 5 frontend capabilities operate through typed adapter and service boundari
 
 ---
 
-## 7. Third-Party Gateway & Courier Proxies (Required for Live Mode)
+## 8. Third-Party Gateway & Courier Proxies (Required for Live Mode)
 
 | Pending Contract                       | Description                                                                                                                             | Impact on Frontend                                                                                                     | Required Resolution                                                                         |
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |

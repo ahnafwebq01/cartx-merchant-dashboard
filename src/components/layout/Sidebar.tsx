@@ -206,7 +206,9 @@ export function Sidebar({
                         {hasChildren && (
                           <div className="text-[11px] text-muted-foreground space-y-1 pt-1.5 border-t border-border/50">
                             {item.children?.map((sub) => {
-                              const isSubActive = pathname === sub.href;
+                              const isSubActive =
+                                pathname === sub.href ||
+                                (sub.href !== item.href && pathname.startsWith(`${sub.href}/`));
                               return (
                                 <div
                                   key={sub.href}
@@ -303,7 +305,9 @@ export function Sidebar({
                           {isItemOpen && (
                             <div className="ml-5 pl-2.5 border-l border-border/70 mt-0.5 space-y-0.5">
                               {item.children?.map((sub) => {
-                                const isSubActive = pathname === sub.href;
+                                const isSubActive =
+                                  pathname === sub.href ||
+                                  (sub.href !== item.href && pathname.startsWith(`${sub.href}/`));
                                 return (
                                   <Link
                                     key={sub.href}

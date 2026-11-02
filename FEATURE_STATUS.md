@@ -15,7 +15,7 @@
 | **07** | **Customers Database** | `/dashboard/customers` | **Phase 4** | **COMPLETED (Demo Mode)** | Customer profiles, tags, groups, lifetime value metrics, purchase history, and notes. |
 | **08** | **Payments & Finance** | `/dashboard/payments` | **Phase 5** | **COMPLETED (Demo Mode)** | bKash, Nagad, SSLCommerz, COD adapters, transactions ledger, refunds, payment method configuration. |
 | **09** | **Shipping & Delivery** | `/dashboard/shipping` | **Phase 5** | **COMPLETED (Demo Mode)** | Steadfast, Pathao, RedX courier adapters, consignments, live tracking stepper, shipping rates & zones. |
-| **10** | **Online Store & Themes** | `/dashboard/store` | Phase 6 | Pending | Theme customizer, pages, custom domain, navigation. |
+| **10** | **Online Store & Themes** | `/dashboard/store` | **Phase 6** | **COMPLETED (Demo Mode)** | Theme library, visual customizer, custom domain setup, DNS instructions, CMS pages, legal templates. |
 | **11** | **Marketing & Promotions** | `/dashboard/marketing` | Phase 7 | Pending | Coupons, automatic discounts, flash sales. |
 | **12** | **Analytics & Reports** | `/dashboard/analytics` | Phase 7 | Pending | Sales analytics, product report, CSV export. |
 | **13** | **Team & Permissions** | `/dashboard/team` | Phase 8 | Pending | Team invitations, role assignments (RBAC). |
@@ -133,6 +133,51 @@
   - [x] Created `tests/phase5-payments-shipping.test.ts` with 37 tests covering schemas, adapters, duplicate prevention, idempotency, refunds, status normalization, cancellation rules, and order integration.
   - [x] **106 / 106 automated tests passing** across entire repository test suite (100% pass rate).
   - [x] **0 ESLint errors**; **0 TypeScript errors**; **36 / 36 routes** prerendered cleanly via Turbopack build.
+
+---
+
+## Detailed Phase 6 Implementation Deliverables (Storefront & Domain Management)
+
+- [x] **Storefront Overview Dashboard** (`/dashboard/store`):
+  - [x] Storefront publishing state selector (Active, Draft, Maintenance, Offline).
+  - [x] Store URL preview banner with one-click copy and live storefront external link.
+  - [x] Active theme preview card with thumbnail, version badge, color palette swatches, typography, and customization shortcut.
+  - [x] 4 KPI Cards: Storefront State, Current Theme, Published CMS Pages, Custom Domain status.
+  - [x] Navigation shortcuts to Theme Customizer, Pages, Domains, and Store Settings.
+  - [x] Domain configuration summary and recent storefront activity audit log.
+  - [x] Reset Demo Data dialog with AlertDialog confirmation.
+- [x] **Theme Library & Visual Customizer** (`/dashboard/store/themes`, `/dashboard/store/themes/customize`):
+  - [x] Curated 4-theme gallery (Modern Commerce, Minimal Boutique, Express Superstore, Artisan Craft) with responsive cards, tags, and feature pills.
+  - [x] Theme preview modal with full feature list and typography/color breakdown.
+  - [x] Instant theme activation with query cache invalidation and toast feedback.
+  - [x] Theme Customizer interface with 4 control tabs: Colors & Presets, Typography (Bengali & English fonts), Homepage Sections (Announcement, Hero, Categories, Products, Promo Banner, Trust Badges), and Header/Logo.
+  - [x] Split-pane interactive Live Storefront Preview canvas with responsive viewport switchers: Desktop (100%), Tablet (768px), and Mobile (375px).
+  - [x] Real-time preview synchronization via React Hook Form `useWatch`.
+  - [x] Reset customizations to theme defaults with alert confirmation.
+- [x] **Domain Management & DNS Guide** (`/dashboard/store/domains`):
+  - [x] Default CartX storefront subdomain (`green-harvest.cartx.com.bd`) with permanent Active status and wildcard SSL.
+  - [x] Custom domain registration form with Zod FQDN validation (rejects protocols, paths, spaces, and reserved domains).
+  - [x] Domain routing data table displaying domain name, type, connection status, SSL status, and target value.
+  - [x] Truthful Demo Mode Presentation: custom domains remain explicitly labeled as *Demo Mode — Verification Pending* and SSL as *Demo / Not Active*.
+  - [x] Explicit security callout: DNS checks and SSL certificates are never fabricated without authoritative Express backend integration.
+  - [x] Interactive DNS instructions modal with copyable CNAME (`cname.cartx.com.bd`) and A record (`104.21.45.120`) rows and Bangladesh registrar advice.
+  - [x] Custom domain removal with `AlertDialog` confirmation.
+- [x] **CMS Pages & Legal Policies** (`/dashboard/store/pages`, `/dashboard/store/pages/new`, `/dashboard/store/pages/[pageId]/edit`):
+  - [x] CMS pages listing table with status tabs (All, Published, Draft, Legal Policies), search, and row actions.
+  - [x] 4 Pre-configured Bangladesh E-Commerce Legal Templates: Privacy Policy, Terms & Conditions, 7-Day Refund & Return Policy, and Shipping Policy.
+  - [x] Mandatory Legal Disclaimer Notice prominently featured in all legal policies.
+  - [x] Full page editor supporting title, auto-slug generator, Markdown content, publishing toggle, and SEO metadata.
+  - [x] Page preview modal with rendered Markdown styling.
+  - [x] Destructive page deletion with `AlertDialog` confirmation.
+- [x] **Sidebar Navigation & RBAC**:
+  - [x] Integrated Storefront navigation group with 4 nested items (Store Overview, Themes & Customization, Pages, Domains).
+  - [x] Protected under `storefront.manage` permission boundary.
+  - [x] Active subroute highlighting for deep routes (`/themes/customize`, `/pages/new`, `/pages/[pageId]/edit`).
+- [x] **Automated Testing & Verification**:
+  - [x] Created `tests/phase6-storefront.test.ts` with 34 tests covering domain validation, page CRUD, theme customization, truthful demo boundaries, and legal disclaimers.
+  - [x] Updated `tests/sidebar-navigation.test.ts` covering 7 logical navigation groups and 26 implemented dashboard routes.
+  - [x] **154 / 154 automated unit tests passing** (100% pass rate).
+  - [x] **0 ESLint errors**; **0 TypeScript errors**; **43 / 43 routes** compiled and prerendered cleanly.
 
 ---
 
