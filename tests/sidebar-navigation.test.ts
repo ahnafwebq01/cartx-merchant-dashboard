@@ -32,7 +32,7 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
   );
 
   describe("Route Inventory & Completeness", () => {
-    it("should include all 7 required logical navigation groups", () => {
+    it("should include all 8 required logical navigation groups", () => {
       const groupIds = NAVIGATION_GROUPS.map((g) => g.id);
       expect(groupIds).toEqual([
         "overview",
@@ -41,6 +41,7 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         "payments-finance",
         "shipping-logistics",
         "storefront",
+        "marketing",
         "store-management",
       ]);
     });
@@ -71,6 +72,12 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         "/dashboard/store/themes",
         "/dashboard/store/pages",
         "/dashboard/store/domains",
+        "/dashboard/marketing",
+        "/dashboard/marketing/coupons",
+        "/dashboard/marketing/discounts",
+        "/dashboard/marketing/flash-sales",
+        "/dashboard/marketing/analytics",
+        "/dashboard/marketing/reports",
         "/dashboard/settings",
         "/onboarding",
       ];
@@ -100,12 +107,8 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
       expect(leafLinks.length).toBe(uniqueLeafLinks.size);
     });
 
-    it("should NOT contain any unimplemented Phase 7-9 routes to avoid 404s", () => {
+    it("should NOT contain any unimplemented Phase 8-9 routes to avoid 404s", () => {
       const unimplementedRoadmapRoutes = [
-        "/dashboard/analytics",
-        "/dashboard/marketing",
-        "/dashboard/marketing/coupons",
-        "/dashboard/marketing/campaigns",
         "/dashboard/apps",
         "/dashboard/mobile-app",
         "/dashboard/team",
@@ -179,6 +182,33 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
           "/dashboard/products/categories",
           "/dashboard/products/categories",
         ),
+      ).toBe(true);
+    });
+
+    it("should correctly match nested marketing routes", () => {
+      expect(
+        isRouteActive("/dashboard/marketing", "/dashboard/marketing"),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/marketing/coupons", "/dashboard/marketing/coupons"),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/marketing/coupons/new", "/dashboard/marketing/coupons"),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/marketing/coupons/cpn-101/edit", "/dashboard/marketing/coupons"),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/marketing/discounts", "/dashboard/marketing/discounts"),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/marketing/flash-sales", "/dashboard/marketing/flash-sales"),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/marketing/analytics", "/dashboard/marketing/analytics"),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/marketing/reports", "/dashboard/marketing/reports"),
       ).toBe(true);
     });
 

@@ -17,7 +17,7 @@
 
 ## 2. Current Implementation Status (Demo Mode)
 
-The project currently operates in **high-fidelity client-side demo mode** (Phases 1 through 6 complete). All features use localized in-memory and browser `localStorage` persistence (`mockOrders`, `mockCustomers`, `mockProducts`, `mockPayments`, `mockShipping`, `mockStorefront`) with SSR-safe fallbacks and TanStack Query state synchronization. No external backend or credentials are required to run and test the complete dashboard.
+The project currently operates in **high-fidelity client-side demo mode** (Phases 1 through 7 complete). All features use localized in-memory and browser `localStorage` persistence (`mockOrders`, `mockCustomers`, `mockProducts`, `mockPayments`, `mockShipping`, `mockStorefront`, `mockMarketing`) with SSR-safe fallbacks and TanStack Query state synchronization. No external backend or credentials are required to run and test the complete dashboard.
 
 | Milestone | Status | Details |
 |---|---|---|
@@ -27,7 +27,8 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
 | **Phase 4: Sales, Orders & Customers** | **Completed (Demo Mode)** | Order fulfillment state machine, returns, printable invoice, customer CRM, segmentation. |
 | **Phase 5: Payments & Shipping Logistics** | **Completed (Demo Mode)** | bKash, Nagad, SSLCommerz, COD adapters, courier consignments (Steadfast, Pathao, RedX). |
 | **Phase 6: Storefront & Domain Management** | **Completed (Demo Mode)** | Theme library, visual customizer with live canvas, custom domain FQDN setup, DNS guide, CMS & legal policies. |
-| **Phases 7–9: Marketing, Analytics, Billing, App** | *Pending* | Future roadmap items per [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md). |
+| **Phase 7: Marketing, Promotions & Analytics** | **Completed (Demo Mode)** | Coupons, automatic discounts, flash sales with live countdowns, promotion analytics, and UTF-8 CSV reports. |
+| **Phases 8–9: Billing, Team & Mobile App** | *Pending* | Future roadmap items per [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md). |
 
 ---
 
@@ -93,6 +94,14 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
 - **Domain Configuration (`/dashboard/store/domains`):** Default CartX subdomain management, custom domain registration with Zod FQDN validation, and interactive DNS setup guide (CNAME & A records).
 - **CMS Pages & Legal Policies (`/dashboard/store/pages`):** Full CMS page CRUD with 4 localized Bangladesh legal templates (Privacy Policy, Terms & Conditions, 7-Day Refund Policy, Shipping Policy) and consumer protection disclaimers.
 
+### Marketing, Promotions & Analytics (`/dashboard/marketing`)
+- **Marketing Overview (`/dashboard/marketing`):** KPI summary cards (Active campaigns, coupon count, attributed revenue, discount expenditure), campaign performance chart, quick navigation actions, and recent audit activity log.
+- **Coupon Management (`/dashboard/marketing/coupons`, `/new`, `/[couponId]/edit`):** Unique coupon codes with one-click copy, percentage / fixed BDT discounts, spending thresholds, maximum caps, usage limits, customer eligibility, and live voucher preview card.
+- **Discounts & Promotional Campaigns (`/dashboard/marketing/discounts`):** Storewide, category-specific, and product-level automatic markdowns with conflict detection and schedule parameters.
+- **Flash Sales Engine (`/dashboard/marketing/flash-sales`):** Limited-time drops with real-time countdown clocks, allocated inventory stock meters, customer purchase limits, and overlap prevention.
+- **Marketing Analytics (`/dashboard/marketing/analytics`):** Multi-timeframe filters (Today, 7D, 30D, 90D), sales attribution metrics, redemption rate velocities, top-performing campaigns, and top redeemed codes.
+- **Product & Campaign Reports (`/dashboard/marketing/reports`):** Tabbed analytical ledgers (Products, Campaigns, Coupons, Discounts) with instant UTF-8 BOM CSV file export for Bengali script compatibility.
+
 ---
 
 ## 5. Main Application Routes
@@ -137,6 +146,14 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
   │   └── /pages                       # CMS pages & legal policy management
   │       ├── /new                     # Create new page & legal templates
   │       └── /[pageId]/edit           # Page editor & revision
+  ├── /marketing                       # Marketing overview & campaign performance
+  │   ├── /coupons                     # Coupon codes listing & quick copy
+  │   │   ├── /new                     # Create coupon with live voucher preview
+  │   │   └── /[couponId]/edit         # Edit coupon thresholds & limits
+  │   ├── /discounts                   # Automatic storewide & category markdowns
+  │   ├── /flash-sales                 # Time-boxed flash drops with countdown clock
+  │   ├── /analytics                   # Attributed promotion revenue & conversion trends
+  │   └── /reports                     # Tabbed analytical reports & UTF-8 CSV exports
   └── /settings                        # Store profile & regional preferences
 ```
 

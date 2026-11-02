@@ -4,7 +4,7 @@
 **Module:** Merchant Dashboard (`cartx-merchant-dashboard`)  
 **Target Market:** Bangladesh (BDT ৳, Bengali & English)  
 **Authoritative Specification:** `CARTX_MERCHANT_DASHBOARD.md` (Version 1.0)  
-**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Complete (Demo Mode) • Phase 5 Complete (Demo Mode) • Phase 6 Complete (Demo Mode) • Phase 7 Pending  
+**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Complete (Demo Mode) • Phase 5 Complete (Demo Mode) • Phase 6 Complete (Demo Mode) • Phase 7 Complete (Demo Mode) • Phase 8 Pending  
 
 ---
 
@@ -167,9 +167,34 @@ flowchart LR
   - [x] **154 / 154 automated unit tests passing** (100% pass rate).
   - [x] **0 ESLint errors**; **0 TypeScript errors**; **43 / 43 routes** compiled cleanly via Turbopack build.
 
-### Phase 7: Marketing, Promotions & Analytics (UP NEXT)
-- [ ] Coupon codes, automatic cart discounts, and flash sales
-- [ ] Sales charts, order volume trends, and exportable reports
+### Phase 7: Marketing, Promotions & Analytics (COMPLETED - Demo Mode)
+- [x] **Coupon Codes Management** (`/dashboard/marketing/coupons`, `/new`, `/[couponId]/edit`):
+  - [x] Coupon CRUD with unique uppercase code generator, percentage and fixed BDT discounts.
+  - [x] Minimum spend, max discount cap, usage limits, customer eligibility (VIP, first-time, all).
+  - [x] Live voucher visual card preview in coupon editor.
+  - [x] One-click clipboard copy with toast feedback.
+- [x] **Discounts & Automated Markdowns** (`/dashboard/marketing/discounts`):
+  - [x] Storewide, category, and product promotion campaigns.
+  - [x] Conflict prevention callout for overlapping discount rules.
+  - [x] Reusable discount calculation engine.
+- [x] **Flash Sales Drop Engine** (`/dashboard/marketing/flash-sales`):
+  - [x] Live countdown ticker component (`FlashSaleCountdown`) with `setInterval`.
+  - [x] Allocated vs claimed inventory quota progress bar.
+  - [x] Strict business rule validation (discounted < regular price, stock <= inventory, overlap prevention).
+- [x] **Marketing Analytics** (`/dashboard/marketing/analytics`):
+  - [x] Attributed revenue, redemption velocities, and discount expenditure KPIs.
+  - [x] Multi-timeframe filters (Today, 7D, 30D, 90D).
+  - [x] SVG campaign trajectory trend chart with interactive tooltip inspection.
+  - [x] Best-performing campaigns and top redeemed coupons ranking tables.
+- [x] **Product & Campaign Reports** (`/dashboard/marketing/reports`):
+  - [x] Tabbed analytical ledgers (Products, Campaigns, Coupons, Discounts).
+  - [x] RFC-4180 compliant CSV export engine with native UTF-8 BOM (`\uFEFF`) for Bengali characters.
+- [x] **Sidebar Navigation & Quality Gates**:
+  - [x] Added collapsible `Marketing` navigation group with 6 implemented routes in `src/config/navigation.ts`.
+  - [x] Updated RBAC permissions (`marketing.view`, `marketing.manage`, `discounts.manage`, `reports.view`).
+  - [x] Created `tests/phase7-marketing.test.ts` (31 tests).
+  - [x] **186 / 186 automated unit tests passing** (100% pass rate across 8 test suites).
+  - [x] **0 ESLint errors**; **0 TypeScript errors**; **51 / 51 routes** compiled cleanly via Turbopack build.
 
 ### Phase 8: Team, Billing & Operations
 - [ ] Team invitations and granular permission assignments
@@ -188,10 +213,10 @@ flowchart LR
 |---|---|---|
 | **TypeScript Strictness** | `npm run type-check` | **PASS (0 errors)** |
 | **ESLint Quality & Rules** | `npm run lint` | **PASS (0 errors, 0 warnings)** |
-| **Automated Test Suite** | `npm run test` | **PASS (154/154 unit tests passing)** |
-| **Production Build** | `npm run build` | **PASS (43/43 routes prerendered)** |
+| **Automated Test Suite** | `npm run test` | **PASS (186/186 unit tests passing)** |
+| **Production Build** | `npm run build` | **PASS (51/51 routes prerendered)** |
 | Strict TypeScript Compilation | `npm run type-check` | **PASS** (0 errors) |
-| ESLint Code Quality | `npm run lint` | **PASS** (0 errors, 5 legacy compiler warnings) |
-| Automated Unit Testing | `npm run test` | **PASS** (106/106 passed across 5 test suites) |
-| Next.js Production Build | `npm run build` | **PASS** (36 static/PPR routes generated) |
+| ESLint Code Quality | `npm run lint` | **PASS** (0 errors, 0 warnings) |
+| Automated Unit Testing | `npm run test` | **PASS** (186/186 passed across 8 test suites) |
+| Next.js Production Build | `npm run build` | **PASS** (51 static/PPR routes generated) |
 | Boundary & Secrets Discipline | Zero client secrets / zero fake success | **PASS** |

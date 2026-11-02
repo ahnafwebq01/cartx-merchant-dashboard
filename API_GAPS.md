@@ -142,7 +142,56 @@ Phase 6 frontend features are fully functional in high-fidelity client demo mode
 
 ---
 
-## 6. Storage & File Upload Contracts
+## 6. Phase 7 Contracts Status (Marketing, Promotions & Analytics)
+
+Phase 7 frontend capabilities operate in high-fidelity client demo mode using local browser storage (`src/features/marketing/services/mockMarketing.ts`) and React Query hooks. When the shared Express backend is deployed, the following REST endpoints will replace the local service implementations:
+
+### Coupon Management Endpoints
+
+| Planned Endpoint                         | Method   | Purpose                                                            | Frontend Hook / Consumer                 |
+| ---------------------------------------- | -------- | ------------------------------------------------------------------ | ---------------------------------------- |
+| `/api/v1/marketing/coupons`              | `GET`    | Paginated coupons listing with search, status, and type filters    | `useCouponsQuery(params)`                |
+| `/api/v1/marketing/coupons/:id`          | `GET`    | Single coupon details, usage stats, and validity bounds            | `useCouponQuery(id)`                     |
+| `/api/v1/marketing/coupons`              | `POST`   | Create new coupon with uppercase uniqueness & validation           | `useCreateCouponMutation()`              |
+| `/api/v1/marketing/coupons/:id`          | `PATCH`  | Update coupon campaign, discounts, thresholds, or limits           | `useUpdateCouponMutation()`              |
+| `/api/v1/marketing/coupons/:id`          | `DELETE` | Delete coupon from catalog                                         | `useDeleteCouponMutation()`              |
+| `/api/v1/marketing/coupons/:id/status`   | `PATCH`  | Toggle active/inactive operational status                          | `useToggleCouponStatusMutation()`        |
+| `/api/v1/marketing/coupons/validate`     | `POST`   | Authoritative server-side checkout validation of coupon redemption | Checkout Service Boundary                |
+
+### Promotional Discounts & Automatic Markdowns
+
+| Planned Endpoint                         | Method   | Purpose                                                            | Frontend Hook / Consumer                 |
+| ---------------------------------------- | -------- | ------------------------------------------------------------------ | ---------------------------------------- |
+| `/api/v1/marketing/discounts`            | `GET`    | List storewide, category, and product promotion campaigns          | `useDiscountsQuery(params)`              |
+| `/api/v1/marketing/discounts/:id`        | `GET`    | Single discount campaign details and attributed revenue metrics    | `useDiscountQuery(id)`                   |
+| `/api/v1/marketing/discounts`            | `POST`   | Create promotional discount campaign with scope and min spend      | `useCreateDiscountMutation()`            |
+| `/api/v1/marketing/discounts/:id`        | `PATCH`  | Update discount rate, schedule, or category/product targets        | `useUpdateDiscountMutation()`            |
+| `/api/v1/marketing/discounts/:id`        | `DELETE` | Remove promotional discount campaign                               | `useDeleteDiscountMutation()`            |
+
+### Flash Sales Campaign Endpoints
+
+| Planned Endpoint                         | Method   | Purpose                                                            | Frontend Hook / Consumer                 |
+| ---------------------------------------- | -------- | ------------------------------------------------------------------ | ---------------------------------------- |
+| `/api/v1/marketing/flash-sales`          | `GET`    | List time-boxed flash sales with live status and stock quotas      | `useFlashSalesQuery(params)`             |
+| `/api/v1/marketing/flash-sales/:id`      | `GET`    | Single flash sale drop details and claimed unit counts             | `useFlashSaleQuery(id)`                  |
+| `/api/v1/marketing/flash-sales`          | `POST`   | Create flash sale with stock validation & overlap check            | `useCreateFlashSaleMutation()`           |
+| `/api/v1/marketing/flash-sales/:id`      | `PATCH`  | Update flash drop pricing or schedule                              | `useUpdateFlashSaleMutation()`           |
+| `/api/v1/marketing/flash-sales/:id`      | `DELETE` | Remove flash sale campaign and restore regular catalog price       | `useDeleteFlashSaleMutation()`           |
+
+### Marketing Analytics & Report Endpoints
+
+| Planned Endpoint                         | Method   | Purpose                                                            | Frontend Hook / Consumer                 |
+| ---------------------------------------- | -------- | ------------------------------------------------------------------ | ---------------------------------------- |
+| `/api/v1/marketing/overview`             | `GET`    | Storewide marketing KPI summary and recent activities audit log    | `useMarketingOverviewQuery()`            |
+| `/api/v1/marketing/analytics`            | `GET`    | Promotion-attributed revenue, redemption rate, timeline trajectory | `useMarketingAnalyticsQuery(preset)`     |
+| `/api/v1/marketing/reports/products`     | `GET`    | Product sales ledger under promotions with discounts given         | `useProductPerformanceReportQuery()`     |
+| `/api/v1/marketing/reports/campaigns`    | `GET`    | Campaign ROI report comparing revenue vs discount savings given    | `useCampaignPerformanceReportQuery()`    |
+| `/api/v1/marketing/reports/coupons`      | `GET`    | Coupon redemptions, average order values, and velocity stats       | `useCouponUsageReportQuery()`            |
+| `/api/v1/marketing/reports/discounts`    | `GET`    | Automatic discount savings given ledger and order volume           | `useDiscountPerformanceReportQuery()`    |
+
+---
+
+## 7. Storage & File Upload Contracts
 
 | Pending Contract          | Description                                                                                                           | Impact on Frontend                                                                                                              | Required Resolution                                                                              |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -150,7 +199,7 @@ Phase 6 frontend features are fully functional in high-fidelity client demo mode
 
 ---
 
-## 7. Authentication & Session Management Gaps
+## 8. Authentication & Session Management Gaps
 
 | Pending Contract               | Description                                                                                      | Impact on Frontend                                                                      | Required Resolution                                                                        |
 | ------------------------------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -159,7 +208,7 @@ Phase 6 frontend features are fully functional in high-fidelity client demo mode
 
 ---
 
-## 8. Third-Party Gateway & Courier Proxies (Required for Live Mode)
+## 9. Third-Party Gateway & Courier Proxies (Required for Live Mode)
 
 | Pending Contract                       | Description                                                                                                                             | Impact on Frontend                                                                                                     | Required Resolution                                                                         |
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |

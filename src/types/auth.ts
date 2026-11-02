@@ -29,6 +29,8 @@ export type Permission =
   | "customers.view"
   | "customers.export"
   | "discounts.manage"
+  | "marketing.view"
+  | "marketing.manage"
   | "reports.view"
   | "storefront.manage"
   | "integrations.manage"

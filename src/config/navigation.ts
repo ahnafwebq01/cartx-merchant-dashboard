@@ -9,6 +9,7 @@ import {
   Settings,
   Rocket,
   Globe,
+  Megaphone,
   type LucideIcon,
 } from "lucide-react";
 import type { Permission } from "@/types/auth";
@@ -208,6 +209,28 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
           { title: "Themes & Customization", href: "/dashboard/store/themes", permission: "storefront.manage" },
           { title: "Pages", href: "/dashboard/store/pages", permission: "storefront.manage" },
           { title: "Domains", href: "/dashboard/store/domains", permission: "storefront.manage" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "marketing",
+    title: "Marketing",
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Marketing",
+        href: "/dashboard/marketing",
+        icon: Megaphone,
+        permission: "marketing.view",
+        children: [
+          { title: "Marketing Overview", href: "/dashboard/marketing", permission: "marketing.view" },
+          { title: "Coupons", href: "/dashboard/marketing/coupons", permission: "discounts.manage" },
+          { title: "Discounts", href: "/dashboard/marketing/discounts", permission: "discounts.manage" },
+          { title: "Flash Sales", href: "/dashboard/marketing/flash-sales", permission: "discounts.manage" },
+          { title: "Marketing Analytics", href: "/dashboard/marketing/analytics", permission: "marketing.view" },
+          { title: "Reports", href: "/dashboard/marketing/reports", permission: "reports.view" },
         ],
       },
     ],

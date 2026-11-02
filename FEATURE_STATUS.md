@@ -16,8 +16,8 @@
 | **08** | **Payments & Finance** | `/dashboard/payments` | **Phase 5** | **COMPLETED (Demo Mode)** | bKash, Nagad, SSLCommerz, COD adapters, transactions ledger, refunds, payment method configuration. |
 | **09** | **Shipping & Delivery** | `/dashboard/shipping` | **Phase 5** | **COMPLETED (Demo Mode)** | Steadfast, Pathao, RedX courier adapters, consignments, live tracking stepper, shipping rates & zones. |
 | **10** | **Online Store & Themes** | `/dashboard/store` | **Phase 6** | **COMPLETED (Demo Mode)** | Theme library, visual customizer, custom domain setup, DNS instructions, CMS pages, legal templates. |
-| **11** | **Marketing & Promotions** | `/dashboard/marketing` | Phase 7 | Pending | Coupons, automatic discounts, flash sales. |
-| **12** | **Analytics & Reports** | `/dashboard/analytics` | Phase 7 | Pending | Sales analytics, product report, CSV export. |
+| **11** | **Marketing & Promotions** | `/dashboard/marketing` | **Phase 7** | **COMPLETED (Demo Mode)** | Coupons, automatic discounts, flash sales with countdowns, marketing overview. |
+| **12** | **Analytics & Reports** | `/dashboard/marketing/analytics`, `/dashboard/marketing/reports` | **Phase 7** | **COMPLETED (Demo Mode)** | Attribution analytics, trend charts, 4 report ledgers, RFC-4180 UTF-8 CSV exports. |
 | **13** | **Team & Permissions** | `/dashboard/team` | Phase 8 | Pending | Team invitations, role assignments (RBAC). |
 | **14** | **Subscription & Billing** | `/dashboard/billing` | Phase 8 | Pending | CartX SaaS subscription plans, usage limits. |
 | **15** | **Support & Help Center** | `/dashboard/support` | Phase 8 | Pending | Ticket management, guides, contact support. |
@@ -178,6 +178,57 @@
   - [x] Updated `tests/sidebar-navigation.test.ts` covering 7 logical navigation groups and 26 implemented dashboard routes.
   - [x] **154 / 154 automated unit tests passing** (100% pass rate).
   - [x] **0 ESLint errors**; **0 TypeScript errors**; **43 / 43 routes** compiled and prerendered cleanly.
+
+---
+
+## Detailed Phase 7 Implementation Deliverables (Marketing, Promotions & Analytics)
+
+- [x] **Marketing Overview Dashboard** (`/dashboard/marketing`):
+  - [x] 4 KPI Cards: Total Active Campaigns, Active Coupon Count, Attributed Sales Revenue (৳), and Total Discount Savings Given (৳).
+  - [x] Demo mode informational banner detailing local browser persistence and BDT currency rules.
+  - [x] Quick action navigation cards for Coupons, Discounts, Flash Sales, and Reports.
+  - [x] Interactive SVG campaign trend chart comparing attributed revenue vs merchant discount savings.
+  - [x] Recent marketing activities log with actor, action type, and localized timestamps.
+  - [x] Reset demo data modal protected by `AlertDialog` restoring baseline presets.
+- [x] **Coupon Codes Management** (`/dashboard/marketing/coupons`, `/new`, `/[couponId]/edit`):
+  - [x] Responsive data table with uppercase code badge, one-click clipboard copy with toast feedback, discount value, min spend, max discount cap, usage counts, and validity windows.
+  - [x] Filter toolbar with real-time search across code/campaign, status filter (All, Active, Inactive, Expired), and discount type filter (Percentage vs Fixed).
+  - [x] Coupon editor (`/new` and `/[couponId]/edit`) with preset code generators (`EID`, `BOISHAKHI`, `SAVE`).
+  - [x] Live interactive simulated coupon ticket preview updating in real-time.
+  - [x] Strict Zod validation: uppercase alphanumeric code uniqueness, 1–100% percentage limits, positive fixed discounts, expiration > start date, and non-negative thresholds.
+  - [x] Status activation toggles and destructive delete confirmation alert dialog.
+- [x] **Discounts & Automatic Markdown Campaigns** (`/dashboard/marketing/discounts`):
+  - [x] Storewide, category-specific, and product-level promotional markdowns applied dynamically at checkout.
+  - [x] Promotional campaign creation & edit dialogs with category tag selectors.
+  - [x] Conflict prevention callout warning merchants about overlapping storewide and product discount rules.
+  - [x] Status filters (Active, Scheduled, Ended, Draft) and scope filters.
+- [x] **Flash Sales Drop Engine** (`/dashboard/marketing/flash-sales`):
+  - [x] Time-boxed flash deals with responsive card grid.
+  - [x] Real-time live ticker countdown component (`FlashSaleCountdown`) displaying Days, Hours, Minutes, Seconds with live `setInterval` updates.
+  - [x] Visual stock meter bar tracking claimed quota vs allocated units.
+  - [x] Create Flash Sale dialog with product inventory picker and auto-calculated discount percentage.
+  - [x] Strict business rule validation: discounted price < regular price, allocated stock <= available warehouse inventory, end time > start time, and active/scheduled product overlap prevention.
+- [x] **Marketing Analytics** (`/dashboard/marketing/analytics`):
+  - [x] 4 KPI Cards: Attributed Revenue (৳), Coupon Redemption Rate (%), Total Redemptions, and Discount Expenditure (৳).
+  - [x] Date preset filters: Today, Last 7 Days, Last 30 Days, Last 90 Days.
+  - [x] Campaign performance trend line chart with interactive tooltip inspection.
+  - [x] Best-performing campaigns ranking table with checkout conversion rates.
+  - [x] Top redeemed coupon codes table with cumulative customer savings.
+  - [x] Attribution methodology callout clearly documenting demo-mode multi-touch attribution calculations.
+- [x] **Product & Campaign Reports with CSV Export** (`/dashboard/marketing/reports`):
+  - [x] Tabbed analytical reports: Product Performance, Campaign Performance, Coupon Usage, and Discount Rules.
+  - [x] Real-time search across ledgers and date range context.
+  - [x] RFC-4180 compliant CSV export engine with proper quotes escaping for commas, newlines, and double quotes.
+  - [x] Native UTF-8 BOM (`\uFEFF`) prefix ensuring Excel & Google Sheets display Bengali product titles (`শাড়ি`, `মধু`, `৳`) correctly without corruption.
+- [x] **Sidebar Navigation & RBAC Integration**:
+  - [x] Added new collapsible `Marketing` navigation group with 6 implemented routes in `src/config/navigation.ts`.
+  - [x] Permissions integration (`marketing.view`, `marketing.manage`, `discounts.manage`, `reports.view`).
+  - [x] Active parent highlighting and deep route expansion.
+- [x] **Automated Testing & Verification**:
+  - [x] Created `tests/phase7-marketing.test.ts` with 31 automated tests covering coupon validation, code uniqueness, discount calculations, flash sales constraints, overlap prevention, analytics metrics, and RFC-4180 CSV generation.
+  - [x] Updated `tests/sidebar-navigation.test.ts` covering 8 navigation groups and 32 implemented dashboard routes.
+  - [x] **186 / 186 automated unit tests passing** (100% pass rate).
+  - [x] **0 ESLint errors**; **0 TypeScript errors**; **51 / 51 routes** compiled and prerendered cleanly.
 
 ---
 
