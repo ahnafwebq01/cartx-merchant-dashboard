@@ -17,18 +17,23 @@
 
 ## 2. Current Implementation Status (Demo Mode)
 
-The project currently operates in **high-fidelity client-side demo mode** (Phases 1 through 7 complete). All features use localized in-memory and browser `localStorage` persistence (`mockOrders`, `mockCustomers`, `mockProducts`, `mockPayments`, `mockShipping`, `mockStorefront`, `mockMarketing`) with SSR-safe fallbacks and TanStack Query state synchronization. No external backend or credentials are required to run and test the complete dashboard.
+The project currently operates in **high-fidelity client-side demo mode** (Phases 1 through 7 complete, with comprehensive onboarding and public production deployment). All features use localized in-memory and browser `localStorage` persistence (`mockOnboarding`, `mockStoreSettings`, `mockOrders`, `mockCustomers`, `mockProducts`, `mockPayments`, `mockShipping`, `mockStorefront`, `mockMarketing`) with SSR-safe fallbacks and TanStack Query state synchronization. No external backend or credentials are required to run and test the complete dashboard.
+
+- **Public Production URL:** [https://cartx-merchant-dashboard.vercel.app](https://cartx-merchant-dashboard.vercel.app)
+- **Deployment Platform:** Vercel (Edge Network)
+- **Demo Mode Capabilities:** 100% client-executable, zero Express backend dependencies, cross-refresh browser persistence, simulated slug registry, and one-click demo data reset.
 
 | Milestone | Status | Details |
 |---|---|---|
 | **Phase 1: Architecture & Foundation** | **Completed** | Modular `src/` hierarchy, design tokens, RBAC permissions, shell layouts. |
-| **Phase 2: Onboarding & Store Profile** | **Completed** | 7-step wizard (`/onboarding/*`), settings management (`/dashboard/settings`). |
+| **Phase 2: Onboarding & Store Profile** | **Completed (Demo Mode)** | 7-step wizard (`/onboarding/*`), settings management (`/dashboard/settings`), simulated subdomain availability check, localStorage draft persistence. |
 | **Phase 3: Products & Inventory** | **Completed (Demo Mode)** | Product CRUD, variant matrix, SKU generation, inventory adjustments, CSV import/export. |
 | **Phase 4: Sales, Orders & Customers** | **Completed (Demo Mode)** | Order fulfillment state machine, returns, printable invoice, customer CRM, segmentation. |
 | **Phase 5: Payments & Shipping Logistics** | **Completed (Demo Mode)** | bKash, Nagad, SSLCommerz, COD adapters, courier consignments (Steadfast, Pathao, RedX). |
 | **Phase 6: Storefront & Domain Management** | **Completed (Demo Mode)** | Theme library, visual customizer with live canvas, custom domain FQDN setup, DNS guide, CMS & legal policies. |
 | **Phase 7: Marketing, Promotions & Analytics** | **Completed (Demo Mode)** | Coupons, automatic discounts, flash sales with live countdowns, promotion analytics, and UTF-8 CSV reports. |
-| **Phases 8–9: Billing, Team & Mobile App** | *Pending* | Future roadmap items per [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md). |
+| **Phase 8: Team, Billing & Operations** | **Completed (Demo Mode)** | Team member management, roles & granular RBAC permissions, CartX SaaS subscription plans, usage limit progress meters, tax invoices, billing settings, Help Center knowledge base, and support ticketing. |
+| **Phase 9: Mobile App Builder & Advanced** | *Pending* | White-label merchant app branding, push alerts, and webhook automation per [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md). |
 
 ---
 
@@ -102,6 +107,24 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
 - **Marketing Analytics (`/dashboard/marketing/analytics`):** Multi-timeframe filters (Today, 7D, 30D, 90D), sales attribution metrics, redemption rate velocities, top-performing campaigns, and top redeemed codes.
 - **Product & Campaign Reports (`/dashboard/marketing/reports`):** Tabbed analytical ledgers (Products, Campaigns, Coupons, Discounts) with instant UTF-8 BOM CSV file export for Bengali script compatibility.
 
+### Team Management & Granular Access (`/dashboard/team`)
+- **Team Directory (`/dashboard/team`):** Staff list with avatars, roles, 2FA status, activity timestamps, and member editing.
+- **Role Assignment & RBAC Matrix (`/dashboard/team/roles`):** Authoritative matrix mapping 8 built-in merchant roles against 26 granular permissions (Catalog, Inventory, Orders, Finance, Storefront, Admin).
+- **Invitations Lifecycle:** Send invitations with 7-day expiration, resend expired/pending invites, and simulate acceptance.
+- **Store Owner Protection:** Enforces non-demotion, non-suspension, and non-deletion rules for primary store owner accounts.
+
+### CartX Subscription & Billing (`/dashboard/billing`)
+- **Subscription Overview (`/dashboard/billing`):** Current tier badge, billing frequency, renewal date, and next renewal amount in BDT (৳).
+- **Resource Usage & Plan Warnings:** Real-time progress bars for Products, Staff Accounts, Orders, Storage, and Custom Domains with automatic warning banners at $\ge 70\%$ capacity.
+- **Tier Comparison & Switching (`/dashboard/billing/plans`):** Starter (৳999/mo), Growth (৳2,499/mo), and Pro (৳5,999/mo) with 17% annual savings toggle and comparison table.
+- **Tax Invoices Ledger (`/dashboard/billing/invoices`):** Filterable receipts ledger with printable invoice modal, BIN attribution, line items, and simulated payment retry for failed invoices.
+- **Billing Settings & Payment Methods (`/dashboard/billing/settings`):** bKash Auto-Debit, Nagad, and Corporate Card tokenization management with legal entity BIN configuration.
+
+### Help Center & Support Desk (`/dashboard/support`)
+- **Knowledge Base (`/dashboard/support`):** 8 searchable Bangladesh e-commerce guides covering bKash tokenization, Steadfast & Pathao APIs, DNS routing, and COD reconciliation.
+- **Categorized FAQs:** Interactive accordion solving frequent questions across account, billing, delivery, and payments.
+- **Support Tickets (`/dashboard/support/tickets`, `/[ticketId]`):** Ticket submission dialog with priority badges, conversation thread with simulated CartX agent replies, and status transitions (Open, In Progress, Resolved, Closed).
+
 ---
 
 ## 5. Main Application Routes
@@ -154,6 +177,15 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
   │   ├── /flash-sales                 # Time-boxed flash drops with countdown clock
   │   ├── /analytics                   # Attributed promotion revenue & conversion trends
   │   └── /reports                     # Tabbed analytical reports & UTF-8 CSV exports
+   ├── /team                            # Team members listing & invitation management
+   │   └── /roles                       # 8-role x 26-permission interactive matrix
+   ├── /billing                         # CartX subscription tier overview & usage meters
+   │   ├── /plans                       # Plan comparison matrix & upgrade/downgrade dialog
+   │   ├── /invoices                    # Invoices ledger, PDF view & simulated payment
+   │   └── /settings                    # Billing contact, tax BIN & payment instruments
+   ├── /support                         # Knowledge base, FAQs & system uptime badge
+   │   └── /tickets                     # Support tickets ledger & creation modal
+   │       └── /[ticketId]              # Ticket thread, status controls & simulated replies
   └── /settings                        # Store profile & regional preferences
 ```
 
@@ -221,7 +253,9 @@ npm run test
 - `tests/phase4-orders-customers.test.ts` — Order lifecycle state machine, cancellation rules, stock restocking, customer statistics recalculation, and filters.
 - `tests/phase5-payments-shipping.test.ts` — Gateway and courier adapters, transactions, refunds, shipments, and live tracking.
 - `tests/phase6-storefront.test.ts` — Theme customization, domain validation, CMS pages CRUD, and truthful demo boundaries.
-- `tests/sidebar-navigation.test.ts` — 7 logical navigation groups and 26 implemented dashboard routes.
+- `tests/phase7-marketing-analytics.test.ts` — Coupon schemas, discount calculations, flash sales, analytics, and reports.
+- `tests/phase8-team-billing-operations.test.ts` — Team CRUD, invitations, role permissions, billing tiers, usage alerts, invoice settlement, and support tickets.
+- `tests/sidebar-navigation.test.ts` — 11 logical navigation groups and 60 implemented dashboard routes with RBAC verification.
 
 ---
 
@@ -236,6 +270,8 @@ When the shared CartX Express.js backend API is deployed:
 
 ## 10. Documentation & Audit Reports
 
+- [`docs/PHASE_8_IMPLEMENTATION_REPORT.md`](./docs/PHASE_8_IMPLEMENTATION_REPORT.md) — Phase 8 Implementation & Quality Verification Report (Team, Billing & Operations).
+- [`docs/PHASE_7_FINAL_AUDIT_REPORT.md`](./docs/PHASE_7_FINAL_AUDIT_REPORT.md) — Phase 7 Final Comprehensive Audit Report (Marketing, Discounts & Analytics).
 - [`docs/PHASE_6_UX_POLISH_AUDIT_REPORT.md`](./docs/PHASE_6_UX_POLISH_AUDIT_REPORT.md) — Comprehensive Phase 6 UI/UX Polish, Accessibility & Consistency Audit Report.
 - [`PHASE_5_FINAL_AUDIT_REPORT.md`](./PHASE_5_FINAL_AUDIT_REPORT.md) — Phase 5 Final Comprehensive Audit Report (Payments & Shipping Logistics).
 - [`CARTX_MERCHANT_DASHBOARD.md`](./CARTX_MERCHANT_DASHBOARD.md) — Authoritative functional specification across all 16 modules.

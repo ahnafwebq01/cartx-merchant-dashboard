@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, AlertCircle, ArrowRight, ArrowLeft, PackagePlus } from "lucide-react";
+import { toast } from "sonner";
 
 interface StepFirstProductProps {
   draft?: OnboardingDraft;
@@ -43,6 +44,7 @@ export function StepFirstProduct({ draft }: StepFirstProductProps) {
         step: 4,
         data: values,
       });
+      toast.success("Initial product created (Demo Mode)");
       router.push("/onboarding/payments");
     } catch {
       // Error handled by mutation state

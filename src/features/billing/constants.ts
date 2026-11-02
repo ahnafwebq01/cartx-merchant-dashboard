@@ -1,0 +1,317 @@
+import type {
+  SubscriptionPlan,
+  StoreSubscription,
+  Invoice,
+  BillingSettings,
+  SubscriptionPlanId,
+} from "./types";
+
+export const SUBSCRIPTION_PLANS: Record<SubscriptionPlanId, SubscriptionPlan> = {
+  starter: {
+    id: "starter",
+    name: "CartX Starter",
+    tagline: "Essential e-commerce tools for emerging shops and independent entrepreneurs in Bangladesh",
+    monthlyPriceBDT: 999,
+    annualPriceBDT: 9990,
+    annualSavingsPercent: 17,
+    limits: {
+      maxProducts: 50,
+      maxStaffAccounts: 2,
+      maxMonthlyOrders: 200,
+      storageGB: 2,
+      customDomains: 0,
+    },
+    features: [
+      "Up to 50 active products",
+      "2 staff member accounts",
+      "Up to 200 orders per month",
+      "Free CartX subdomain (*.cartx.com.bd)",
+      "bKash & Nagad checkout ready",
+      "Manual courier tracking",
+      "Standard email support (48h)",
+    ],
+  },
+  growth: {
+    id: "growth",
+    name: "CartX Growth",
+    tagline: "High-performance infrastructure and automated marketing for scaling brands",
+    monthlyPriceBDT: 2499,
+    annualPriceBDT: 24990,
+    annualSavingsPercent: 17,
+    isPopular: true,
+    limits: {
+      maxProducts: 500,
+      maxStaffAccounts: 5,
+      maxMonthlyOrders: 1000,
+      storageGB: 5,
+      customDomains: 1,
+    },
+    features: [
+      "Up to 500 active products",
+      "5 staff accounts with RBAC roles",
+      "Up to 1,000 orders per month",
+      "1 Custom domain with automated SSL",
+      "Flash sales drop & coupons engine",
+      "Steadfast & Pathao courier API dispatch",
+      "Attributed marketing & CSV exports",
+      "Priority email & live chat support (24h)",
+    ],
+  },
+  pro: {
+    id: "pro",
+    name: "CartX Pro",
+    tagline: "Maximum scale, unlimited bandwidth, dedicated SLA, and white-label mobile app support",
+    monthlyPriceBDT: 5999,
+    annualPriceBDT: 59990,
+    annualSavingsPercent: 17,
+    limits: {
+      maxProducts: -1, // Unlimited
+      maxStaffAccounts: 15,
+      maxMonthlyOrders: -1, // Unlimited
+      storageGB: 20,
+      customDomains: 3,
+    },
+    features: [
+      "Unlimited products & categories",
+      "15 staff accounts with granular permissions",
+      "Unlimited monthly order volume",
+      "Up to 3 custom domains with SSL",
+      "White-label mobile app eligibility",
+      "Multi-location inventory tracking",
+      "Advanced API & Webhook integrations",
+      "Dedicated account manager & 1-hour VIP SLA",
+    ],
+  },
+};
+
+export interface PlanComparisonFeatureRow {
+  category: string;
+  name: string;
+  starter: string;
+  growth: string;
+  pro: string;
+}
+
+export const PLAN_COMPARISON_MATRIX: PlanComparisonFeatureRow[] = [
+  {
+    category: "Capacity & Limits",
+    name: "Active Products Catalog",
+    starter: "50 products",
+    growth: "500 products",
+    pro: "Unlimited",
+  },
+  {
+    category: "Capacity & Limits",
+    name: "Monthly Orders Volume",
+    starter: "200 orders / mo",
+    growth: "1,000 orders / mo",
+    pro: "Unlimited",
+  },
+  {
+    category: "Capacity & Limits",
+    name: "Team Staff Accounts",
+    starter: "2 members",
+    growth: "5 members",
+    pro: "15 members",
+  },
+  {
+    category: "Capacity & Limits",
+    name: "Storage & Media Assets",
+    starter: "2 GB",
+    growth: "5 GB",
+    pro: "20 GB",
+  },
+  {
+    category: "Branding & Storefront",
+    name: "Custom Domain Routing",
+    starter: "Subdomain only",
+    growth: "1 Custom Domain",
+    pro: "3 Custom Domains",
+  },
+  {
+    category: "Branding & Storefront",
+    name: "Free Automated SSL",
+    starter: "Subdomain only",
+    growth: "Included",
+    pro: "Included (Multi-domain)",
+  },
+  {
+    category: "Branding & Storefront",
+    name: "Mobile App Access",
+    starter: "Web browser only",
+    growth: "Merchant Web App",
+    pro: "White-label Mobile App eligible",
+  },
+  {
+    category: "Marketing & Sales",
+    name: "Coupons & Discounts Engine",
+    starter: "Basic percentage only",
+    growth: "Coupons + Flash sales",
+    pro: "Full suite + Multi-tier rules",
+  },
+  {
+    category: "Marketing & Sales",
+    name: "CSV Reports & Attribution",
+    starter: "Basic summary",
+    growth: "RFC-4180 UTF-8 CSV exports",
+    pro: "Advanced ledgers + Scheduled exports",
+  },
+  {
+    category: "Logistics & Automation",
+    name: "Courier Integrations",
+    starter: "Manual booking",
+    growth: "Steadfast & Pathao APIs",
+    pro: "Multi-courier smart routing",
+  },
+  {
+    category: "Fees & Support",
+    name: "Platform Transaction Fee",
+    starter: "0% fee",
+    growth: "0% fee",
+    pro: "0% fee",
+  },
+  {
+    category: "Fees & Support",
+    name: "Customer Support SLA",
+    starter: "Standard email (48h)",
+    growth: "Priority email & chat (24h)",
+    pro: "Dedicated Manager + 1h VIP Hotline",
+  },
+];
+
+export const INITIAL_SUBSCRIPTION: StoreSubscription = {
+  planId: "growth",
+  status: "active",
+  billingCycle: "monthly",
+  currentPeriodStart: "2026-11-01T00:00:00.000Z",
+  currentPeriodEnd: "2026-12-01T00:00:00.000Z",
+  nextBillingDate: "2026-12-01T00:00:00.000Z",
+  cancelAtPeriodEnd: false,
+  currentPriceBDT: 2499,
+  paymentMethodSummary: "bKash Auto-Debit (017*****890)",
+};
+
+export const INITIAL_INVOICES: Invoice[] = [
+  {
+    id: "inv_2026_11_001",
+    invoiceNumber: "INV-2026-11-001",
+    date: "2026-11-01T09:00:00.000Z",
+    dueDate: "2026-11-01T23:59:59.000Z",
+    planId: "growth",
+    planName: "CartX Growth Plan (Monthly)",
+    billingCycle: "monthly",
+    subtotalBDT: 2499,
+    vatAmountBDT: 0,
+    totalBDT: 2499,
+    status: "paid",
+    paymentMethod: "bKash Auto-Debit (017*****890)",
+    transactionId: "TXN-BK-20261101-9942",
+    lineItems: [
+      { description: "CartX Growth Subscription (Nov 1 – Nov 30, 2026)", amountBDT: 2499 },
+    ],
+  },
+  {
+    id: "inv_2026_10_001",
+    invoiceNumber: "INV-2026-10-001",
+    date: "2026-10-01T09:00:00.000Z",
+    dueDate: "2026-10-01T23:59:59.000Z",
+    planId: "growth",
+    planName: "CartX Growth Plan (Monthly)",
+    billingCycle: "monthly",
+    subtotalBDT: 2499,
+    vatAmountBDT: 0,
+    totalBDT: 2499,
+    status: "paid",
+    paymentMethod: "bKash Auto-Debit (017*****890)",
+    transactionId: "TXN-BK-20261001-8173",
+    lineItems: [
+      { description: "CartX Growth Subscription (Oct 1 – Oct 31, 2026)", amountBDT: 2499 },
+    ],
+  },
+  {
+    id: "inv_2026_09_001",
+    invoiceNumber: "INV-2026-09-001",
+    date: "2026-09-01T09:00:00.000Z",
+    dueDate: "2026-09-01T23:59:59.000Z",
+    planId: "growth",
+    planName: "CartX Growth Plan (Monthly)",
+    billingCycle: "monthly",
+    subtotalBDT: 2499,
+    vatAmountBDT: 0,
+    totalBDT: 2499,
+    status: "paid",
+    paymentMethod: "Visa ending in 4242",
+    transactionId: "TXN-CC-20260901-1049",
+    lineItems: [
+      { description: "CartX Growth Subscription (Sep 1 – Sep 30, 2026)", amountBDT: 2499 },
+    ],
+  },
+  {
+    id: "inv_2026_08_001",
+    invoiceNumber: "INV-2026-08-001",
+    date: "2026-08-01T09:00:00.000Z",
+    dueDate: "2026-08-01T23:59:59.000Z",
+    planId: "starter",
+    planName: "CartX Starter Plan (Monthly)",
+    billingCycle: "monthly",
+    subtotalBDT: 999,
+    vatAmountBDT: 0,
+    totalBDT: 999,
+    status: "paid",
+    paymentMethod: "bKash Auto-Debit (017*****890)",
+    transactionId: "TXN-BK-20260801-4412",
+    lineItems: [
+      { description: "CartX Starter Subscription (Aug 1 – Aug 31, 2026)", amountBDT: 999 },
+    ],
+  },
+  {
+    id: "inv_2026_07_002",
+    invoiceNumber: "INV-2026-07-002",
+    date: "2026-07-02T10:15:00.000Z",
+    dueDate: "2026-07-05T23:59:59.000Z",
+    planId: "starter",
+    planName: "CartX Starter Plan Renewal (Retry Failed)",
+    billingCycle: "monthly",
+    subtotalBDT: 999,
+    vatAmountBDT: 0,
+    totalBDT: 999,
+    status: "failed",
+    paymentMethod: "bKash Auto-Debit (017*****890)",
+    transactionId: "TXN-FAILED-INSUFFICIENT-FUNDS",
+    lineItems: [
+      { description: "CartX Starter Subscription Renewal (Payment Failed: Insufficient bKash balance)", amountBDT: 999 },
+    ],
+  },
+];
+
+export const INITIAL_BILLING_SETTINGS: BillingSettings = {
+  billingEmail: "accounts@greenharvest.com.bd",
+  companyName: "Green Harvest Organic Bangladesh Ltd.",
+  businessIdentificationNumber: "002819472-0101",
+  taxRegistrationNumber: "TIN-8492048102",
+  street: "House 42, Road 11, Block D",
+  city: "Banani, Dhaka",
+  state: "Dhaka",
+  postalCode: "1213",
+  country: "Bangladesh",
+  paymentMethods: [
+    {
+      id: "pm_bkash_01",
+      type: "bkash",
+      label: "bKash Auto-Debit Agreement",
+      identifier: "017*****890",
+      accountHolderName: "Tariqul Islam",
+      isDefault: true,
+    },
+    {
+      id: "pm_card_01",
+      type: "card",
+      label: "BRAC Bank Visa Corporate Card",
+      identifier: "•••• 4242",
+      accountHolderName: "Green Harvest Ltd.",
+      expiresOn: "12/28",
+      isDefault: false,
+    },
+  ],
+};
+

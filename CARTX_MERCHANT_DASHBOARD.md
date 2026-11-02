@@ -14,7 +14,7 @@
 **Platform Type:** Multi-Tenant SaaS
 **Document Audience:** Product Designer, Frontend Developer, Backend Developer, QA Engineer, Google Antigravity AI Agent
 
-*Prepared by WebQ — Where problems get solved. | 01410767729 | www.webq.com.bd | info@webq.com.bd | Suite 2A, Building No 8, Road No 8, Block B, Section 13, Mirpur, Dhaka - 1216*
+*CartX Platform Documentation — Multi-Tenant E-Commerce Merchant Administration Panel | info@cartx.example.com*
 
 ---
 

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePublishStore } from "../hooks";
 import type { OnboardingDraft } from "../types";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -48,6 +49,9 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
       setPublishedData({
         storefrontUrl: result.storefrontUrl || `https://${draft?.step1?.storeSlug || "store"}.cartx.com.bd`,
         publishedAt: result.publishedAt || new Date().toISOString(),
+      });
+      toast.success("Storefront published live (Demo Mode)!", {
+        description: "Your demo store is now active and ready to explore.",
       });
     } catch {
       // Error handled by mutation state

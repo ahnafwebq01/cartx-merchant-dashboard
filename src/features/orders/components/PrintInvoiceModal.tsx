@@ -203,7 +203,7 @@ export function PrintInvoiceModal({
 
           {/* Footer note */}
           <div className="border-t border-border pt-4 text-center text-[10px] text-muted-foreground">
-            Thank you for shopping with {storeName}. For inquiries, contact support at 01410767729.
+            Thank you for shopping with {storeName}. For inquiries, contact support at +880 1700-000000 or support@cartx.example.com.
           </div>
         </div>
       </DialogContent>

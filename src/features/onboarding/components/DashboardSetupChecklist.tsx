@@ -2,10 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import { useOnboardingDraft } from "../hooks";
+import { useOnboardingDraft, ONBOARDING_QUERY_KEY } from "../hooks";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useQueryClient } from "@tanstack/react-query";
+import { mockOnboardingService } from "../services/mockOnboarding";
+import { toast } from "sonner";
 import {
   CheckCircle2,
   Circle,
@@ -19,12 +22,14 @@ import {
   Truck,
   Sparkles,
   RefreshCw,
+  RotateCcw,
 } from "lucide-react";
 
 export function DashboardSetupChecklist() {
   const { data: draft, isLoading, isError, error, refetch } = useOnboardingDraft();
+  const queryClient = useQueryClient();
 
-  // Evaluate genuine completion derived strictly from backend draft state
+  // Evaluate genuine completion derived strictly from draft state
   const isProfileComplete = Boolean(
     draft?.step1?.storeName && draft?.step1?.storeSlug && draft?.step2?.district
   );
@@ -110,6 +115,27 @@ export function DashboardSetupChecklist() {
   const completedRequired = checklistItems.filter((i) => i.isRequired && i.isComplete).length;
   const progressPercent = Math.round((completedRequired / totalRequired) * 100);
 
+  // Resume Setup points directly to the first incomplete step
+  const getResumePath = () => {
+    if (!draft?.step1?.storeName || !draft?.step1?.storeSlug) return "/onboarding/store";
+    if (!draft?.step2?.businessAddress || !draft?.step2?.district) return "/onboarding/business";
+    if (!draft?.step3?.brandColor || !draft?.step3?.themeId) return "/onboarding/storefront";
+    if (!draft?.step4?.productName || !draft?.step4?.price) return "/onboarding/products";
+    if (draft?.step5?.cashOnDelivery === undefined && draft?.step5?.providerStatus !== "connected") return "/onboarding/payments";
+    if (draft?.step6?.insideDhakaRate === undefined) return "/onboarding/shipping";
+    return "/onboarding/publish";
+  };
+  const resumePath = getResumePath();
+
+  const handleResetOnboarding = () => {
+    mockOnboardingService.resetOnboarding();
+    queryClient.invalidateQueries({ queryKey: ONBOARDING_QUERY_KEY });
+    queryClient.invalidateQueries({ queryKey: ["stores", "current"] });
+    toast.success("Onboarding draft reset", {
+      description: "Onboarding progress has been cleared back to Step 1.",
+    });
+  };
+
   return (
     <Card className="border-border">
       <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-4">
@@ -121,7 +147,7 @@ export function DashboardSetupChecklist() {
             </Badge>
           </div>
           <CardDescription className="mt-1">
-            Status derived authoritatively from backend onboarding state.
+            Track your store setup journey. Persisted safely across browser refreshes in Demo Mode.
           </CardDescription>
         </div>
 
@@ -143,7 +169,7 @@ export function DashboardSetupChecklist() {
 
           {!isStorePublished && (
             <Button size="sm" asChild className="gap-1.5 h-8">
-              <Link href="/onboarding">
+              <Link href={resumePath}>
                 Resume Setup
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
@@ -153,15 +179,36 @@ export function DashboardSetupChecklist() {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {/* API Offline / Unreachable Notice */}
+        {/* Demo Mode Reassurance Notice */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 rounded-lg border border-primary/20 bg-primary/5 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-2 w-2 shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            <span className="font-medium text-foreground">Demo Mode Active:</span>
+            <span className="text-muted-foreground">Setup progress is saved locally in this browser.</span>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleResetOnboarding}
+            className="h-6 text-[11px] text-muted-foreground hover:text-foreground self-start sm:self-auto"
+          >
+            <RotateCcw className="h-3 w-3 mr-1" />
+            Reset Setup
+          </Button>
+        </div>
+
+        {/* API Offline Notice if real backend was attempted but unavailable */}
         {isError && (
           <div className="p-3 text-xs rounded-lg border border-warning/30 bg-warning/5 text-warning flex items-start gap-2">
             <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
             <div>
               <p className="font-semibold text-foreground">Backend Synchronization Notice</p>
               <p className="text-muted-foreground mt-0.5">
-                {error instanceof Error ? error.message : "Unable to reach /stores/onboarding."}
-                Checklist reflects unverified/default state until the shared Express API is accessible.
+                {error instanceof Error ? error.message : "Operating in offline demo mode."}
+                Checklist reflects simulated in-browser state.
               </p>
             </div>
           </div>
@@ -211,12 +258,19 @@ export function DashboardSetupChecklist() {
                 </div>
               </div>
 
-              {!item.isComplete && (
+              {!item.isComplete ? (
                 <Link
                   href={item.link}
                   className="text-primary hover:underline text-xs font-medium shrink-0 ml-2"
                 >
                   Configure
+                </Link>
+              ) : (
+                <Link
+                  href={item.link}
+                  className="text-muted-foreground hover:text-foreground text-xs shrink-0 ml-2"
+                >
+                  Edit
                 </Link>
               )}
             </div>
@@ -240,4 +294,3 @@ export function DashboardSetupChecklist() {
     </Card>
   );
 }
-

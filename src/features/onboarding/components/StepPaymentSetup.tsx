@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, AlertCircle, ArrowRight, ArrowLeft, Banknote, ShieldAlert, CreditCard } from "lucide-react";
+import { toast } from "sonner";
 
 interface StepPaymentSetupProps {
   draft?: OnboardingDraft;
@@ -41,6 +42,7 @@ export function StepPaymentSetup({ draft }: StepPaymentSetupProps) {
         step: 5,
         data: values,
       });
+      toast.success("Payment configuration saved (Demo Mode)");
       router.push("/onboarding/shipping");
     } catch {
       // Error handled by mutation state

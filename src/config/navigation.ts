@@ -10,6 +10,9 @@ import {
   Rocket,
   Globe,
   Megaphone,
+  ShieldCheck,
+  Receipt,
+  LifeBuoy,
   type LucideIcon,
 } from "lucide-react";
 import type { Permission } from "@/types/auth";
@@ -231,6 +234,61 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
           { title: "Flash Sales", href: "/dashboard/marketing/flash-sales", permission: "discounts.manage" },
           { title: "Marketing Analytics", href: "/dashboard/marketing/analytics", permission: "marketing.view" },
           { title: "Reports", href: "/dashboard/marketing/reports", permission: "reports.view" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "team",
+    title: "Team & Access",
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Team Management",
+        href: "/dashboard/team",
+        icon: ShieldCheck,
+        permission: "team.manage",
+        children: [
+          { title: "Team Members", href: "/dashboard/team", permission: "team.manage" },
+          { title: "Roles & Permissions", href: "/dashboard/team/roles", permission: "team.manage" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "billing",
+    title: "Subscription & Billing",
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Billing & Plans",
+        href: "/dashboard/billing",
+        icon: Receipt,
+        permission: "billing.manage",
+        children: [
+          { title: "Plan & Usage", href: "/dashboard/billing", permission: "billing.manage" },
+          { title: "Plans & Pricing", href: "/dashboard/billing/plans", permission: "billing.manage" },
+          { title: "Invoices", href: "/dashboard/billing/invoices", permission: "billing.manage" },
+          { title: "Billing Settings", href: "/dashboard/billing/settings", permission: "billing.manage" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "support",
+    title: "Help & Support",
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Support Center",
+        href: "/dashboard/support",
+        icon: LifeBuoy,
+        children: [
+          { title: "Help Center", href: "/dashboard/support" },
+          { title: "Support Tickets", href: "/dashboard/support/tickets" },
         ],
       },
     ],

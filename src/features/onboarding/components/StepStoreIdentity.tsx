@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, CheckCircle2, AlertCircle, ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 
 interface StepStoreIdentityProps {
   draft?: OnboardingDraft;
@@ -76,6 +77,9 @@ export function StepStoreIdentity({ draft }: StepStoreIdentityProps) {
       await saveStepMutation.mutateAsync({
         step: 1,
         data: values,
+      });
+      toast.success("Store identity saved (Demo Mode)", {
+        description: "Your progress is saved locally in this browser.",
       });
       router.push("/onboarding/business");
     } catch {
@@ -148,12 +152,12 @@ export function StepStoreIdentity({ draft }: StepStoreIdentityProps) {
                 slugResult.available ? (
                   <span className="text-success flex items-center gap-1 font-medium">
                     <CheckCircle2 className="h-3.5 w-3.5" />
-                    Subdomain is available!
+                    {slugResult.message || "Subdomain is available! (Simulated check)"}
                   </span>
                 ) : (
                   <span className="text-destructive flex items-center gap-1 font-medium">
                     <AlertCircle className="h-3.5 w-3.5" />
-                    Subdomain is already taken. Please choose another.
+                    {slugResult.message || "Subdomain is already taken. Please choose another."}
                   </span>
                 )
               ) : null}

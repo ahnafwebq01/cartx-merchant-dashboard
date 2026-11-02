@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, AlertCircle, ArrowRight, ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
 
 interface StepBusinessInfoProps {
   draft?: OnboardingDraft;
@@ -45,6 +46,7 @@ export function StepBusinessInfo({ draft }: StepBusinessInfoProps) {
         step: 2,
         data: values,
       });
+      toast.success("Business details saved (Demo Mode)");
       router.push("/onboarding/storefront");
     } catch {
       // Error handled by mutation state

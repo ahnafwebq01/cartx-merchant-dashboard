@@ -8,14 +8,14 @@
 
 ## 1. Phase 2 Contracts Status (Onboarding & Settings)
 
-The frontend integration boundary for Phase 2 has been fully implemented and typed:
+The frontend integration boundary for Phase 2 has been fully implemented, typed, and augmented with a high-fidelity Demo Mode service layer (`mockOnboardingService` and `mockStoreSettingsService`):
 
-- `GET /stores/onboarding` (Draft restoration)
-- `PATCH /stores/onboarding/:step` (Step persistence)
-- `GET /stores/check-slug?slug=...` (Subdomain check)
-- `GET /stores/current` (Store profile fetch)
-- `PUT /stores/current` (Store settings update)
-- `POST /stores/current/publish` (Store publication)
+- `GET /stores/onboarding` (Draft restoration — fallback: `mockOnboardingService.getDraft()`)
+- `PATCH /stores/onboarding/:step` (Step persistence — fallback: `mockOnboardingService.saveStep(step, data)`)
+- `GET /stores/check-slug?slug=...` (Subdomain check — fallback: `mockOnboardingService.checkSlugAvailability(slug)`)
+- `GET /stores/current` (Store profile fetch — fallback: `mockStoreSettingsService.getSettings()`)
+- `PUT /stores/current` (Store settings update — fallback: `mockStoreSettingsService.updateSettings(data)`)
+- `POST /stores/current/publish` (Store publication — fallback: `mockOnboardingService.publishStore()`)
 
 ---
 
@@ -191,7 +191,54 @@ Phase 7 frontend capabilities operate in high-fidelity client demo mode using lo
 
 ---
 
-## 7. Storage & File Upload Contracts
+## 7. Phase 8 Contracts Status (Team, Billing & Operations Support)
+
+Phase 8 capabilities are fully implemented and typed using modular browser services (`mockTeam.ts`, `mockBilling.ts`, `mockSupport.ts`) backed by TanStack Query hooks. When the shared Express API is deployed, the following endpoints will replace the local storage persistence:
+
+### Team & Permissions Endpoints
+
+| Planned Endpoint | Method | Purpose | Frontend Hook / Consumer |
+|---|---|---|---|
+| `/api/v1/team/members` | `GET` | List store team members with roles and statuses | `useTeamMembersQuery()` |
+| `/api/v1/team/members/:id` | `PATCH` | Update team member role, status, or custom permissions | `useUpdateTeamMemberMutation()` |
+| `/api/v1/team/members/:id` | `DELETE` | Remove team member from store (safeguarding Owner) | `useRemoveTeamMemberMutation()` |
+| `/api/v1/team/invitations` | `GET` | List pending and historical store invitations | `useTeamInvitationsQuery()` |
+| `/api/v1/team/invitations` | `POST` | Create and send email invitation to new staff member | `useInviteMemberMutation()` |
+| `/api/v1/team/invitations/:id/cancel` | `POST` | Revoke a pending team invitation | `useCancelInvitationMutation()` |
+| `/api/v1/team/invitations/:id/resend` | `POST` | Resend invitation email and extend expiration | `useResendInvitationMutation()` |
+| `/api/v1/team/roles` | `GET` | List available merchant roles and default permission grants | `useRoleDefinitionsQuery()` |
+
+### CartX Subscription & Billing Endpoints
+
+| Planned Endpoint | Method | Purpose | Frontend Hook / Consumer |
+|---|---|---|---|
+| `/api/v1/billing/subscription` | `GET` | Get active store subscription tier, cycle, and renewal | `useStoreSubscriptionQuery()` |
+| `/api/v1/billing/subscription` | `POST` | Upgrade or downgrade subscription tier and cycle | `useChangePlanMutation()` |
+| `/api/v1/billing/usage` | `GET` | Current resource consumption vs subscription limits | `usePlanUsageMetricsQuery()` |
+| `/api/v1/billing/invoices` | `GET` | Historical billing invoices ledger with payment status | `useInvoicesQuery()` |
+| `/api/v1/billing/invoices/:id` | `GET` | Invoice breakdown, VAT calculation, and line items | `useInvoiceQuery(id)` |
+| `/api/v1/billing/invoices/:id/pay` | `POST` | Settle pending or failed invoice via default payment method | `usePayInvoiceMutation()` |
+| `/api/v1/billing/settings` | `GET` | Merchant legal tax BIN, billing contact, and invoices email | `useBillingSettingsQuery()` |
+| `/api/v1/billing/settings` | `PUT` | Update merchant billing and tax information | `useUpdateBillingSettingsMutation()` |
+| `/api/v1/billing/payment-methods` | `POST` | Add bKash Auto-Debit, Nagad, or Card payment method | `useAddPaymentMethodMutation()` |
+| `/api/v1/billing/payment-methods/:id/default` | `POST` | Set primary payment method for auto-renewal | `useSetDefaultPaymentMethodMutation()` |
+| `/api/v1/billing/payment-methods/:id` | `DELETE` | Remove saved payment instrument | `useRemovePaymentMethodMutation()` |
+
+### Support & Help Center Endpoints
+
+| Planned Endpoint | Method | Purpose | Frontend Hook / Consumer |
+|---|---|---|---|
+| `/api/v1/support/articles` | `GET` | Searchable knowledge base articles and guides | `useHelpArticlesQuery(query, category)` |
+| `/api/v1/support/faqs` | `GET` | Categorized FAQ items for merchant self-service | `useFAQItemsQuery(category)` |
+| `/api/v1/support/tickets` | `GET` | List merchant support tickets with filters | `useSupportTicketsQuery(filters)` |
+| `/api/v1/support/tickets` | `POST` | Create a new merchant support ticket | `useCreateTicketMutation()` |
+| `/api/v1/support/tickets/:id` | `GET` | Ticket conversation history and metadata | `useSupportTicketQuery(id)` |
+| `/api/v1/support/tickets/:id/reply` | `POST` | Post merchant reply and reopen resolved tickets | `useReplyTicketMutation()` |
+| `/api/v1/support/tickets/:id/status` | `PATCH` | Merchant closes or reopens support ticket | `useUpdateTicketStatusMutation()` |
+
+---
+
+## 8. Storage & File Upload Contracts
 
 | Pending Contract          | Description                                                                                                           | Impact on Frontend                                                                                                              | Required Resolution                                                                              |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -199,7 +246,7 @@ Phase 7 frontend capabilities operate in high-fidelity client demo mode using lo
 
 ---
 
-## 8. Authentication & Session Management Gaps
+## 9. Authentication & Session Management Gaps
 
 | Pending Contract               | Description                                                                                      | Impact on Frontend                                                                      | Required Resolution                                                                        |
 | ------------------------------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -208,7 +255,7 @@ Phase 7 frontend capabilities operate in high-fidelity client demo mode using lo
 
 ---
 
-## 9. Third-Party Gateway & Courier Proxies (Required for Live Mode)
+## 10. Third-Party Gateway & Courier Proxies (Required for Live Mode)
 
 | Pending Contract                       | Description                                                                                                                             | Impact on Frontend                                                                                                     | Required Resolution                                                                         |
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |

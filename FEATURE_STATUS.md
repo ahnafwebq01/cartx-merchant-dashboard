@@ -7,8 +7,8 @@
 |---|---|---|---|---|---|
 | **00** | **Project Setup & Architecture** | `/` | **Phase 1** | **COMPLETED** | `src/` modular layout, Tailwind v4 tokens, shadcn/ui, API client, auth context, layout shell. |
 | **01** | **Overview (Dashboard Home)** | `/dashboard` | **Phase 1 / 2** | **COMPLETED** | Layout shell, collapsible sidebar (21st.dev inspired), status KPI cards, setup checklist. Real metrics in Phase 4. |
-| **02** | **Store Onboarding Wizard** | `/onboarding/*` | **Phase 2** | **COMPLETED** | 7-step wizard (identity, business, storefront, products, payments, shipping, publish) with debounced slug check. |
-| **03** | **Settings & Store Profile** | `/dashboard/settings` | **Phase 2** | **COMPLETED** | Store profile, business info, contacts, BDT locale, RBAC permission guards, and TanStack Query sync. |
+| **02** | **Store Onboarding Wizard** | `/onboarding/*` | **Phase 2** | **COMPLETED (Demo Mode)** | 7-step wizard (identity, business, storefront, products, payments, shipping, publish) with debounced slug check, simulated registry, and localStorage persistence. |
+| **03** | **Settings & Store Profile** | `/dashboard/settings` | **Phase 2** | **COMPLETED (Demo Mode)** | Store profile, business info, contacts, BDT locale, RBAC permission guards, and TanStack Query sync with Demo Mode fallback. |
 | **04** | **Products Management** | `/dashboard/products` | **Phase 3** | **COMPLETED (Demo Mode)** | Full CRUD, categories, collections, variants, SKU generator, CSV import/export, local persistence. |
 | **05** | **Stocks & Inventory** | `/dashboard/inventory` | **Phase 3** | **COMPLETED (Demo Mode)** | Stock adjustments (restock, damaged, lost, correction), health meters, movement audit logs. |
 | **06** | **Sales & Orders** | `/dashboard/orders` | **Phase 4** | **COMPLETED (Demo Mode)** | Order listing, details, fulfillment lifecycle, timeline, printable invoice, status state machine. |
@@ -18,9 +18,9 @@
 | **10** | **Online Store & Themes** | `/dashboard/store` | **Phase 6** | **COMPLETED (Demo Mode)** | Theme library, visual customizer, custom domain setup, DNS instructions, CMS pages, legal templates. |
 | **11** | **Marketing & Promotions** | `/dashboard/marketing` | **Phase 7** | **COMPLETED (Demo Mode)** | Coupons, automatic discounts, flash sales with countdowns, marketing overview. |
 | **12** | **Analytics & Reports** | `/dashboard/marketing/analytics`, `/dashboard/marketing/reports` | **Phase 7** | **COMPLETED (Demo Mode)** | Attribution analytics, trend charts, 4 report ledgers, RFC-4180 UTF-8 CSV exports. |
-| **13** | **Team & Permissions** | `/dashboard/team` | Phase 8 | Pending | Team invitations, role assignments (RBAC). |
-| **14** | **Subscription & Billing** | `/dashboard/billing` | Phase 8 | Pending | CartX SaaS subscription plans, usage limits. |
-| **15** | **Support & Help Center** | `/dashboard/support` | Phase 8 | Pending | Ticket management, guides, contact support. |
+| **13** | **Team & Permissions** | `/dashboard/team` | **Phase 8** | **COMPLETED (Demo Mode)** | Team members, invitations lifecycle, role assignments (8 roles x 26 permissions matrix). |
+| **14** | **Subscription & Billing** | `/dashboard/billing` | **Phase 8** | **COMPLETED (Demo Mode)** | CartX SaaS subscription plans, usage limit meters, invoices PDF view, simulated payments. |
+| **15** | **Support & Help Center** | `/dashboard/support` | **Phase 8** | **COMPLETED (Demo Mode)** | Bangladesh e-commerce guides, categorized FAQs, support tickets CRUD, simulated chat thread. |
 | **16** | **Mobile App Builder** | `/dashboard/mobile-app` | Phase 9 | Pending | White-label merchant app branding and push alerts. |
 
 ---
@@ -232,8 +232,44 @@
 
 ---
 
+---
+
+## Detailed Phase 8 Implementation Deliverables (Team, Billing & Support Operations)
+
+- [x] **Team Management & Role-Based Access Control** (`/dashboard/team`, `/dashboard/team/roles`):
+  - [x] Responsive team members data table with user avatars, emails, status badges (Active, Inactive, Suspended), role badges, joined dates, and last login timestamps.
+  - [x] KPI Summary Cards: Total Staff, Active Members, Pending Invites, and Security Admins.
+  - [x] Tabbed views for Active Team Members vs Pending Invitations.
+  - [x] Invite Member Dialog with React Hook Form + Zod schema, email validation, role selector (8 merchant roles), and expandable granular permission overrides.
+  - [x] Full invitation lifecycle management: Pending, Accepted, Expired, Cancelled, and Resend actions.
+  - [x] Edit Member Dialog with role adjustment, active status toggle, and custom permission checkboxes.
+  - [x] Safe member removal with destructive `AlertDialog` confirmation and Store Owner protection (owner cannot be demoted or deleted).
+  - [x] Interactive Roles & Permissions matrix view (`/dashboard/team/roles`) mapping 8 roles (Owner, Admin, Store Manager, Order Manager, Inventory Manager, Support Agent, Marketing Specialist, Read-Only Staff) against 26 granular permissions grouped into 7 domains.
+- [x] **Billing & Subscription Management** (`/dashboard/billing`, `/plans`, `/invoices`, `/settings`):
+  - [x] Current plan overview hero card displaying tier badge, price in BDT (৳), billing cycle, renewal date, and upgrade action.
+  - [x] Usage limit tracking with accessible `Progress` bars across 4 key metrics: Products, Monthly Orders, Staff Accounts, and File Storage.
+  - [x] Plan usage warning banners triggered automatically when any metric exceeds the 70% capacity threshold.
+  - [x] Pricing & Plan Comparison matrix (`/dashboard/billing/plans`) featuring Starter (৳999/mo), Growth (৳2,499/mo), and Pro (৳5,999/mo) plans.
+  - [x] Annual billing toggle with 17% automatic discount calculation (2 months free).
+  - [x] Interactive Upgrade/Downgrade Plan Dialog with billing cycle selection and simulated tier adjustment.
+  - [x] Filterable Invoices Ledger (`/dashboard/billing/invoices`) with status badges (Paid, Pending, Failed) and payment/retry actions.
+  - [x] Printable Tax Invoice Modal (`InvoiceDetailDialog`) with CartX Bangladesh Ltd legal header, merchant BIN, line items, and VAT breakdown.
+  - [x] Billing Settings & Payment Instruments (`/dashboard/billing/settings`) for connecting simulated bKash Auto-Debit, Nagad, and Visa/Mastercard methods.
+- [x] **Help Center & Operations Support** (`/dashboard/support`, `/tickets`, `/tickets/[ticketId]`):
+  - [x] Knowledge Base landing page with hero search bar, system operational uptime badge (99.98% operational), and Bangladesh e-commerce guides (Courier APIs, bKash Integration, Domain DNS, VAT, etc.).
+  - [x] Categorized FAQ accordion (Shipping, Payments, Domains, Invoicing).
+  - [x] Create Support Ticket Dialog with React Hook Form + Zod, subject, category selector, priority levels (Low, Medium, High, Urgent), and message.
+  - [x] Filterable Support Tickets Ledger (`/dashboard/support/tickets`) with status badges (Open, In Progress, Resolved, Closed), priority indicators, and search.
+  - [x] Detailed Support Ticket Conversation View (`/dashboard/support/tickets/[ticketId]`) with interactive timeline, client reply input, manual status controls, and simulated CartX agent response generator.
+- [x] **Sidebar Navigation & Quality Gates**:
+  - [x] Added 3 new navigation groups in `src/config/navigation.ts`: Team & Access (2 items), Subscription & Billing (4 items), and Help & Support (2 items).
+  - [x] Comprehensive test suite in `tests/phase8-team-billing-operations.test.ts` (27 automated tests).
+  - [x] Updated `tests/sidebar-navigation.test.ts` (16 automated tests covering 11 groups and 60 routes).
+  - [x] **215 / 215 automated unit tests passing** (100% pass rate across 9 test suites).
+  - [x] **0 ESLint errors**; **0 TypeScript errors**; **60 / 60 routes** compiled and prerendered cleanly.
+
 ## Demo Mode Disclosures & Future Backend Integration
 
 1. **Storage Mode**: Products, categories, inventory, orders, customers, payment transactions, refunds, and shipments are persisted in browser `localStorage` (`cartx_demo_*`) with in-memory fallbacks for SSR/testing.
-2. **Backend Replacement Boundary**: All data operations are encapsulated in typed feature services (`mockProducts.ts`, `mockOrders.ts`, `mockCustomers.ts`, `mockPayments.ts`, `mockShipping.ts`) behind React Query hooks. When the shared Express API is deployed, these services can be connected to real HTTP endpoints without altering UI components.
+2. **Backend Replacement Boundary**: All data operations are encapsulated in typed feature services (`mockProducts.ts`, `mockOrders.ts`, `mockCustomers.ts`, `mockPayments.ts`, `mockShipping.ts`, `mockStorefront.ts`, `mockMarketing.ts`, `mockTeam.ts`, `mockBilling.ts`, `mockSupport.ts`) behind React Query hooks. When the shared Express API is deployed, these services can be connected to real HTTP endpoints without altering UI components.
 3. **Payment & Courier Credentials**: Zero-trust architecture strictly prevents storing secret API passwords, signing keys, or private tokens in browser storage or client bundles. Real gateway connections require the shared backend proxy endpoints.

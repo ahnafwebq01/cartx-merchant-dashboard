@@ -11,6 +11,7 @@ import { ErrorState } from "@/components/feedback/ErrorState";
 import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -95,6 +96,9 @@ export function StoreSettingsView() {
       setSaveSuccess(false);
       await updateMutation.mutateAsync(values);
       setSaveSuccess(true);
+      toast.success("Store settings updated successfully (Demo Mode)", {
+        description: "Your changes are saved locally in this browser.",
+      });
       setTimeout(() => setSaveSuccess(false), 4000);
     } catch {
       // Handled by updateMutation.isError

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, AlertCircle, ArrowRight, ArrowLeft, Info, Check } from "lucide-react";
+import { toast } from "sonner";
 
 interface StepStorefrontProps {
   draft?: OnboardingDraft;
@@ -78,6 +79,7 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
         step: 3,
         data: values,
       });
+      toast.success("Storefront branding saved (Demo Mode)");
       router.push("/onboarding/products");
     } catch {
       // Error handled by mutation state

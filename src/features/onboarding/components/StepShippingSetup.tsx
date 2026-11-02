@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, AlertCircle, ArrowRight, ArrowLeft, Truck, MapPin } from "lucide-react";
+import { toast } from "sonner";
 
 interface StepShippingSetupProps {
   draft?: OnboardingDraft;
@@ -42,6 +43,7 @@ export function StepShippingSetup({ draft }: StepShippingSetupProps) {
         step: 6,
         data: values,
       });
+      toast.success("Delivery rates saved (Demo Mode)");
       router.push("/onboarding/publish");
     } catch {
       // Error handled by mutation state

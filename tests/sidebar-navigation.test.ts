@@ -32,7 +32,7 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
   );
 
   describe("Route Inventory & Completeness", () => {
-    it("should include all 8 required logical navigation groups", () => {
+    it("should include all 11 required logical navigation groups", () => {
       const groupIds = NAVIGATION_GROUPS.map((g) => g.id);
       expect(groupIds).toEqual([
         "overview",
@@ -42,6 +42,9 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         "shipping-logistics",
         "storefront",
         "marketing",
+        "team",
+        "billing",
+        "support",
         "store-management",
       ]);
     });
@@ -78,6 +81,14 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         "/dashboard/marketing/flash-sales",
         "/dashboard/marketing/analytics",
         "/dashboard/marketing/reports",
+        "/dashboard/team",
+        "/dashboard/team/roles",
+        "/dashboard/billing",
+        "/dashboard/billing/plans",
+        "/dashboard/billing/invoices",
+        "/dashboard/billing/settings",
+        "/dashboard/support",
+        "/dashboard/support/tickets",
         "/dashboard/settings",
         "/onboarding",
       ];
@@ -107,13 +118,10 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
       expect(leafLinks.length).toBe(uniqueLeafLinks.size);
     });
 
-    it("should NOT contain any unimplemented Phase 8-9 routes to avoid 404s", () => {
+    it("should NOT contain any unimplemented Phase 9 routes to avoid 404s", () => {
       const unimplementedRoadmapRoutes = [
         "/dashboard/apps",
         "/dashboard/mobile-app",
-        "/dashboard/team",
-        "/dashboard/billing",
-        "/dashboard/support",
         "/dashboard/profile",
         "/dashboard/security",
         "/dashboard/notifications",
@@ -309,6 +317,28 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         false,
       );
       expect(hasPermission(inventoryPermissions, "inventory.view")).toBe(true);
+    });
+
+    it("should allow admin to manage team but strictly prevent admin from managing owner-only billing", () => {
+      const adminPermissions = DEFAULT_ROLE_PERMISSIONS.admin;
+      expect(hasPermission(adminPermissions, "team.manage")).toBe(true);
+      expect(hasPermission(adminPermissions, "billing.manage")).toBe(false);
+
+      const ownerPermissions = DEFAULT_ROLE_PERMISSIONS.owner;
+      expect(hasPermission(ownerPermissions, "team.manage")).toBe(true);
+      expect(hasPermission(ownerPermissions, "billing.manage")).toBe(true);
+    });
+
+    it("should correctly match nested team, billing, and support routes", () => {
+      expect(isRouteActive("/dashboard/team", "/dashboard/team")).toBe(true);
+      expect(isRouteActive("/dashboard/team/roles", "/dashboard/team/roles")).toBe(true);
+      expect(isRouteActive("/dashboard/billing", "/dashboard/billing")).toBe(true);
+      expect(isRouteActive("/dashboard/billing/plans", "/dashboard/billing/plans")).toBe(true);
+      expect(isRouteActive("/dashboard/billing/invoices", "/dashboard/billing/invoices")).toBe(true);
+      expect(isRouteActive("/dashboard/billing/settings", "/dashboard/billing/settings")).toBe(true);
+      expect(isRouteActive("/dashboard/support", "/dashboard/support")).toBe(true);
+      expect(isRouteActive("/dashboard/support/tickets", "/dashboard/support/tickets")).toBe(true);
+      expect(isRouteActive("/dashboard/support/tickets/TCK-1048", "/dashboard/support/tickets")).toBe(true);
     });
   });
 });

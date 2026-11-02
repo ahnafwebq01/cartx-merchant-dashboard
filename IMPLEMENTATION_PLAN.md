@@ -4,7 +4,7 @@
 **Module:** Merchant Dashboard (`cartx-merchant-dashboard`)  
 **Target Market:** Bangladesh (BDT ৳, Bengali & English)  
 **Authoritative Specification:** `CARTX_MERCHANT_DASHBOARD.md` (Version 1.0)  
-**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Complete (Demo Mode) • Phase 5 Complete (Demo Mode) • Phase 6 Complete (Demo Mode) • Phase 7 Complete (Demo Mode) • Phase 8 Pending  
+**Status:** Phase 1 Complete • Phase 2 Complete • Phase 3 Complete (Demo Mode) • Phase 4 Complete (Demo Mode) • Phase 5 Complete (Demo Mode) • Phase 6 Complete (Demo Mode) • Phase 7 Complete (Demo Mode) • Phase 8 Complete (Demo Mode) • Phase 9 Pending  
 
 ---
 
@@ -56,9 +56,9 @@ flowchart LR
 
 ---
 
-### Phase 2: Merchant Onboarding & Store Profile (COMPLETED)
+### Phase 2: Merchant Onboarding & Store Profile (COMPLETED - Demo Mode & Production Deployed)
 - [x] **Seven-Step Onboarding Wizard** (`/onboarding/*`):
-  - [x] Step 1: Store & Account Identity (`/onboarding/store`) with live debounced slug check
+  - [x] Step 1: Store & Account Identity (`/onboarding/store`) with live debounced slug check & simulated availability engine
   - [x] Step 2: Physical Business Information (`/onboarding/business`) with Bangladesh district select
   - [x] Step 3: Storefront Setup (`/onboarding/storefront`) with brand color picker & theme selector
   - [x] Step 4: First Product (`/onboarding/products`) with BDT price validation & stock
@@ -68,6 +68,15 @@ flowchart LR
 - [x] **Store Profile & Settings Management** (`/dashboard/settings`):
   - [x] Store Profile tab (name, subdomain slug, description, storefront URL)
   - [x] Business Information tab (category, address, district, area, trade license)
+  - [x] Contact Details tab (owner name, verified email, mobile number)
+  - [x] Regional & Localization tab (BDT currency, Bengali `bn-BD` locale, Dhaka timezone)
+- [x] **Demo Mode & Public Production Deployment**:
+  - [x] `mockOnboardingService` & `mockStoreSettingsService` with SSR-safe `localStorage` persistence
+  - [x] Centralized Demo Mode fallback preventing `Failed to fetch` errors
+  - [x] Simulated subdomain registry check with reserved keywords protection
+  - [x] Dynamic Resume Setup routing directly to the first incomplete step
+  - [x] Interactive Topbar `Demo Mode` indicator with one-click data reset
+  - [x] Deployed to Vercel production: https://cartx-merchant-dashboard.vercel.app
   - [x] Contact Details tab (owner name, email, Bangladeshi mobile number)
   - [x] Regional & Locale tab (BDT ৳ currency, `bn-BD` locale, `Asia/Dhaka` timezone)
   - [x] `PermissionGuard` access control (`settings.manage` permission)
@@ -196,10 +205,33 @@ flowchart LR
   - [x] **186 / 186 automated unit tests passing** (100% pass rate across 8 test suites).
   - [x] **0 ESLint errors**; **0 TypeScript errors**; **51 / 51 routes** compiled cleanly via Turbopack build.
 
-### Phase 8: Team, Billing & Operations
-- [ ] Team invitations and granular permission assignments
-- [ ] CartX subscription plans, billing invoices, and usage limits
-- [ ] Help center and support ticketing
+### Phase 8: Team, Billing & Operations (COMPLETED - Demo Mode)
+- [x] **Team Management & Role-Based Access Control** (`/dashboard/team`, `/dashboard/team/roles`):
+  - [x] Team member listing with active status, role badges, joined dates, and last login timestamps.
+  - [x] Invite team member dialog with email, role selector (8 merchant roles), and granular permission overrides.
+  - [x] Full invitation lifecycle management (Pending, Accepted, Expired, Cancelled, Resend actions).
+  - [x] Member edit modal with role modification, permission customization, and status management.
+  - [x] Safe member removal with destructive `AlertDialog` confirmation and Store Owner protection (owner cannot be demoted or deleted).
+  - [x] Interactive Roles & Permissions matrix view mapping 8 roles against 26 granular permissions across all modules.
+- [x] **Billing & Subscription Management** (`/dashboard/billing`, `/plans`, `/invoices`, `/settings`):
+  - [x] Subscription tier overview (Starter ৳999/mo, Growth ৳2,499/mo, Pro ৳5,999/mo) with active tier status.
+  - [x] Plan comparison matrix with annual billing toggle (17% savings calculation).
+  - [x] Upgrade/downgrade subscription dialog with instant tier adjustment simulation and demo mode disclosure.
+  - [x] Usage limits tracking with `Progress` bars (products, monthly orders, staff accounts, storage) and warning banners when exceeding 70% threshold.
+  - [x] Invoices ledger with status badges (Paid, Pending, Failed), printable tax invoice modal with CartX BD Ltd header, and simulated payment/retry actions.
+  - [x] Billing settings & payment instruments management (simulated bKash Auto-Debit, Nagad, Visa/Mastercard).
+- [x] **Help Center & Operations Support** (`/dashboard/support`, `/tickets`, `/tickets/[ticketId]`):
+  - [x] Help Center landing page with search bar, system operational uptime badge, and Bangladesh e-commerce guides.
+  - [x] Categorized FAQ accordion (Shipping, Payments, Domains, Invoicing).
+  - [x] Support ticket creation dialog with category and priority selectors.
+  - [x] Filterable support tickets ledger with status badges (Open, In Progress, Resolved, Closed).
+  - [x] Detailed ticket conversation thread with client reply submission and simulated CartX agent response generator.
+- [x] **Sidebar Navigation & Quality Gates**:
+  - [x] Added `Team & Access` (2 items), `Subscription & Billing` (4 items), and `Help & Support` (2 items) navigation groups.
+  - [x] Created `tests/phase8-team-billing-operations.test.ts` (27 comprehensive tests).
+  - [x] Updated `tests/sidebar-navigation.test.ts` (16 tests covering 11 groups and 60 routes).
+  - [x] **215 / 215 automated unit tests passing** (100% pass rate across 9 test suites).
+  - [x] **0 ESLint errors**; **0 TypeScript errors**; **60 / 60 routes** compiled and prerendered cleanly via Turbopack build.
 
 ### Phase 9: Mobile App & Advanced Capabilities
 - [ ] White-label merchant/customer mobile app configuration
@@ -213,10 +245,10 @@ flowchart LR
 |---|---|---|
 | **TypeScript Strictness** | `npm run type-check` | **PASS (0 errors)** |
 | **ESLint Quality & Rules** | `npm run lint` | **PASS (0 errors, 0 warnings)** |
-| **Automated Test Suite** | `npm run test` | **PASS (186/186 unit tests passing)** |
-| **Production Build** | `npm run build` | **PASS (51/51 routes prerendered)** |
+| **Automated Test Suite** | `npm run test` | **PASS (215/215 unit tests passing)** |
+| **Production Build** | `npm run build` | **PASS (60/60 routes prerendered)** |
 | Strict TypeScript Compilation | `npm run type-check` | **PASS** (0 errors) |
 | ESLint Code Quality | `npm run lint` | **PASS** (0 errors, 0 warnings) |
-| Automated Unit Testing | `npm run test` | **PASS** (186/186 passed across 8 test suites) |
-| Next.js Production Build | `npm run build` | **PASS** (51 static/PPR routes generated) |
+| Automated Unit Testing | `npm run test` | **PASS** (215/215 passed across 9 test suites) |
+| Next.js Production Build | `npm run build` | **PASS** (60 static/PPR routes generated) |
 | Boundary & Secrets Discipline | Zero client secrets / zero fake success | **PASS** |

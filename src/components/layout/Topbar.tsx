@@ -43,12 +43,26 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Sidebar } from "./Sidebar";
+import { DemoModeBadge } from "./DemoModeBadge";
 import { useAuth } from "@/lib/auth/context";
+import { resetAllDemoData } from "@/lib/demo/resetDemo";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { RotateCcw } from "lucide-react";
 
 export function Topbar() {
-  const { user, currentStore, currentRole, logout } = useAuth();
+  const { user, currentStore, currentRole, logout, loginAsDemo } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const handleQuickReset = async () => {
+    resetAllDemoData();
+    await queryClient.invalidateQueries();
+    toast.success("Demo Mode reset successfully", {
+      description: "All onboarding steps and demo data have been restored to defaults.",
+    });
+  };
 
   return (
     <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-card px-4 md:px-6">
@@ -111,6 +125,9 @@ export function Topbar() {
 
       {/* Right: Actions & User Profile */}
       <div className="flex items-center gap-2">
+        {/* Demo Mode Badge */}
+        <DemoModeBadge />
+
         {/* Help Shortcut */}
         <Button
           variant="ghost"
@@ -133,64 +150,78 @@ export function Topbar() {
           <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary" />
         </Button>
 
-        {/* User Profile Menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="flex items-center gap-2 pl-2 pr-1 h-9 rounded-full focus:outline-none"
-              aria-label="User account menu"
-            >
-              <Avatar className="h-7 w-7 border border-border">
-                <AvatarImage src={user?.avatarUrl} alt={user?.name || "Merchant"} />
-                <AvatarFallback className="text-[11px] bg-primary text-primary-foreground">
-                  {user?.name ? user.name.slice(0, 2).toUpperCase() : "CX"}
-                </AvatarFallback>
-              </Avatar>
-              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground hidden sm:block shrink-0" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none text-foreground">
-                  {user?.name || "Merchant Admin"}
-                </p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  {user?.email || "merchant@cartx.com.bd"}
-                </p>
-                <div className="pt-1">
-                  <Badge variant="outline" className="text-[10px] font-mono capitalize">
-                    {currentRole || "Store Owner"}
-                  </Badge>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/settings" className="cursor-pointer flex items-center">
-                <UserIcon className="mr-2 h-4 w-4" />
-                <span>Store Profile</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <a
-                href={currentStore?.slug ? `https://${currentStore.slug}.cartx.com.bd` : "#"}
-                target="_blank"
-                rel="noreferrer"
-                className="cursor-pointer flex items-center"
+        {/* User Profile Menu or Sign-in */}
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2 pl-2 pr-1 h-9 rounded-full focus:outline-none"
+                aria-label="User account menu"
               >
-                <ExternalLink className="mr-2 h-4 w-4" />
-                <span>View Storefront</span>
-              </a>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => logout()} className="text-destructive cursor-pointer">
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Sign Out</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+                <Avatar className="h-7 w-7 border border-border">
+                  <AvatarImage src={user?.avatarUrl} alt={user?.name || "Merchant"} />
+                  <AvatarFallback className="text-[11px] bg-primary text-primary-foreground">
+                    {user?.name ? user.name.slice(0, 2).toUpperCase() : "CX"}
+                  </AvatarFallback>
+                </Avatar>
+                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground hidden sm:block shrink-0" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none text-foreground">
+                    {user?.name || "Merchant Admin"}
+                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user?.email || "merchant@cartx.com.bd"}
+                  </p>
+                  <div className="pt-1">
+                    <Badge variant="outline" className="text-[10px] font-mono capitalize">
+                      {currentRole || "Store Owner"}
+                    </Badge>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/settings" className="cursor-pointer flex items-center">
+                  <UserIcon className="mr-2 h-4 w-4" />
+                  <span>Store Profile</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <a
+                  href={currentStore?.slug ? `https://${currentStore.slug}.cartx.com.bd` : "#"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="cursor-pointer flex items-center"
+                >
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  <span>View Storefront</span>
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleQuickReset} className="text-amber-600 dark:text-amber-400 cursor-pointer">
+                <RotateCcw className="mr-2 h-4 w-4" />
+                <span>Reset Demo Data</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => logout()} className="text-destructive cursor-pointer">
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign Out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button
+            size="sm"
+            onClick={() => loginAsDemo("owner")}
+            className="text-xs h-8"
+          >
+            Demo Sign-In
+          </Button>
+        )}
       </div>
 
       {/* Help & Support Dialog */}
@@ -227,6 +258,25 @@ export function Topbar() {
             <div className="text-[11px] text-muted-foreground space-y-1">
               <p>
                 <strong>Demo Mode Info:</strong> All product, inventory, order, payment, and shipment data in this session is stored safely in your browser storage.
+              </p>
+              <p>
+                Need tutorials or technical help? Visit the{" "}
+                <Link
+                  href="/dashboard/support"
+                  onClick={() => setHelpOpen(false)}
+                  className="text-primary underline font-medium"
+                >
+                  Help Center
+                </Link>{" "}
+                or submit a{" "}
+                <Link
+                  href="/dashboard/support/tickets"
+                  onClick={() => setHelpOpen(false)}
+                  className="text-primary underline font-medium"
+                >
+                  Support Ticket
+                </Link>
+                .
               </p>
               <p>
                 Need to change store profile, business details, or delivery rates? Visit{" "}
