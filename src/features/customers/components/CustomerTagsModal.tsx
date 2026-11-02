@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -78,6 +79,9 @@ export function CustomerTagsModal({
             <Tag className="h-4 w-4 text-primary" />
             Manage Tags for {customer.name}
           </DialogTitle>
+          <DialogDescription className="text-xs text-muted-foreground">
+            Assign custom segmentation tags to organize customers for targeted promotions and VIP service.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2 text-xs">

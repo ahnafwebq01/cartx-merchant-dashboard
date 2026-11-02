@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categoryFormSchema, type CategoryFormValues } from "../schemas";
 import { useCategoriesQuery, useCreateCategoryMutation } from "../hooks";
@@ -36,7 +36,7 @@ export function CategoryManagementModal({
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     reset,
     formState: { errors },
   } = useForm<CategoryFormValues>({
@@ -49,7 +49,7 @@ export function CategoryManagementModal({
     },
   });
 
-  const nameWatch = watch("name");
+  const nameWatch = useWatch({ control, name: "name" });
 
   const handleAutoSlug = () => {
     if (!nameWatch) return;

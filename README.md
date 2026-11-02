@@ -26,7 +26,8 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
 | **Phase 3: Products & Inventory** | **Completed (Demo Mode)** | Product CRUD, variant matrix, SKU generation, inventory adjustments, CSV import/export. |
 | **Phase 4: Sales, Orders & Customers** | **Completed (Demo Mode)** | Order fulfillment state machine, returns, printable invoice, customer CRM, segmentation. |
 | **Phase 5: Payments & Shipping Logistics** | **Completed (Demo Mode)** | bKash, Nagad, SSLCommerz, COD adapters, courier consignments (Steadfast, Pathao, RedX). |
-| **Phases 6–9: Storefront, Marketing, Billing, App** | *Pending* | Future roadmap items per [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md). |
+| **Phase 6: UX Polish & Consistency Audit** | **Completed** | Full UI/UX audit, standardized headers, responsive tables, accessible dialogs, safety alerts ([Report](./docs/PHASE_6_UX_POLISH_AUDIT_REPORT.md)). |
+| **Phases 7–9: Storefront, Marketing, Billing, App** | *Pending* | Future roadmap items per [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md). |
 
 ---
 
@@ -196,3 +197,15 @@ When the shared CartX Express.js backend API is deployed:
 - The typed API client in `src/lib/api/client.ts` will connect to live REST endpoints.
 - Detailed endpoint contracts, request/response models, and remaining integration requirements are documented in [`API_GAPS.md`](./API_GAPS.md).
 - Phase 5 will introduce live Bangladesh payment gateway integrations (bKash, Nagad, SSLCommerz) and courier tracking APIs (Steadfast, Pathao, RedX).
+
+---
+
+## 10. Documentation & Audit Reports
+
+- [`docs/PHASE_6_UX_POLISH_AUDIT_REPORT.md`](./docs/PHASE_6_UX_POLISH_AUDIT_REPORT.md) — Comprehensive Phase 6 UI/UX Polish, Accessibility & Consistency Audit Report.
+- [`PHASE_5_FINAL_AUDIT_REPORT.md`](./PHASE_5_FINAL_AUDIT_REPORT.md) — Phase 5 Final Comprehensive Audit Report (Payments & Shipping Logistics).
+- [`CARTX_MERCHANT_DASHBOARD.md`](./CARTX_MERCHANT_DASHBOARD.md) — Authoritative functional specification across all 16 modules.
+- [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md) — Multi-phase architectural delivery plan and milestone checklist.
+- [`FEATURE_STATUS.md`](./FEATURE_STATUS.md) — Living feature status matrix across modules.
+- [`API_GAPS.md`](./API_GAPS.md) — Express backend REST integration contracts and missing proxy endpoints.
+- [`SECURITY_CHECKLIST.md`](./SECURITY_CHECKLIST.md) — Zero-trust credential security verification.

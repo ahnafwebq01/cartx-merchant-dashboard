@@ -13,13 +13,14 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/feedback/EmptyState";
 import { useOrdersQuery } from "@/features/orders/hooks";
 import { OrderStatusBadge } from "@/features/orders/components/OrderStatusBadge";
 import { PaymentStatusBadge } from "@/features/orders/components/PaymentStatusBadge";
 import {
   RotateCcw,
   Eye,
-  DollarSign,
+  Receipt,
   Package,
 } from "lucide-react";
 
@@ -90,7 +91,7 @@ export default function OrderReturnsPage() {
               </p>
             </div>
             <div className="h-10 w-10 rounded-lg bg-rose-500/10 text-rose-600 flex items-center justify-center shrink-0">
-              <DollarSign className="h-5 w-5" />
+              <Receipt className="h-5 w-5" />
             </div>
           </CardContent>
         </Card>
@@ -120,44 +121,42 @@ export default function OrderReturnsPage() {
         </Card>
       </div>
 
-      {/* Returns Table */}
-      <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader className="bg-muted/40 text-xs">
-              <TableRow>
-                <TableHead className="w-28">Order</TableHead>
-                <TableHead className="w-32">Date</TableHead>
-                <TableHead className="min-w-[180px]">Customer</TableHead>
-                <TableHead className="min-w-[200px]">Return Reason</TableHead>
-                <TableHead className="w-32">Order Status</TableHead>
-                <TableHead className="w-32">Refund Status</TableHead>
-                <TableHead className="w-28 text-right">Value</TableHead>
-                <TableHead className="w-16 text-center">Action</TableHead>
-              </TableRow>
-            </TableHeader>
+      {/* Returns Table or Empty State */}
+      {!isLoading && returnOrders.length === 0 ? (
+        <EmptyState
+          icon={RotateCcw}
+          title="No Return or Refund Records"
+          description="All customer orders are currently in good standing without active return merchandise or disputed refunds."
+        />
+      ) : (
+        <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader className="bg-muted/40 text-xs">
+                <TableRow>
+                  <TableHead className="w-28">Order</TableHead>
+                  <TableHead className="w-32">Date</TableHead>
+                  <TableHead className="min-w-[180px]">Customer</TableHead>
+                  <TableHead className="min-w-[200px]">Return Reason</TableHead>
+                  <TableHead className="w-32">Order Status</TableHead>
+                  <TableHead className="w-32">Refund Status</TableHead>
+                  <TableHead className="w-28 text-right">Value</TableHead>
+                  <TableHead className="w-16 text-center">Action</TableHead>
+                </TableRow>
+              </TableHeader>
 
-            <TableBody>
-              {isLoading ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={8}
-                    className="h-32 text-center text-xs text-muted-foreground"
-                  >
-                    Loading return records...
-                  </TableCell>
-                </TableRow>
-              ) : returnOrders.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={8}
-                    className="h-32 text-center text-xs text-muted-foreground"
-                  >
-                    No return or refund cases recorded.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                returnOrders.map((o) => (
+              <TableBody>
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={8}
+                      className="h-32 text-center text-xs text-muted-foreground"
+                    >
+                      Loading return records...
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  returnOrders.map((o) => (
                   <TableRow key={o.id} className="text-xs">
                     <TableCell>
                       <Link
@@ -229,6 +228,7 @@ export default function OrderReturnsPage() {
           </Table>
         </div>
       </div>
+      )}
     </div>
   );
 }

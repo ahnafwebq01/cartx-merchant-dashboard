@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { storefrontSetupSchema, type StorefrontSetupFormValues } from "../schemas";
 import { useSaveStep } from "../hooks";
@@ -56,7 +56,7 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setValue,
     formState: { errors },
   } = useForm<StorefrontSetupFormValues>({
@@ -69,8 +69,8 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
     },
   });
 
-  const watchedColor = watch("brandColor");
-  const watchedTheme = watch("themeId");
+  const watchedColor = useWatch({ control, name: "brandColor" });
+  const watchedTheme = useWatch({ control, name: "themeId" });
 
   const onSubmit = async (values: StorefrontSetupFormValues) => {
     try {

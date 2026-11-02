@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { storeIdentitySchema, type StoreIdentityFormValues } from "../schemas";
 import { useSaveStep, useSlugCheck } from "../hooks";
@@ -26,7 +26,7 @@ export function StepStoreIdentity({ draft }: StepStoreIdentityProps) {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setValue,
     formState: { errors },
   } = useForm<StoreIdentityFormValues>({
@@ -41,8 +41,8 @@ export function StepStoreIdentity({ draft }: StepStoreIdentityProps) {
     },
   });
 
-  const watchedSlug = watch("storeSlug");
-  const watchedName = watch("storeName");
+  const watchedSlug = useWatch({ control, name: "storeSlug" });
+  const watchedName = useWatch({ control, name: "storeName" });
 
   // Auto-generate slug from store name if slug is untouched
   useEffect(() => {

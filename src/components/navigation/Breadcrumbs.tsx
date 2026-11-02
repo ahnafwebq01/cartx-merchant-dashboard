@@ -14,6 +14,12 @@ interface BreadcrumbsProps {
 }
 
 export function Breadcrumbs({ items = [], className }: BreadcrumbsProps) {
+  // Omit leading redundant "Dashboard" item if items.length > 1, as the Home icon already links to /dashboard
+  const displayItems =
+    items.length > 1 && (items[0].href === "/dashboard" || items[0].label === "Dashboard")
+      ? items.slice(1)
+      : items;
+
   return (
     <nav aria-label="Breadcrumb" className={cn("flex items-center text-sm", className)}>
       <ol className="flex items-center space-x-2">
@@ -26,8 +32,8 @@ export function Breadcrumbs({ items = [], className }: BreadcrumbsProps) {
             <Home className="h-4 w-4" />
           </Link>
         </li>
-        {items.map((item, index) => {
-          const isLast = index === items.length - 1;
+        {displayItems.map((item, index) => {
+          const isLast = index === displayItems.length - 1;
           return (
             <React.Fragment key={index}>
               <li aria-hidden="true" className="text-muted-foreground">

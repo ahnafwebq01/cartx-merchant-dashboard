@@ -6,6 +6,16 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { PaymentKPIOverview } from "@/features/payments/components/PaymentKPIOverview";
 import { PaymentTransactionsTable } from "@/features/payments/components/PaymentTransactionsTable";
 import {
@@ -30,6 +40,7 @@ function PaymentsOverviewContent() {
     limit: 5,
     status: "all",
   });
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
 
   const { data: stats, isLoading: isStatsLoading } = usePaymentKPIsQuery();
   const { data: txData, isLoading: isTxLoading } = usePaymentTransactionsQuery(filterParams);
@@ -54,25 +65,25 @@ function PaymentsOverviewContent() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => resetMutation.mutate()}
+              onClick={() => setIsResetConfirmOpen(true)}
               disabled={resetMutation.isPending}
               className="text-xs h-8 gap-1.5"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Reset Demo Data
             </Button>
-            <Link href="/dashboard/payments/methods">
-              <Button size="sm" variant="outline" className="text-xs h-8 gap-1.5">
+            <Button size="sm" variant="outline" asChild className="text-xs h-8 gap-1.5">
+              <Link href="/dashboard/payments/methods">
                 <Sliders className="h-3.5 w-3.5" />
                 Payment Methods
-              </Button>
-            </Link>
-            <Link href="/dashboard/payments/transactions">
-              <Button size="sm" className="text-xs h-8 gap-1.5">
+              </Link>
+            </Button>
+            <Button size="sm" asChild className="text-xs h-8 gap-1.5">
+              <Link href="/dashboard/payments/transactions">
                 <Receipt className="h-3.5 w-3.5" />
                 All Transactions
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         }
       />
@@ -180,6 +191,33 @@ function PaymentsOverviewContent() {
           </Card>
         </div>
       </div>
+
+      {/* Reset Demo Data Confirmation Dialog */}
+      <AlertDialog open={isResetConfirmOpen} onOpenChange={setIsResetConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-base flex items-center gap-2">
+              <RotateCcw className="h-4 w-4 text-primary" /> Reset Payment Transactions?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-xs">
+              Are you sure you want to reset payment records? This will restore the default verified
+              Bangladeshi MFS transactions (bKash, Nagad, SSLCommerz, COD) and clear custom refunds.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="text-xs">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                resetMutation.mutate();
+                setIsResetConfirmOpen(false);
+              }}
+              className="text-xs"
+            >
+              Reset to Defaults
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

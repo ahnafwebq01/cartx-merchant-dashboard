@@ -11,7 +11,13 @@ import { ErrorState } from "@/components/feedback/ErrorState";
 import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -107,7 +113,7 @@ export function StoreSettingsView() {
         <PageHeader
           title="Store Settings"
           description="Manage store identity, location, contacts, and locale preferences."
-          breadcrumbs={[{ label: "Settings", href: "/dashboard/settings" }]}
+          breadcrumbs={[{ label: "Store Settings" }]}
         />
         <LoadingSkeleton rows={6} />
       </div>
@@ -120,7 +126,7 @@ export function StoreSettingsView() {
         <PageHeader
           title="Store Settings"
           description="Manage store identity, location, contacts, and locale preferences."
-          breadcrumbs={[{ label: "Settings", href: "/dashboard/settings" }]}
+          breadcrumbs={[{ label: "Store Settings" }]}
         />
         <ErrorState
           title="Failed to load store settings"
@@ -136,15 +142,12 @@ export function StoreSettingsView() {
   }
 
   return (
-    <PermissionGuard
-      permission="settings.manage"
-      showAccessDenied
-    >
+    <PermissionGuard permission="settings.manage" showAccessDenied>
       <div className="space-y-6">
         <PageHeader
           title="Store Settings"
           description="Manage store identity, location, contacts, and locale preferences."
-          breadcrumbs={[{ label: "Settings", href: "/dashboard/settings" }]}
+          breadcrumbs={[{ label: "Store Settings" }]}
           actions={
             <div className="flex items-center gap-2">
               {store?.slug && (
@@ -168,7 +171,9 @@ export function StoreSettingsView() {
         {saveSuccess && (
           <div className="flex items-center gap-2 p-3 text-sm text-success rounded-lg bg-success/10 border border-success/20">
             <CheckCircle2 className="h-4 w-4 shrink-0" />
-            <span>Store settings successfully updated and persisted on backend!</span>
+            <span>
+              Store settings successfully updated and persisted on backend!
+            </span>
           </div>
         )}
 
@@ -191,7 +196,9 @@ export function StoreSettingsView() {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-sm text-foreground">{store?.name || "CartX Store"}</h3>
+                <h3 className="font-semibold text-sm text-foreground">
+                  {store?.name || "CartX Store"}
+                </h3>
                 <Badge
                   variant={store?.status === "active" ? "success" : "secondary"}
                   className="text-[10px] capitalize"
@@ -200,7 +207,9 @@ export function StoreSettingsView() {
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground font-mono mt-0.5">
-                {store?.slug ? `${store.slug}.cartx.com.bd` : "Subdomain unconfigured"}
+                {store?.slug
+                  ? `${store.slug}.cartx.com.bd`
+                  : "Subdomain unconfigured"}
               </p>
             </div>
           </div>
@@ -246,7 +255,11 @@ export function StoreSettingsView() {
                   <div className="space-y-1.5">
                     <Label htmlFor="name">Store Name (দোকানের নাম) *</Label>
                     <Input id="name" {...register("name")} />
-                    {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
+                    {errors.name && (
+                      <p className="text-xs text-destructive">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-1.5">
@@ -261,18 +274,26 @@ export function StoreSettingsView() {
                         .cartx.com.bd
                       </span>
                     </div>
-                    {errors.slug && <p className="text-xs text-destructive">{errors.slug.message}</p>}
+                    {errors.slug && (
+                      <p className="text-xs text-destructive">
+                        {errors.slug.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label htmlFor="description">Store Description (বিবরণ) *</Label>
+                    <Label htmlFor="description">
+                      Store Description (বিবরণ) *
+                    </Label>
                     <Textarea
                       id="description"
                       rows={3}
                       {...register("description")}
                     />
                     {errors.description && (
-                      <p className="text-xs text-destructive">{errors.description.message}</p>
+                      <p className="text-xs text-destructive">
+                        {errors.description.message}
+                      </p>
                     )}
                   </div>
                 </CardContent>
@@ -283,21 +304,30 @@ export function StoreSettingsView() {
             <TabsContent value="business">
               <Card className="border-border">
                 <CardHeader>
-                  <CardTitle className="text-base">Business Information</CardTitle>
+                  <CardTitle className="text-base">
+                    Business Information
+                  </CardTitle>
                   <CardDescription>
-                    Physical business presence, registration, and retail category.
+                    Physical business presence, registration, and retail
+                    category.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-1.5">
-                    <Label htmlFor="businessCategory">Business Category *</Label>
+                    <Label htmlFor="businessCategory">
+                      Business Category *
+                    </Label>
                     <select
                       id="businessCategory"
                       {...register("businessCategory")}
                       className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                     >
                       {BUSINESS_CATEGORIES.map((cat) => (
-                        <option key={cat.id} value={cat.id} className="bg-card text-foreground">
+                        <option
+                          key={cat.id}
+                          value={cat.id}
+                          className="bg-card text-foreground"
+                        >
                           {cat.name}
                         </option>
                       ))}
@@ -305,10 +335,18 @@ export function StoreSettingsView() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label htmlFor="businessAddress">Physical Business Address *</Label>
-                    <Textarea id="businessAddress" rows={2} {...register("businessAddress")} />
+                    <Label htmlFor="businessAddress">
+                      Physical Business Address *
+                    </Label>
+                    <Textarea
+                      id="businessAddress"
+                      rows={2}
+                      {...register("businessAddress")}
+                    />
                     {errors.businessAddress && (
-                      <p className="text-xs text-destructive">{errors.businessAddress.message}</p>
+                      <p className="text-xs text-destructive">
+                        {errors.businessAddress.message}
+                      </p>
                     )}
                   </div>
 
@@ -321,7 +359,11 @@ export function StoreSettingsView() {
                         className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                       >
                         {BANGLADESH_DISTRICTS.map((d) => (
-                          <option key={d} value={d} className="bg-card text-foreground">
+                          <option
+                            key={d}
+                            value={d}
+                            className="bg-card text-foreground"
+                          >
                             {d}
                           </option>
                         ))}
@@ -332,7 +374,9 @@ export function StoreSettingsView() {
                       <Label htmlFor="cityArea">City / Area *</Label>
                       <Input id="cityArea" {...register("cityArea")} />
                       {errors.cityArea && (
-                        <p className="text-xs text-destructive">{errors.cityArea.message}</p>
+                        <p className="text-xs text-destructive">
+                          {errors.cityArea.message}
+                        </p>
                       )}
                     </div>
 
@@ -343,8 +387,13 @@ export function StoreSettingsView() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label htmlFor="tradeLicenseNo">Trade License / BIN Number (Optional)</Label>
-                    <Input id="tradeLicenseNo" {...register("tradeLicenseNo")} />
+                    <Label htmlFor="tradeLicenseNo">
+                      Trade License / BIN Number (Optional)
+                    </Label>
+                    <Input
+                      id="tradeLicenseNo"
+                      {...register("tradeLicenseNo")}
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -354,26 +403,39 @@ export function StoreSettingsView() {
             <TabsContent value="contact">
               <Card className="border-border">
                 <CardHeader>
-                  <CardTitle className="text-base">Store Contact Details</CardTitle>
+                  <CardTitle className="text-base">
+                    Store Contact Details
+                  </CardTitle>
                   <CardDescription>
-                    Official email and telephone numbers for notifications and customer receipts.
+                    Official email and telephone numbers for notifications and
+                    customer receipts.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-1.5">
-                    <Label htmlFor="ownerName">Owner Name (মালিকের নাম) *</Label>
+                    <Label htmlFor="ownerName">
+                      Owner Name (মালিকের নাম) *
+                    </Label>
                     <Input id="ownerName" {...register("ownerName")} />
                     {errors.ownerName && (
-                      <p className="text-xs text-destructive">{errors.ownerName.message}</p>
+                      <p className="text-xs text-destructive">
+                        {errors.ownerName.message}
+                      </p>
                     )}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <Label htmlFor="contactEmail">Contact Email *</Label>
-                      <Input id="contactEmail" type="email" {...register("contactEmail")} />
+                      <Input
+                        id="contactEmail"
+                        type="email"
+                        {...register("contactEmail")}
+                      />
                       {errors.contactEmail && (
-                        <p className="text-xs text-destructive">{errors.contactEmail.message}</p>
+                        <p className="text-xs text-destructive">
+                          {errors.contactEmail.message}
+                        </p>
                       )}
                     </div>
 
@@ -381,7 +443,9 @@ export function StoreSettingsView() {
                       <Label htmlFor="contactPhone">Mobile Number *</Label>
                       <Input id="contactPhone" {...register("contactPhone")} />
                       {errors.contactPhone && (
-                        <p className="text-xs text-destructive">{errors.contactPhone.message}</p>
+                        <p className="text-xs text-destructive">
+                          {errors.contactPhone.message}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -393,9 +457,12 @@ export function StoreSettingsView() {
             <TabsContent value="locale">
               <Card className="border-border">
                 <CardHeader>
-                  <CardTitle className="text-base">Currency & Regional Settings</CardTitle>
+                  <CardTitle className="text-base">
+                    Currency & Regional Settings
+                  </CardTitle>
                   <CardDescription>
-                    Primary currency and formatting parameters (CARTX_MERCHANT_DASHBOARD.md Section 1).
+                    Primary currency and formatting parameters
+                    (CARTX_MERCHANT_DASHBOARD.md Section 1).
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -408,7 +475,9 @@ export function StoreSettingsView() {
                         value="BDT (৳) — Bangladeshi Taka"
                         className="bg-muted text-foreground cursor-not-allowed"
                       />
-                      <p className="text-[11px] text-muted-foreground">Default primary currency for Bangladesh.</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        Default primary currency for Bangladesh.
+                      </p>
                     </div>
 
                     <div className="space-y-1.5">
@@ -418,8 +487,18 @@ export function StoreSettingsView() {
                         {...register("locale")}
                         className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                       >
-                        <option value="bn-BD" className="bg-card text-foreground">বাংলা (Bangladesh)</option>
-                        <option value="en-US" className="bg-card text-foreground">English (United States)</option>
+                        <option
+                          value="bn-BD"
+                          className="bg-card text-foreground"
+                        >
+                          বাংলা (Bangladesh)
+                        </option>
+                        <option
+                          value="en-US"
+                          className="bg-card text-foreground"
+                        >
+                          English (United States)
+                        </option>
                       </select>
                     </div>
 
@@ -430,7 +509,12 @@ export function StoreSettingsView() {
                         {...register("timezone")}
                         className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                       >
-                        <option value="Asia/Dhaka" className="bg-card text-foreground">Asia/Dhaka (GMT+6)</option>
+                        <option
+                          value="Asia/Dhaka"
+                          className="bg-card text-foreground"
+                        >
+                          Asia/Dhaka (GMT+6)
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -475,4 +559,3 @@ export function StoreSettingsView() {
     </PermissionGuard>
   );
 }
-

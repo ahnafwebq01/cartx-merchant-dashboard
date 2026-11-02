@@ -102,8 +102,28 @@ export function InventoryTable({ items }: InventoryTableProps) {
             <TableBody>
               {filteredItems.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="h-48 text-center text-xs text-muted-foreground">
-                    No inventory records match your criteria.
+                  <TableCell colSpan={6} className="h-48 text-center text-xs text-muted-foreground p-6">
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <p className="font-medium text-foreground">No inventory records match your criteria</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {search || statusFilter !== "all"
+                          ? "Try adjusting your search keyword or stock status filter."
+                          : "No tracked inventory items found in your catalog."}
+                      </p>
+                      {(search || statusFilter !== "all") && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSearch("");
+                            setStatusFilter("all");
+                          }}
+                          className="mt-2 text-xs h-7"
+                        >
+                          Reset Filters
+                        </Button>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ) : (

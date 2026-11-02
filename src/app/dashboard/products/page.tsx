@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { ProductFilterToolbar } from "@/features/products/components/ProductFilterToolbar";
@@ -117,13 +116,11 @@ export default function ProductsPage() {
   return (
     <div className="space-y-6">
       {/* Navigation & Header */}
-      <div>
-        <Breadcrumbs items={[{ label: "Products" }]} />
-        <PageHeader
-          title="Products & Catalog"
-          description="Manage your store's merchandise, categories, pricing in BDT (৳), and product availability."
-        />
-      </div>
+      <PageHeader
+        title="Products & Catalog"
+        description="Manage your store's merchandise, categories, pricing in BDT (৳), and product availability."
+        breadcrumbs={[{ label: "Products" }]}
+      />
 
       {/* Demo Notice Banner */}
       <div className="flex items-center gap-2.5 p-3 rounded-lg border border-primary/20 bg-primary/5 text-xs text-muted-foreground">

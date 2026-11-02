@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import type { Order } from "../types";
@@ -34,11 +35,14 @@ export function PrintInvoiceModal({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[720px] max-h-[90vh] overflow-y-auto p-0">
-        <DialogHeader className="p-4 border-b border-border flex flex-row items-center justify-between">
+        <DialogHeader className="p-4 pr-12 border-b border-border flex flex-row items-center justify-between">
           <DialogTitle className="text-sm font-semibold flex items-center gap-2">
             <Printer className="h-4 w-4 text-primary" />
             Invoice — {order.orderNumber}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Printable customer sales invoice with BDT pricing, line items, and delivery address.
+          </DialogDescription>
           <Button
             size="sm"
             onClick={handlePrint}

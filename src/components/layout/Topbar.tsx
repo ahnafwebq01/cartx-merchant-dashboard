@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, Suspense } from "react";
+import Link from "next/link";
 import {
   Menu,
   Bell,
@@ -11,6 +12,10 @@ import {
   User as UserIcon,
   LogOut,
   ExternalLink,
+  Phone,
+  Mail,
+  Clock,
+  LifeBuoy,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -23,13 +28,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Sidebar } from "./Sidebar";
 import { useAuth } from "@/lib/auth/context";
 
 export function Topbar() {
   const { user, currentStore, currentRole, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-card px-4 md:px-6">
@@ -48,6 +67,10 @@ export function Topbar() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-64 border-r border-border">
+            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+            <SheetDescription className="sr-only">
+              Merchant dashboard mobile navigation sidebar
+            </SheetDescription>
             <Suspense fallback={<div className="w-64 h-full bg-card" />}>
               <Sidebar onItemClick={() => setMobileOpen(false)} />
             </Suspense>
@@ -55,17 +78,17 @@ export function Topbar() {
         </Sheet>
 
         {/* Current Store Selector */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-background/50 hover:bg-muted/50 cursor-pointer transition-colors">
-          <Building className="h-4 w-4 text-primary" />
-          <div className="flex flex-col text-left">
-            <span className="text-xs font-semibold leading-tight text-foreground">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-background/50 hover:bg-muted/50 cursor-pointer transition-colors max-w-[180px] sm:max-w-xs">
+          <Building className="h-4 w-4 text-primary shrink-0" />
+          <div className="flex flex-col text-left min-w-0">
+            <span className="text-xs font-semibold leading-tight text-foreground truncate">
               {currentStore?.name || "CartX Demo Store"}
             </span>
-            <span className="text-[10px] text-muted-foreground">
+            <span className="text-[10px] text-muted-foreground truncate">
               {currentStore?.currency || "BDT (৳)"}
             </span>
           </div>
-          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground ml-1" />
+          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground ml-1 shrink-0" />
         </div>
       </div>
 
@@ -93,12 +116,10 @@ export function Topbar() {
           variant="ghost"
           size="icon"
           className="h-9 w-9 text-muted-foreground hover:text-foreground"
-          aria-label="Help and resources"
-          asChild
+          aria-label="Help and merchant support"
+          onClick={() => setHelpOpen(true)}
         >
-          <a href="/dashboard/support">
-            <HelpCircle className="h-4 w-4" />
-          </a>
+          <HelpCircle className="h-4 w-4" />
         </Button>
 
         {/* Notification Center Trigger */}
@@ -126,7 +147,7 @@ export function Topbar() {
                   {user?.name ? user.name.slice(0, 2).toUpperCase() : "CX"}
                 </AvatarFallback>
               </Avatar>
-              <ChevronDown className="h-3 w-3 text-muted-foreground hidden sm:block" />
+              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground hidden sm:block shrink-0" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
@@ -147,17 +168,17 @@ export function Topbar() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <a href="/dashboard/settings" className="cursor-pointer">
+              <Link href="/dashboard/settings" className="cursor-pointer flex items-center">
                 <UserIcon className="mr-2 h-4 w-4" />
                 <span>Store Profile</span>
-              </a>
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <a
                 href={currentStore?.slug ? `https://${currentStore.slug}.cartx.com.bd` : "#"}
                 target="_blank"
                 rel="noreferrer"
-                className="cursor-pointer"
+                className="cursor-pointer flex items-center"
               >
                 <ExternalLink className="mr-2 h-4 w-4" />
                 <span>View Storefront</span>
@@ -171,6 +192,57 @@ export function Topbar() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/* Help & Support Dialog */}
+      <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
+        <DialogContent className="sm:max-w-[460px]">
+          <DialogHeader>
+            <div className="flex items-center gap-2 text-primary">
+              <LifeBuoy className="h-5 w-5" />
+              <DialogTitle className="text-base font-semibold">
+                CartX Merchant Support
+              </DialogTitle>
+            </div>
+            <DialogDescription className="text-xs">
+              Dedicated merchant assistance for online businesses in Bangladesh.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 py-2 text-xs">
+            <div className="p-3 rounded-lg border border-border bg-muted/40 space-y-2">
+              <div className="flex items-center gap-2 text-foreground font-medium">
+                <Phone className="h-4 w-4 text-primary" />
+                <span>Merchant Helpline: +880 9612-CARTX (22789)</span>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Mail className="h-4 w-4 text-primary" />
+                <span>support@cartx.com.bd</span>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground text-[11px]">
+                <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+                <span>Saturday – Thursday: 9:00 AM – 10:00 PM (Dhaka Time)</span>
+              </div>
+            </div>
+
+            <div className="text-[11px] text-muted-foreground space-y-1">
+              <p>
+                <strong>Demo Mode Info:</strong> All product, inventory, order, payment, and shipment data in this session is stored safely in your browser storage.
+              </p>
+              <p>
+                Need to change store profile, business details, or delivery rates? Visit{" "}
+                <Link
+                  href="/dashboard/settings"
+                  onClick={() => setHelpOpen(false)}
+                  className="text-primary underline font-medium"
+                >
+                  Store Settings
+                </Link>
+                .
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </header>
   );
 }

@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productFormSchema, type ProductFormValues } from "../schemas";
 import type { Product, ProductCategory } from "../types";
@@ -105,23 +105,23 @@ export function ProductForm({
     handleSubmit,
     setValue,
     getValues,
-    watch,
+    control,
     formState: { errors },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(productFormSchema),
     defaultValues,
   });
 
-  const titleWatch = watch("title");
-  const priceWatch = watch("price") || 0;
-  const costWatch = watch("costPrice") || 0;
-  const currentCategory = watch("category");
-  const currentStatus = watch("status");
-  const imageUrlWatch = watch("imageUrl");
-  const trackInventoryWatch = watch("trackInventory");
-  const variants = watch("variants") || [];
+  const titleWatch = useWatch({ control, name: "title" });
+  const priceWatch = useWatch({ control, name: "price" }) || 0;
+  const costWatch = useWatch({ control, name: "costPrice" }) || 0;
+  const currentCategory = useWatch({ control, name: "category" });
+  const currentStatus = useWatch({ control, name: "status" });
+  const imageUrlWatch = useWatch({ control, name: "imageUrl" });
+  const trackInventoryWatch = useWatch({ control, name: "trackInventory" });
+  const variants = useWatch({ control, name: "variants" }) || [];
 
-  const salePriceWatch = watch("salePrice");
+  const salePriceWatch = useWatch({ control, name: "salePrice" });
 
   // Profit Margin calculation based on effective retail/selling price
   const effectivePrice =

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { InventoryStatsCards } from "@/features/inventory/components/InventoryStatsCards";
@@ -23,32 +22,29 @@ export default function InventoryOverviewPage() {
   return (
     <div className="space-y-6">
       {/* Navigation & Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <Breadcrumbs items={[{ label: "Stocks & Inventory" }]} />
-          <PageHeader
-            title="Stocks & Inventory"
-            description="Real-time multi-location warehouse stock tracking, threshold monitors, and stock level controls."
-          />
-        </div>
+      <PageHeader
+        title="Stocks & Inventory"
+        description="Real-time multi-location warehouse stock tracking, threshold monitors, and stock level controls."
+        breadcrumbs={[{ label: "Stocks & Inventory" }]}
+        actions={
+          <div className="flex flex-wrap items-center gap-2">
+            <Button asChild variant="outline" size="sm" className="text-xs h-9">
+              <Link href="/dashboard/inventory/adjustments">
+                <History className="h-3.5 w-3.5 mr-1.5" /> Movement Logs
+              </Link>
+            </Button>
 
-        <div className="flex items-center gap-2">
-          <Button asChild variant="outline" size="sm" className="text-xs h-9">
-            <Link href="/dashboard/inventory/adjustments">
-              <History className="h-3.5 w-3.5 mr-1.5" /> Movement Logs
-            </Link>
-          </Button>
-
-          <Button
-            type="button"
-            size="sm"
-            onClick={() => setShowAdjustModal(true)}
-            className="text-xs h-9"
-          >
-            <SlidersHorizontal className="h-3.5 w-3.5 mr-1.5" /> Adjust Stock
-          </Button>
-        </div>
-      </div>
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => setShowAdjustModal(true)}
+              className="text-xs h-9"
+            >
+              <SlidersHorizontal className="h-3.5 w-3.5 mr-1.5" /> Adjust Stock
+            </Button>
+          </div>
+        }
+      />
 
       {/* Demo Notice Banner */}
       <div className="flex items-center gap-2.5 p-3 rounded-lg border border-primary/20 bg-primary/5 text-xs text-muted-foreground">

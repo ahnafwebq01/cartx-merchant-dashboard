@@ -12,8 +12,19 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -39,6 +50,7 @@ export default function CustomersPage() {
   const [managingTagsCustomer, setManagingTagsCustomer] =
     useState<Customer | null>(null);
   const [isAddCustomerOpen, setIsAddCustomerOpen] = useState(false);
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
 
   // Form state for Add Customer
   const [newCustomerForm, setNewCustomerForm] = useState<CustomerFormValues>({
@@ -149,7 +161,7 @@ export default function CustomersPage() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => resetCustomersMutation.mutate()}
+              onClick={() => setIsResetConfirmOpen(true)}
               className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground"
             >
               <RefreshCw className="h-3.5 w-3.5" />
@@ -199,6 +211,9 @@ export default function CustomersPage() {
               <UserPlus className="h-4 w-4 text-primary" />
               Add New Customer
             </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              Enter customer contact details, city, division, and primary delivery address.
+            </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleCreateCustomerSubmit} className="space-y-4 py-2 text-xs">
@@ -209,8 +224,9 @@ export default function CustomersPage() {
             )}
 
             <div className="space-y-1">
-              <Label className="text-xs">Full Name *</Label>
+              <Label htmlFor="cust-name" className="text-xs">Full Name *</Label>
               <Input
+                id="cust-name"
                 placeholder="e.g. Tanvir Ahmed"
                 value={newCustomerForm.name}
                 onChange={(e) =>
@@ -222,8 +238,9 @@ export default function CustomersPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <Label className="text-xs">Mobile Phone *</Label>
+                <Label htmlFor="cust-phone" className="text-xs">Mobile Phone *</Label>
                 <Input
+                  id="cust-phone"
                   placeholder="01711223344"
                   value={newCustomerForm.phone}
                   onChange={(e) =>
@@ -234,8 +251,9 @@ export default function CustomersPage() {
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs">Email Address</Label>
+                <Label htmlFor="cust-email" className="text-xs">Email Address</Label>
                 <Input
+                  id="cust-email"
                   placeholder="customer@example.com"
                   type="email"
                   value={newCustomerForm.email}
@@ -249,8 +267,9 @@ export default function CustomersPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <Label className="text-xs">City *</Label>
+                <Label htmlFor="cust-city" className="text-xs">City *</Label>
                 <Input
+                  id="cust-city"
                   placeholder="Dhaka"
                   value={newCustomerForm.city}
                   onChange={(e) =>
@@ -261,8 +280,9 @@ export default function CustomersPage() {
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs">Division *</Label>
+                <Label htmlFor="cust-division" className="text-xs">Division *</Label>
                 <Input
+                  id="cust-division"
                   placeholder="Dhaka"
                   value={newCustomerForm.division}
                   onChange={(e) =>
@@ -277,8 +297,9 @@ export default function CustomersPage() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs">Primary Shipping Address *</Label>
+              <Label htmlFor="cust-address" className="text-xs">Primary Shipping Address *</Label>
               <Input
+                id="cust-address"
                 placeholder="House 42, Road 7/A, Dhanmondi"
                 value={newCustomerForm.addressLine1}
                 onChange={(e) =>
@@ -313,6 +334,34 @@ export default function CustomersPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Reset Demo Data Confirmation Dialog */}
+      <AlertDialog open={isResetConfirmOpen} onOpenChange={setIsResetConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-base flex items-center gap-2">
+              <RefreshCw className="h-4 w-4 text-primary" /> Reset Customer Records?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-xs">
+              Are you sure you want to reset customer data? This will restore the 10 default
+              Bangladeshi demo customers (Tanvir Ahmed, Farhana Yasmin, etc.) and reset lifetime
+              spend statistics.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="text-xs">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                resetCustomersMutation.mutate();
+                setIsResetConfirmOpen(false);
+              }}
+              className="text-xs"
+            >
+              Reset to Defaults
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

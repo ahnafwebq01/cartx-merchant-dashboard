@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { stockAdjustmentFormSchema, type StockAdjustmentFormValues } from "../schemas";
 import { useStockAdjustmentMutation } from "../hooks";
@@ -39,7 +39,7 @@ export function StockAdjustmentDialog({
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     reset,
     formState: { errors },
   } = useForm<StockAdjustmentFormValues>({
@@ -54,9 +54,9 @@ export function StockAdjustmentDialog({
     },
   });
 
-  const selectedProductId = watch("productId");
-  const selectedType = watch("type");
-  const quantityWatch = watch("quantity") || 0;
+  const selectedProductId = useWatch({ control, name: "productId" });
+  const selectedType = useWatch({ control, name: "type" });
+  const quantityWatch = useWatch({ control, name: "quantity" }) || 0;
 
   // Find active selected product object
   const activeItem = item || allItems.find((i) => i.id === selectedProductId);
