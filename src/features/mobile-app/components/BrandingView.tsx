@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Save,
@@ -67,6 +67,9 @@ export function BrandingView() {
     }
   }, [config, form]);
 
+  const watchedValues = useWatch({ control: form.control });
+  const currentValues = { ...form.getValues(), ...watchedValues };
+
   if (isLoading) {
     return <LoadingSkeleton rows={6} />;
   }
@@ -74,8 +77,6 @@ export function BrandingView() {
   const onSubmit = async (values: MobileAppBrandingFormValues) => {
     await updateMutation.mutateAsync(values);
   };
-
-  const currentValues = form.watch();
 
   return (
     <div className="space-y-6">
@@ -161,8 +162,8 @@ export function BrandingView() {
               <div className="space-y-2">
                 <Label className="text-xs font-medium">Visual Theme Mode</Label>
                 <Select
-                  value={form.watch("theme")}
-                  onValueChange={(val: "light" | "dark" | "auto") => form.setValue("theme", val)}
+                  value={currentValues.theme || "light"}
+                  onValueChange={(val: "light" | "dark" | "auto") => form.setValue("theme", val, { shouldDirty: true })}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select theme mode" />

@@ -131,13 +131,13 @@ describe("Phase 8 — Team, Billing & Operations Architecture", () => {
     it("should create team invitation with 7-day expiration and pending status", async () => {
       const newInvite = await teamService.inviteMember({
         name: "Jamil Ahmed",
-        email: "jamil.ops@gmail.com",
+        email: "jamil.ops@example.com",
         role: "order_manager",
         customPermissions: [],
       });
 
       expect(newInvite.status).toBe("pending");
-      expect(newInvite.email).toBe("jamil.ops@gmail.com");
+      expect(newInvite.email).toBe("jamil.ops@example.com");
       expect(newInvite.role).toBe("order_manager");
 
       const expiryDate = new Date(newInvite.expiresAt);
@@ -163,11 +163,11 @@ describe("Phase 8 — Team, Billing & Operations Architecture", () => {
       await expect(
         teamService.inviteMember({
           name: "Duplicate Nusrat",
-          email: "nusrat.mkt@gmail.com",
+          email: "nusrat.mkt@example.com",
           role: "marketing_manager",
           customPermissions: [],
         })
-      ).rejects.toThrow('An active pending invitation for "nusrat.mkt@gmail.com" already exists.');
+      ).rejects.toThrow('An active pending invitation for "nusrat.mkt@example.com" already exists.');
     });
 
     it("should handle invitation state transitions: resend, cancel, accept", async () => {

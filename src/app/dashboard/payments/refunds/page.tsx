@@ -8,6 +8,7 @@ import { useRefundsQuery } from "@/features/payments/hooks";
 import { Card, CardContent } from "@/components/ui/card";
 import { RotateCcw, ShieldCheck, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function PaymentRefundsContent() {
   const [search, setSearch] = useState("");
@@ -83,8 +84,10 @@ function PaymentRefundsContent() {
 
 export default function PaymentRefundsPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <PaymentRefundsContent />
-    </Suspense>
+    <PermissionGuard permission="refunds.request" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <PaymentRefundsContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }

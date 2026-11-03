@@ -10,7 +10,13 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -29,7 +35,9 @@ import type { DateRange } from "../types";
 import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 
 export function ProductAnalyticsView() {
-  const [dateRange, setDateRange] = useState<DateRange>(getDateRangeFromPreset("30d"));
+  const [dateRange, setDateRange] = useState<DateRange>(
+    getDateRangeFromPreset("30d"),
+  );
   const { data: products, isLoading } = useProductAnalyticsQuery(dateRange);
 
   if (isLoading || !products) {
@@ -71,7 +79,9 @@ export function ProductAnalyticsView() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{products.totalProducts}</div>
-            <p className="text-xs text-muted-foreground mt-2">{products.activeProducts} published in storefront</p>
+            <p className="text-xs text-muted-foreground mt-2">
+              {products.activeProducts} published in storefront
+            </p>
           </CardContent>
         </Card>
 
@@ -83,8 +93,12 @@ export function ProductAnalyticsView() {
             <AlertTriangle className="h-4 w-4 text-amber-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{products.lowStockProducts.length} Items</div>
-            <p className="text-xs text-muted-foreground mt-2">Below safety reorder threshold</p>
+            <div className="text-2xl font-bold">
+              {products.lowStockProducts.length} Items
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Below safety reorder threshold
+            </p>
           </CardContent>
         </Card>
 
@@ -96,8 +110,12 @@ export function ProductAnalyticsView() {
             <Layers className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{products.categoryPerformance.length}</div>
-            <p className="text-xs text-muted-foreground mt-2">Merchandising taxonomies</p>
+            <div className="text-2xl font-bold">
+              {products.categoryPerformance.length}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Merchandising taxonomies
+            </p>
           </CardContent>
         </Card>
 
@@ -122,7 +140,9 @@ export function ProductAnalyticsView() {
       {/* Top Selling Products Table */}
       <Card className="rounded-xl shadow-xs overflow-hidden">
         <CardHeader>
-          <CardTitle className="text-base font-semibold">Top Selling Products by Revenue</CardTitle>
+          <CardTitle className="text-base font-semibold">
+            Top Selling Products by Revenue
+          </CardTitle>
           <CardDescription className="text-xs">
             Performance rankings calculated from processed orders
           </CardDescription>
@@ -131,16 +151,26 @@ export function ProductAnalyticsView() {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead className="text-xs font-semibold">SKU</TableHead>
-              <TableHead className="text-xs font-semibold">Product Title</TableHead>
-              <TableHead className="text-xs font-semibold text-center">Units Sold</TableHead>
-              <TableHead className="text-xs font-semibold text-right">Attributed Revenue</TableHead>
+              <TableHead className="text-xs font-semibold">
+                Product Title
+              </TableHead>
+              <TableHead className="text-xs font-semibold text-center">
+                Units Sold
+              </TableHead>
+              <TableHead className="text-xs font-semibold text-right">
+                Attributed Revenue
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {products.topSellingProducts.map((p) => (
               <TableRow key={p.id} className="hover:bg-muted/30">
-                <TableCell className="text-xs font-mono font-medium">{p.sku}</TableCell>
-                <TableCell className="text-xs font-semibold text-foreground">{p.name}</TableCell>
+                <TableCell className="text-xs font-mono font-medium">
+                  {p.sku}
+                </TableCell>
+                <TableCell className="text-xs font-semibold text-foreground">
+                  {p.name}
+                </TableCell>
                 <TableCell className="text-xs text-center font-mono">
                   <Badge variant="outline">{p.sales} units</Badge>
                 </TableCell>
@@ -170,16 +200,25 @@ export function ProductAnalyticsView() {
               <TableRow className="bg-muted/50">
                 <TableHead className="text-xs font-semibold">SKU</TableHead>
                 <TableHead className="text-xs font-semibold">Title</TableHead>
-                <TableHead className="text-xs font-semibold text-right">Current Stock</TableHead>
+                <TableHead className="text-xs font-semibold text-right">
+                  Current Stock
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {products.lowStockProducts.map((item) => (
                 <TableRow key={item.id} className="hover:bg-muted/30">
-                  <TableCell className="text-xs font-mono">{item.sku}</TableCell>
-                  <TableCell className="text-xs font-medium truncate max-w-[140px]">{item.name}</TableCell>
+                  <TableCell className="text-xs font-mono">
+                    {item.sku}
+                  </TableCell>
+                  <TableCell className="text-xs font-medium truncate max-w-[140px]">
+                    {item.name}
+                  </TableCell>
                   <TableCell className="text-xs text-right">
-                    <Badge variant="destructive" className="font-mono text-[10px]">
+                    <Badge
+                      variant="destructive"
+                      className="font-mono text-[10px]"
+                    >
                       {item.stock} left (reorder at {item.threshold})
                     </Badge>
                   </TableCell>
@@ -202,15 +241,23 @@ export function ProductAnalyticsView() {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold">Category</TableHead>
-                <TableHead className="text-xs font-semibold text-center">Products</TableHead>
-                <TableHead className="text-xs font-semibold text-right">Gross Sales</TableHead>
+                <TableHead className="text-xs font-semibold">
+                  Category
+                </TableHead>
+                <TableHead className="text-xs font-semibold text-center">
+                  Products
+                </TableHead>
+                <TableHead className="text-xs font-semibold text-right">
+                  Gross Sales
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {products.categoryPerformance.map((cat) => (
                 <TableRow key={cat.category} className="hover:bg-muted/30">
-                  <TableCell className="text-xs font-semibold text-foreground">{cat.category}</TableCell>
+                  <TableCell className="text-xs font-semibold text-foreground">
+                    {cat.category}
+                  </TableCell>
                   <TableCell className="text-xs text-center font-mono">
                     <Badge variant="secondary">{cat.products}</Badge>
                   </TableCell>
@@ -226,4 +273,3 @@ export function ProductAnalyticsView() {
     </div>
   );
 }
-

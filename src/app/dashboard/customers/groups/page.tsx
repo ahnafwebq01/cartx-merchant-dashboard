@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button";
 import { CustomerSegmentsCard } from "@/features/customers/components/CustomerSegmentsCard";
 import { useCustomerStatsQuery } from "@/features/customers/hooks";
 import { Users, Sparkles, MessageCircle, ArrowRight } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 export default function CustomerGroupsPage() {
   const { data: stats } = useCustomerStatsQuery();
 
   return (
-    <div className="space-y-6">
+    <PermissionGuard permission="customers.view" showAccessDenied>
+      <div className="space-y-6">
       <PageHeader
         title="Customer Groups & Segments"
         description="Automated customer classification based on order count, purchase recency, and lifetime spending."
@@ -89,6 +91,7 @@ export default function CustomerGroupsPage() {
         </Card>
       </div>
     </div>
+  </PermissionGuard>
   );
 }
 

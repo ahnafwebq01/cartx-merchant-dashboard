@@ -4,6 +4,7 @@ import React from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -56,9 +57,14 @@ export function InvoiceDetailDialog({
         <DialogHeader className="flex flex-row items-center justify-between pb-2 border-b border-border">
           <div className="flex items-center gap-2">
             <Receipt className="h-5 w-5 text-primary" />
-            <DialogTitle className="text-lg">
-              Tax Invoice {invoice.invoiceNumber}
-            </DialogTitle>
+            <div>
+              <DialogTitle className="text-lg">
+                Tax Invoice {invoice.invoiceNumber}
+              </DialogTitle>
+              <DialogDescription className="sr-only">
+                Detailed printable VAT tax invoice breakdown for CartX subscription.
+              </DialogDescription>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={handlePrint} className="gap-1.5 h-8">

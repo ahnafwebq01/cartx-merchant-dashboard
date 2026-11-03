@@ -13,6 +13,7 @@ import {
 } from "@/features/inventory/hooks";
 import { Button } from "@/components/ui/button";
 import { History, SlidersHorizontal, Info } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 export default function InventoryOverviewPage() {
   const { data: stats, isLoading: statsLoading } = useInventoryStatsQuery();
@@ -20,7 +21,8 @@ export default function InventoryOverviewPage() {
   const [showAdjustModal, setShowAdjustModal] = useState(false);
 
   return (
-    <div className="space-y-6">
+    <PermissionGuard permission="inventory.view" showAccessDenied>
+      <div className="space-y-6">
       {/* Navigation & Header */}
       <PageHeader
         title="Stocks & Inventory"
@@ -76,5 +78,6 @@ export default function InventoryOverviewPage() {
         onOpenChange={setShowAdjustModal}
       />
     </div>
+  </PermissionGuard>
   );
 }

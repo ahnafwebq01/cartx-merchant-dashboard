@@ -3,7 +3,7 @@
 **Module:** Merchant Dashboard  
 **Tenancy Model:** Multi-Tenant SaaS (Single shared database, tenant isolation via `storeId`)  
 **Security Standard:** Strict Separation of Concerns & Zero-Trust Client  
-**Last Updated:** October 28, 2026 (Phase 2 Review)  
+**Last Updated:** November 3, 2026 (Phases 1–9 Final Audit & Stabilization)  
 
 ---
 
@@ -51,3 +51,15 @@
 | **Support Staff** | View customer contact, order notes | Payment gateway credentials, billing, settings |
 
 > **Crucial Rule:** The frontend `PermissionGuard` is a UI enhancement. All backend routes must validate user permissions before executing business logic.
+
+---
+
+## 5. Demo Mode, Integrations & Data Isolation
+
+| Control | Implementation Rule | Status |
+|---|---|---|
+| **Zero Third-Party Secrets in Client** | Payment, courier, webhook, and marketing third-party API credentials are never sent across external networks or stored in unencrypted client state. Form fields display zero-trust notices. | **ENFORCED** across all configuration dialogs |
+| **Simulated Webhook Isolation** | Webhook delivery simulator executes in-memory with synthetic HTTP status codes (200/504) and simulated latency. Target URLs are NEVER contacted via `fetch()` or outbound network requests. | **ENFORCED** in `mockIntegrations.ts` |
+| **PII & Fictional Data Sanitization** | All demo names, mobile numbers, and emails use RFC-2606 reserved domains (`@example.com`, `@greenharvest.com.bd`) and standard fictional BD numbers (`+8801700-000000`, `+8801711223344`). No personal emails (`@gmail.com`, `@outlook.com`) or real telephone numbers exist in code or demo presets. | **ENFORCED** repository-wide |
+| **Universal Route Permission Guards** | All 16 module pages and dynamic detail subroutes are wrapped in `<PermissionGuard ... showAccessDenied>`, blocking unauthorized direct URL navigation and preventing client-side privilege escalation. | **ENFORCED** on all 78 dashboard routes |
+| **Comprehensive Multi-Module Data Reset** | `resetAllDemoData()` wipes all 16 stateful storage keys and simultaneously resets all 16 in-memory mock service instances, preventing stale cached data from persisting across tenant sessions. | **ENFORCED** in `resetDemo.ts` |

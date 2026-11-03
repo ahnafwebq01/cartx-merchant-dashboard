@@ -6,6 +6,7 @@ import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Globe, Key, Lock, CheckCircle2 } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function PaymentSettingsContent() {
   return (
@@ -125,8 +126,10 @@ function PaymentSettingsContent() {
 
 export default function PaymentSettingsPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <PaymentSettingsContent />
-    </Suspense>
+    <PermissionGuard permission="payments.manage" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <PaymentSettingsContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }

@@ -7,7 +7,10 @@ import type {
   WebhookStats,
   WebhookEvent,
 } from "../types";
-import type { WebhookEndpointFormValues, IntegrationConfigValues } from "../schemas";
+import type {
+  WebhookEndpointFormValues,
+  IntegrationConfigValues,
+} from "../schemas";
 import {
   INITIAL_INTEGRATIONS,
   INITIAL_WEBHOOK_ENDPOINTS,
@@ -17,17 +20,18 @@ import {
 
 export const INTEGRATIONS_STORAGE_KEY = "cartx_demo_integrations_v1";
 export const WEBHOOKS_STORAGE_KEY = "cartx_demo_webhooks_v1";
-export const WEBHOOK_DELIVERIES_STORAGE_KEY = "cartx_demo_webhook_deliveries_v1";
+export const WEBHOOK_DELIVERIES_STORAGE_KEY =
+  "cartx_demo_webhook_deliveries_v1";
 
 export class MockIntegrationsService {
   private memoryIntegrations: Integration[] = JSON.parse(
-    JSON.stringify(INITIAL_INTEGRATIONS)
+    JSON.stringify(INITIAL_INTEGRATIONS),
   );
   private memoryWebhooks: WebhookEndpoint[] = JSON.parse(
-    JSON.stringify(INITIAL_WEBHOOK_ENDPOINTS)
+    JSON.stringify(INITIAL_WEBHOOK_ENDPOINTS),
   );
   private memoryDeliveries: WebhookDeliveryAttempt[] = JSON.parse(
-    JSON.stringify(INITIAL_WEBHOOK_DELIVERIES)
+    JSON.stringify(INITIAL_WEBHOOK_DELIVERIES),
   );
 
   private safeGetItem<T>(key: string, fallback: T): T {
@@ -45,7 +49,10 @@ export class MockIntegrationsService {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
     } catch (e) {
-      console.warn(`[MockIntegrationsService] Failed to set localStorage key "${key}":`, e);
+      console.warn(
+        `[MockIntegrationsService] Failed to set localStorage key "${key}":`,
+        e,
+      );
     }
   }
 
@@ -57,12 +64,16 @@ export class MockIntegrationsService {
   }): Promise<Integration[]> {
     const list = this.safeGetItem<Integration[]>(
       INTEGRATIONS_STORAGE_KEY,
-      this.memoryIntegrations
+      this.memoryIntegrations,
     );
     this.memoryIntegrations = list;
 
     return list.filter((item) => {
-      if (params?.category && params.category !== "all" && item.category !== params.category) {
+      if (
+        params?.category &&
+        params.category !== "all" &&
+        item.category !== params.category
+      ) {
         return false;
       }
       if (params?.search) {
@@ -83,7 +94,7 @@ export class MockIntegrationsService {
 
   public async updateIntegrationConfig(
     id: string,
-    values: IntegrationConfigValues
+    values: IntegrationConfigValues,
   ): Promise<Integration> {
     const list = await this.getIntegrations();
     const index = list.findIndex((i) => i.id === id);
@@ -187,7 +198,7 @@ export class MockIntegrationsService {
   public async getWebhooks(): Promise<WebhookEndpoint[]> {
     const list = this.safeGetItem<WebhookEndpoint[]>(
       WEBHOOKS_STORAGE_KEY,
-      this.memoryWebhooks
+      this.memoryWebhooks,
     );
     this.memoryWebhooks = list;
     return list;
@@ -198,7 +209,9 @@ export class MockIntegrationsService {
     return list.find((w) => w.id === id) || null;
   }
 
-  public async createWebhook(values: WebhookEndpointFormValues): Promise<WebhookEndpoint> {
+  public async createWebhook(
+    values: WebhookEndpointFormValues,
+  ): Promise<WebhookEndpoint> {
     const list = await this.getWebhooks();
     const now = new Date().toISOString();
 
@@ -222,7 +235,7 @@ export class MockIntegrationsService {
 
   public async updateWebhook(
     id: string,
-    values: WebhookEndpointFormValues
+    values: WebhookEndpointFormValues,
   ): Promise<WebhookEndpoint> {
     const list = await this.getWebhooks();
     const index = list.findIndex((w) => w.id === id);
@@ -269,10 +282,12 @@ export class MockIntegrationsService {
     return list[index];
   }
 
-  public async getWebhookDeliveries(webhookId?: string): Promise<WebhookDeliveryAttempt[]> {
+  public async getWebhookDeliveries(
+    webhookId?: string,
+  ): Promise<WebhookDeliveryAttempt[]> {
     const list = this.safeGetItem<WebhookDeliveryAttempt[]>(
       WEBHOOK_DELIVERIES_STORAGE_KEY,
-      this.memoryDeliveries
+      this.memoryDeliveries,
     );
     this.memoryDeliveries = list;
 
@@ -284,14 +299,17 @@ export class MockIntegrationsService {
 
   public async simulateDelivery(
     webhookId: string,
-    event: WebhookEvent
+    event: WebhookEvent,
   ): Promise<WebhookDeliveryAttempt> {
     const webhook = await this.getWebhookById(webhookId);
     if (!webhook) {
       throw new Error(`Webhook with ID "${webhookId}" was not found.`);
     }
 
-    const payload = SAMPLE_WEBHOOK_PAYLOADS[event] || { event, timestamp: new Date().toISOString() };
+    const payload = SAMPLE_WEBHOOK_PAYLOADS[event] || {
+      event,
+      timestamp: new Date().toISOString(),
+    };
     const isSuccess = Math.random() > 0.15; // 85% success simulation
 
     const newDelivery: WebhookDeliveryAttempt = {
@@ -315,7 +333,9 @@ export class MockIntegrationsService {
     return newDelivery;
   }
 
-  public async retryDelivery(deliveryId: string): Promise<WebhookDeliveryAttempt> {
+  public async retryDelivery(
+    deliveryId: string,
+  ): Promise<WebhookDeliveryAttempt> {
     const deliveries = await this.getWebhookDeliveries();
     const index = deliveries.findIndex((d) => d.id === deliveryId);
     if (index === -1) {
@@ -346,8 +366,13 @@ export class MockIntegrationsService {
     const totalEndpoints = webhooks.length;
     const activeEndpoints = webhooks.filter((w) => w.isActive).length;
     const totalDeliveries = deliveries.length;
-    const successfulDeliveries = deliveries.filter((d) => d.status === "simulated_success").length;
-    const successRate = totalDeliveries > 0 ? Math.round((successfulDeliveries / totalDeliveries) * 100) : 100;
+    const successfulDeliveries = deliveries.filter(
+      (d) => d.status === "simulated_success",
+    ).length;
+    const successRate =
+      totalDeliveries > 0
+        ? Math.round((successfulDeliveries / totalDeliveries) * 100)
+        : 100;
 
     return {
       totalEndpoints,
@@ -360,7 +385,9 @@ export class MockIntegrationsService {
   public resetToDefaults(): void {
     this.memoryIntegrations = JSON.parse(JSON.stringify(INITIAL_INTEGRATIONS));
     this.memoryWebhooks = JSON.parse(JSON.stringify(INITIAL_WEBHOOK_ENDPOINTS));
-    this.memoryDeliveries = JSON.parse(JSON.stringify(INITIAL_WEBHOOK_DELIVERIES));
+    this.memoryDeliveries = JSON.parse(
+      JSON.stringify(INITIAL_WEBHOOK_DELIVERIES),
+    );
 
     if (typeof window !== "undefined") {
       window.localStorage.removeItem(INTEGRATIONS_STORAGE_KEY);

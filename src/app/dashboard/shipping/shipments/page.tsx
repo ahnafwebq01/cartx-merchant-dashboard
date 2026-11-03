@@ -6,6 +6,7 @@ import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { ShipmentListTable } from "@/features/shipping/components/ShipmentListTable";
 import { useShipmentsQuery } from "@/features/shipping/hooks";
 import type { ShipmentFilterParams } from "@/features/shipping/types";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function ShipmentsListingContent() {
   const [filterParams, setFilterParams] = useState<ShipmentFilterParams>({
@@ -48,9 +49,11 @@ function ShipmentsListingContent() {
 
 export default function ShipmentsListingPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <ShipmentsListingContent />
-    </Suspense>
+    <PermissionGuard permission="shipping.view" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <ShipmentsListingContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }
 

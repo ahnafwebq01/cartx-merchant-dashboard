@@ -125,6 +125,28 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
 - **Categorized FAQs:** Interactive accordion solving frequent questions across account, billing, delivery, and payments.
 - **Support Tickets (`/dashboard/support/tickets`, `/[ticketId]`):** Ticket submission dialog with priority badges, conversation thread with simulated CartX agent replies, and status transitions (Open, In Progress, Resolved, Closed).
 
+### Mobile App Builder & Device Preview (`/dashboard/mobile-app`)
+- **White-Label Branding (`/dashboard/mobile-app/branding`):** Store name, logo, splash screen, and brand color palette customization.
+- **Home Layout Blocks (`/dashboard/mobile-app/content`):** Dynamic section builder (hero banners, category grids, featured carousels) and navigation router.
+- **Interactive Device Emulator (`/dashboard/mobile-app/preview`):** Live side-by-side Android and iOS device simulators.
+- **Build & Push Settings (`/dashboard/mobile-app/settings`):** App package identifiers (`com.store.app`), push notification triggers, and cloud compilation trigger simulation.
+
+### Customer Segmentation (`/dashboard/marketing/segments`)
+- **Compound Condition Builder:** Nested AND/OR logic rules with real-time customer preview.
+- **Deterministic Evaluation:** 8 demographic and transactional criteria (spend, orders, AOV, location, tags, etc.).
+
+### Advanced Analytics Hub (`/dashboard/analytics`)
+- **Domain Deep-Dives:** Dedicated ledgers and trend charts for Sales, Customers, Products, and Marketing.
+- **Data Export:** RFC-4180 compliant CSV reports with native UTF-8 BOM (`\uFEFF`) for Bengali script fidelity.
+
+### Integrations & Webhooks (`/dashboard/integrations`)
+- **Bangladesh Gateway & Courier Ecosystem:** Direct connector cards for bKash, Nagad, SSLCommerz, Steadfast, Pathao, RedX.
+- **Event Webhooks (`/dashboard/integrations/webhooks`):** 6 core event topics with sample JSON payload inspector and simulated test pings.
+
+### Store Automation Builder (`/dashboard/automation`)
+- **Visual Recipe Builder:** Multi-step Trigger-Condition-Action workflows with operator predicates.
+- **Execution History (`/dashboard/automation/history`):** Complete audit logs with simulation test execution runs.
+
 ---
 
 ## 5. Main Application Routes
@@ -177,15 +199,33 @@ The project currently operates in **high-fidelity client-side demo mode** (Phase
   │   ├── /flash-sales                 # Time-boxed flash drops with countdown clock
   │   ├── /analytics                   # Attributed promotion revenue & conversion trends
   │   └── /reports                     # Tabbed analytical reports & UTF-8 CSV exports
-   ├── /team                            # Team members listing & invitation management
-   │   └── /roles                       # 8-role x 26-permission interactive matrix
-   ├── /billing                         # CartX subscription tier overview & usage meters
-   │   ├── /plans                       # Plan comparison matrix & upgrade/downgrade dialog
-   │   ├── /invoices                    # Invoices ledger, PDF view & simulated payment
-   │   └── /settings                    # Billing contact, tax BIN & payment instruments
-   ├── /support                         # Knowledge base, FAQs & system uptime badge
-   │   └── /tickets                     # Support tickets ledger & creation modal
-   │       └── /[ticketId]              # Ticket thread, status controls & simulated replies
+  │   └── /segments                    # Advanced customer segmentation builder
+  ├── /mobile-app                      # Mobile app overview & setup progress
+  │   ├── /branding                    # White-label app icons, logos, & colors
+  │   ├── /content                     # Layout block builder & screen nav
+  │   ├── /preview                     # Dual-phone Android & iOS emulator
+  │   └── /settings                    # App package IDs & push notifications
+  ├── /analytics                       # Analytics Hub overview & sales metrics
+  │   ├── /sales                       # Revenue trends & order velocity
+  │   ├── /customers                   # Acquisition cohorts & retention
+  │   ├── /products                    # SKU rankings & stock turnover
+  │   └── /marketing                   # Campaign attribution & ROI
+  ├── /integrations                    # Bangladesh & international app connectors
+  │   └── /webhooks                    # Webhook endpoints & payload tester
+  ├── /automation                      # Workflow recipes & active automations
+  │   ├── /workflows                   # Trigger-condition-action workflow builder
+  │   │   ├── /new                     # Recipe creation studio
+  │   │   └── /[workflowId]/edit       # Recipe editor
+  │   └── /history                     # Workflow execution logs & test simulator
+  ├── /team                            # Team members listing & invitation management
+  │   └── /roles                       # 8-role x 26-permission interactive matrix
+  ├── /billing                         # CartX subscription tier overview & usage meters
+  │   ├── /plans                       # Plan comparison matrix & upgrade/downgrade dialog
+  │   ├── /invoices                    # Invoices ledger, PDF view & simulated payment
+  │   └── /settings                    # Billing contact, tax BIN & payment instruments
+  ├── /support                         # Knowledge base, FAQs & system uptime badge
+  │   └── /tickets                     # Support tickets ledger & creation modal
+  │       └── /[ticketId]              # Ticket thread, status controls & simulated replies
   └── /settings                        # Store profile & regional preferences
 ```
 
@@ -255,7 +295,10 @@ npm run test
 - `tests/phase6-storefront.test.ts` — Theme customization, domain validation, CMS pages CRUD, and truthful demo boundaries.
 - `tests/phase7-marketing-analytics.test.ts` — Coupon schemas, discount calculations, flash sales, analytics, and reports.
 - `tests/phase8-team-billing-operations.test.ts` — Team CRUD, invitations, role permissions, billing tiers, usage alerts, invoice settlement, and support tickets.
-- `tests/sidebar-navigation.test.ts` — 11 logical navigation groups and 60 implemented dashboard routes with RBAC verification.
+- `tests/phase9-advanced-modules.test.ts` — Mobile app config, compound segmentation criteria, deep-dive analytics metrics, webhooks simulation, and workflow recipes.
+- `tests/customer-segmentation.test.ts` — Deterministic condition engine testing across 8 criteria.
+- `tests/sidebar-navigation.test.ts` — 15 logical navigation groups and 78 implemented dashboard routes with RBAC verification.
+- `tests/cross-module-integrity.test.ts` — 9 realistic cross-module flows testing end-to-end data integrity across products, orders, inventory, customers, coupons, segments, analytics, and demo reset.
 
 ---
 
@@ -270,6 +313,8 @@ When the shared CartX Express.js backend API is deployed:
 
 ## 10. Documentation & Audit Reports
 
+- [`docs/FINAL_AUDIT_AND_PRODUCTION_QA_REPORT.md`](./docs/FINAL_AUDIT_AND_PRODUCTION_QA_REPORT.md) — Comprehensive Final Audit, Bug Fixes & Production QA Report (Phases 1–9).
+- [`docs/PHASE_9_IMPLEMENTATION_REPORT.md`](./docs/PHASE_9_IMPLEMENTATION_REPORT.md) — Phase 9 Implementation & Quality Verification Report (Mobile App, Customer Segments, Analytics Hub, Integrations & Automation).
 - [`docs/PHASE_8_IMPLEMENTATION_REPORT.md`](./docs/PHASE_8_IMPLEMENTATION_REPORT.md) — Phase 8 Implementation & Quality Verification Report (Team, Billing & Operations).
 - [`docs/PHASE_7_FINAL_AUDIT_REPORT.md`](./docs/PHASE_7_FINAL_AUDIT_REPORT.md) — Phase 7 Final Comprehensive Audit Report (Marketing, Discounts & Analytics).
 - [`docs/PHASE_6_UX_POLISH_AUDIT_REPORT.md`](./docs/PHASE_6_UX_POLISH_AUDIT_REPORT.md) — Comprehensive Phase 6 UI/UX Polish, Accessibility & Consistency Audit Report.

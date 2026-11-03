@@ -37,6 +37,7 @@ import {
 import type { Customer, CustomerFilterParams } from "@/features/customers/types";
 import type { CustomerFormValues } from "@/features/customers/schemas";
 import { UserPlus, RefreshCw } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 export default function CustomersPage() {
   const [filters, setFilters] = useState<CustomerFilterParams>({
@@ -140,7 +141,8 @@ export default function CustomersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <PermissionGuard permission="customers.view" showAccessDenied>
+      <div className="space-y-6">
       <PageHeader
         title="Customers Database"
         description="View customer lifetime value, order frequency, delivery addresses, and customer tags."
@@ -363,6 +365,7 @@ export default function CustomersPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+  </PermissionGuard>
   );
 }
 

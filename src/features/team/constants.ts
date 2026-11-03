@@ -184,7 +184,7 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
 export const INITIAL_INVITATIONS: TeamInvitation[] = [
   {
     id: "inv_01",
-    email: "nusrat.mkt@gmail.com",
+    email: "nusrat.mkt@example.com",
     name: "Nusrat Jahan",
     role: "marketing_manager",
     invitedBy: "Tariqul Islam",
@@ -194,7 +194,7 @@ export const INITIAL_INVITATIONS: TeamInvitation[] = [
   },
   {
     id: "inv_02",
-    email: "mahmud.acc@outlook.com",
+    email: "mahmud.acc@example.com",
     name: "Mahmudur Rahman",
     role: "accountant",
     invitedBy: "Tariqul Islam",

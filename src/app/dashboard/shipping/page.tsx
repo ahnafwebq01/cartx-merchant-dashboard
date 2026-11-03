@@ -32,6 +32,7 @@ import {
   Sliders,
   Boxes,
 } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function ShippingOverviewContent() {
   const [filterParams, setFilterParams] = useState<ShipmentFilterParams>({
@@ -223,8 +224,10 @@ function ShippingOverviewContent() {
 
 export default function ShippingOverviewPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <ShippingOverviewContent />
-    </Suspense>
+    <PermissionGuard permission="shipping.view" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <ShippingOverviewContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }

@@ -6,6 +6,7 @@ import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { CourierCard } from "@/features/shipping/components/CourierCard";
 import { useCourierConnectionsQuery } from "@/features/shipping/hooks";
 import { Info } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function CourierIntegrationsContent() {
   const { data: couriers, isLoading } = useCourierConnectionsQuery();
@@ -48,8 +49,10 @@ function CourierIntegrationsContent() {
 
 export default function CourierIntegrationsPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <CourierIntegrationsContent />
-    </Suspense>
+    <PermissionGuard permission="shipping.manage" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <CourierIntegrationsContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }

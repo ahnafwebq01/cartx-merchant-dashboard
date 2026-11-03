@@ -36,6 +36,7 @@ import type {
 import { mockOrderService } from "@/features/orders/services/mockOrders";
 import { Download, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 export default function OrdersPage() {
   const [filters, setFilters] = useState<OrderFilterParams>({
@@ -203,7 +204,8 @@ export default function OrdersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <PermissionGuard permission="orders.view" showAccessDenied>
+      <div className="space-y-6">
       <PageHeader
         title="Sales & Orders"
         description="Receive, track fulfillment, manage shipments, and generate invoices."
@@ -332,5 +334,6 @@ export default function OrdersPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+  </PermissionGuard>
   );
 }

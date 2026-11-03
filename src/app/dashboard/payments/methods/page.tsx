@@ -6,6 +6,7 @@ import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { PaymentMethodCard } from "@/features/payments/components/PaymentMethodCard";
 import { usePaymentMethodsQuery } from "@/features/payments/hooks";
 import { Info } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function PaymentMethodsContent() {
   const { data: methods, isLoading } = usePaymentMethodsQuery();
@@ -48,8 +49,10 @@ function PaymentMethodsContent() {
 
 export default function PaymentMethodsPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <PaymentMethodsContent />
-    </Suspense>
+    <PermissionGuard permission="payments.manage" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <PaymentMethodsContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }

@@ -6,6 +6,7 @@ import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { PaymentTransactionsTable } from "@/features/payments/components/PaymentTransactionsTable";
 import { usePaymentTransactionsQuery } from "@/features/payments/hooks";
 import type { PaymentFilterParams } from "@/features/payments/types";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function PaymentTransactionsContent() {
   const [filterParams, setFilterParams] = useState<PaymentFilterParams>({
@@ -48,9 +49,11 @@ function PaymentTransactionsContent() {
 
 export default function PaymentTransactionsPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <PaymentTransactionsContent />
-    </Suspense>
+    <PermissionGuard permission="payments.view" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <PaymentTransactionsContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }
 

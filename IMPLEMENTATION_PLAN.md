@@ -274,7 +274,7 @@ flowchart LR
 | Gate | Check Command | Status |
 |---|---|---|
 | **TypeScript Strictness** | `npm run type-check` | **PASS (0 errors)** |
-| **ESLint Quality & Rules** | `npm run lint` | **PASS (0 errors, 2 info warnings)** |
-| **Automated Test Suite** | `npm run test` | **PASS (255/255 unit tests passing across 11 suites)** |
+| **ESLint Quality & Rules** | `npm run lint` | **PASS (0 errors, 0 warnings)** |
+| **Automated Test Suite** | `npm run test` | **PASS (262/262 unit tests passing across 12 suites)** |
 | **Production Build** | `npm run build` | **PASS (78/78 static and PPR routes prerendered)** |
 | **Boundary & Secrets Discipline** | Zero client secrets / zero fake success | **PASS** |

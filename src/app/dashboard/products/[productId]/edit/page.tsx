@@ -12,6 +12,7 @@ import {
   useUpdateProductMutation,
 } from "@/features/products/hooks";
 import type { ProductFormValues } from "@/features/products/schemas";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function EditProductContent() {
   const params = useParams();
@@ -112,14 +113,16 @@ function EditProductContent() {
 
 export default function EditProductPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="space-y-6">
-          <LoadingSkeleton rows={8} className="h-96" />
-        </div>
-      }
-    >
-      <EditProductContent />
-    </Suspense>
+    <PermissionGuard permission="products.update" showAccessDenied>
+      <Suspense
+        fallback={
+          <div className="space-y-6">
+            <LoadingSkeleton rows={8} className="h-96" />
+          </div>
+        }
+      >
+        <EditProductContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }

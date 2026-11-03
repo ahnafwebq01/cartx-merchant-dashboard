@@ -28,6 +28,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Info, Trash2 } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 export default function ProductsPage() {
   const [filters, setFilters] = useState<ProductFilterParams>({
@@ -114,7 +115,8 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <PermissionGuard permission="products.view" showAccessDenied>
+      <div className="space-y-6">
       {/* Navigation & Header */}
       <PageHeader
         title="Products & Catalog"
@@ -229,5 +231,6 @@ export default function ProductsPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+  </PermissionGuard>
   );
 }

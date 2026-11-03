@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Save,
@@ -59,6 +59,11 @@ export function MobileAppSettings() {
       });
     }
   }, [config, form]);
+
+  const pushPrefs = useWatch({
+    control: form.control,
+    name: "pushNotificationPrefs",
+  });
 
   if (isLoading) {
     return <LoadingSkeleton rows={6} />;
@@ -137,8 +142,8 @@ export function MobileAppSettings() {
               </div>
               <Switch
                 id="pushOrder"
-                checked={form.watch("pushNotificationPrefs.orderUpdates")}
-                onCheckedChange={(val) => form.setValue("pushNotificationPrefs.orderUpdates", val)}
+                checked={pushPrefs?.orderUpdates ?? true}
+                onCheckedChange={(val) => form.setValue("pushNotificationPrefs.orderUpdates", val, { shouldDirty: true })}
               />
             </div>
 
@@ -153,8 +158,8 @@ export function MobileAppSettings() {
               </div>
               <Switch
                 id="pushShipping"
-                checked={form.watch("pushNotificationPrefs.shipping")}
-                onCheckedChange={(val) => form.setValue("pushNotificationPrefs.shipping", val)}
+                checked={pushPrefs?.shipping ?? true}
+                onCheckedChange={(val) => form.setValue("pushNotificationPrefs.shipping", val, { shouldDirty: true })}
               />
             </div>
 
@@ -169,8 +174,8 @@ export function MobileAppSettings() {
               </div>
               <Switch
                 id="pushPromo"
-                checked={form.watch("pushNotificationPrefs.promotions")}
-                onCheckedChange={(val) => form.setValue("pushNotificationPrefs.promotions", val)}
+                checked={pushPrefs?.promotions ?? true}
+                onCheckedChange={(val) => form.setValue("pushNotificationPrefs.promotions", val, { shouldDirty: true })}
               />
             </div>
 
@@ -185,8 +190,8 @@ export function MobileAppSettings() {
               </div>
               <Switch
                 id="pushGeneral"
-                checked={form.watch("pushNotificationPrefs.general")}
-                onCheckedChange={(val) => form.setValue("pushNotificationPrefs.general", val)}
+                checked={pushPrefs?.general ?? false}
+                onCheckedChange={(val) => form.setValue("pushNotificationPrefs.general", val, { shouldDirty: true })}
               />
             </div>
           </CardContent>

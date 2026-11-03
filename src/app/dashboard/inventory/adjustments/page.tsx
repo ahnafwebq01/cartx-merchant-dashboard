@@ -12,6 +12,7 @@ import {
 } from "@/features/inventory/hooks";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Plus } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 export default function StockAdjustmentsPage() {
   const { data: movements = [], isLoading: movementsLoading } = useInventoryMovementsQuery();
@@ -19,7 +20,8 @@ export default function StockAdjustmentsPage() {
   const [showAdjustModal, setShowAdjustModal] = useState(false);
 
   return (
-    <div className="space-y-6">
+    <PermissionGuard permission="inventory.view" showAccessDenied>
+      <div className="space-y-6">
       <PageHeader
         title="Stock Movements & Audit Trail"
         description="Complete tamper-evident log of all stock increases, damages, losses, and manual reconciliations."
@@ -60,5 +62,6 @@ export default function StockAdjustmentsPage() {
         onOpenChange={setShowAdjustModal}
       />
     </div>
+  </PermissionGuard>
   );
 }

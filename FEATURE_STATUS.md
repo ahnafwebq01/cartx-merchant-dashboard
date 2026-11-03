@@ -272,8 +272,47 @@
   - [x] **215 / 215 automated unit tests passing** (100% pass rate across 9 test suites).
   - [x] **0 ESLint errors**; **0 TypeScript errors**; **60 / 60 routes** compiled and prerendered cleanly.
 
+
+---
+
+## Detailed Phase 9 Implementation Deliverables (Mobile App, Customer Segments, Analytics Hub, Integrations & Automation)
+
+- [x] **Mobile App Management & Platform Preview** (`/dashboard/mobile-app`, `/branding`, `/content`, `/preview`, `/settings`):
+  - [x] Overview dashboard tracking app setup readiness, store package status, and quick customization actions.
+  - [x] White-label app branding editor (app name, description, icon, logo, splash screen, 4 brand colors, theme mode).
+  - [x] Homepage dynamic layout blocks (hero banners, featured items, category grid, testimonials) and bottom navigation bar router.
+  - [x] Responsive dual-device phone emulator for native Android and iOS interactive preview.
+  - [x] Compilation settings with package identifiers (`com.store.app`), push notification toggles, and simulated build trigger modal.
+- [x] **Advanced Customer Segmentation** (`/dashboard/marketing/segments`):
+  - [x] Dynamic audience builder supporting compound AND/OR multi-group condition logic.
+  - [x] Deterministic criteria evaluation across 8 fields: orders, spend, AOV, tags, group, last order date, registration date, city/district.
+  - [x] Real-time customer count preview and matched customer accounts breakdown.
+  - [x] Segment recipe lifecycle management: create, edit, duplicate, toggle status, and delete.
+- [x] **Advanced Analytics Hub** (`/dashboard/analytics`, `/sales`, `/customers`, `/products`, `/marketing`):
+  - [x] Preset and custom date range filters (Today, 7D, 30D, 90D, Custom range).
+  - [x] Sales trends, gross revenue, order volume, and status distribution.
+  - [x] Customer acquisition rate, cohort retention, and top high-value VIP customer ledger.
+  - [x] Product performance rankings, top revenue SKUs, and inventory reorder alerts.
+  - [x] Marketing campaign attribution and voucher savings breakdown.
+  - [x] RFC-4180 compliant CSV exports with native UTF-8 BOM (`\uFEFF`) for Bengali characters.
+- [x] **Integrations Center & Webhooks** (`/dashboard/integrations`, `/webhooks`):
+  - [x] Categorized integration catalog (Payments, Shipping, Marketing, Analytics, Notifications, Storefront).
+  - [x] Supported Bangladesh integrations: bKash, Nagad, SSLCommerz, Steadfast, Pathao, RedX.
+  - [x] Secure integration config dialogs with zero secrets in client storage.
+  - [x] Webhook endpoints management supporting 6 event topics with sample payload previews and simulated test deliveries.
+- [x] **Automation & Workflow Builder** (`/dashboard/automation`, `/workflows`, `/new`, `/[workflowId]/edit`, `/history`):
+  - [x] Multi-step visual builder for trigger-condition-action recipes.
+  - [x] 5 triggers, 5 conditions with operators, and 5 operational actions.
+  - [x] Manual execution test simulator with instant audit trail recording.
+- [x] **Sidebar Navigation & Quality Gates**:
+  - [x] Added 4 new navigation groups in `src/config/navigation.ts`: Mobile App, Analytics Hub, Integrations, and Store Automation (15 groups total).
+  - [x] Test suites `tests/phase9-advanced-modules.test.ts` (23 tests), `tests/customer-segmentation.test.ts` (17 tests), and `tests/cross-module-integrity.test.ts` (7 comprehensive integration tests).
+  - [x] Updated `tests/sidebar-navigation.test.ts` (16 automated tests covering 15 groups and 78 routes).
+  - [x] **262 / 262 automated unit tests passing** (100% pass rate across 12 test suites).
+  - [x] **0 ESLint errors**; **0 ESLint warnings**; **0 TypeScript errors**; **78 / 78 routes** compiled cleanly via Turbopack build.
+
 ## Demo Mode Disclosures & Future Backend Integration
 
 1. **Storage Mode**: Products, categories, inventory, orders, customers, payment transactions, refunds, and shipments are persisted in browser `localStorage` (`cartx_demo_*`) with in-memory fallbacks for SSR/testing.
-2. **Backend Replacement Boundary**: All data operations are encapsulated in typed feature services (`mockProducts.ts`, `mockOrders.ts`, `mockCustomers.ts`, `mockPayments.ts`, `mockShipping.ts`, `mockStorefront.ts`, `mockMarketing.ts`, `mockTeam.ts`, `mockBilling.ts`, `mockSupport.ts`) behind React Query hooks. When the shared Express API is deployed, these services can be connected to real HTTP endpoints without altering UI components.
+2. **Backend Replacement Boundary**: All data operations are encapsulated in typed feature services (`mockProducts.ts`, `mockOrders.ts`, `mockCustomers.ts`, `mockPayments.ts`, `mockShipping.ts`, `mockStorefront.ts`, `mockMarketing.ts`, `mockTeam.ts`, `mockBilling.ts`, `mockSupport.ts`, `mockMobileApp.ts`, `mockSegmentation.ts`, `mockAnalytics.ts`, `mockIntegrations.ts`, `mockAutomation.ts`) behind React Query hooks. When the shared Express API is deployed, these services can be connected to real HTTP endpoints without altering UI components.
 3. **Payment & Courier Credentials**: Zero-trust architecture strictly prevents storing secret API passwords, signing keys, or private tokens in browser storage or client bundles. Real gateway connections require the shared backend proxy endpoints.

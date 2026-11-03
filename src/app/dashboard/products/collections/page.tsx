@@ -28,6 +28,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCollectionsQuery, useCreateCollectionMutation } from "@/features/products/hooks";
 import { toast } from "sonner";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 export default function CollectionsPage() {
   const { data: collections = [], isLoading } = useCollectionsQuery();
@@ -65,7 +66,8 @@ export default function CollectionsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <PermissionGuard permission="products.view" showAccessDenied>
+      <div className="space-y-6">
       <PageHeader
         title="Product Collections"
         description="Curate themed groups of merchandise for seasonal campaigns, promotions, and featured showcases."
@@ -194,5 +196,6 @@ export default function CollectionsPage() {
         </DialogContent>
       </Dialog>
     </div>
+  </PermissionGuard>
   );
 }

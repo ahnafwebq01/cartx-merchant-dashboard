@@ -218,42 +218,104 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         isRouteActive("/dashboard/marketing", "/dashboard/marketing"),
       ).toBe(true);
       expect(
-        isRouteActive("/dashboard/marketing/coupons", "/dashboard/marketing/coupons"),
+        isRouteActive(
+          "/dashboard/marketing/coupons",
+          "/dashboard/marketing/coupons",
+        ),
       ).toBe(true);
       expect(
-        isRouteActive("/dashboard/marketing/coupons/new", "/dashboard/marketing/coupons"),
+        isRouteActive(
+          "/dashboard/marketing/coupons/new",
+          "/dashboard/marketing/coupons",
+        ),
       ).toBe(true);
       expect(
-        isRouteActive("/dashboard/marketing/coupons/cpn-101/edit", "/dashboard/marketing/coupons"),
+        isRouteActive(
+          "/dashboard/marketing/coupons/cpn-101/edit",
+          "/dashboard/marketing/coupons",
+        ),
       ).toBe(true);
       expect(
-        isRouteActive("/dashboard/marketing/discounts", "/dashboard/marketing/discounts"),
+        isRouteActive(
+          "/dashboard/marketing/discounts",
+          "/dashboard/marketing/discounts",
+        ),
       ).toBe(true);
       expect(
-        isRouteActive("/dashboard/marketing/flash-sales", "/dashboard/marketing/flash-sales"),
+        isRouteActive(
+          "/dashboard/marketing/flash-sales",
+          "/dashboard/marketing/flash-sales",
+        ),
       ).toBe(true);
       expect(
-        isRouteActive("/dashboard/marketing/analytics", "/dashboard/marketing/analytics"),
+        isRouteActive(
+          "/dashboard/marketing/analytics",
+          "/dashboard/marketing/analytics",
+        ),
       ).toBe(true);
       expect(
-        isRouteActive("/dashboard/marketing/reports", "/dashboard/marketing/reports"),
+        isRouteActive(
+          "/dashboard/marketing/reports",
+          "/dashboard/marketing/reports",
+        ),
       ).toBe(true);
       expect(
-        isRouteActive("/dashboard/marketing/segments", "/dashboard/marketing/segments"),
+        isRouteActive(
+          "/dashboard/marketing/segments",
+          "/dashboard/marketing/segments",
+        ),
       ).toBe(true);
     });
 
     it("should correctly match Phase 9 mobile-app, analytics, integrations, and automation routes", () => {
-      expect(isRouteActive("/dashboard/mobile-app", "/dashboard/mobile-app")).toBe(true);
-      expect(isRouteActive("/dashboard/mobile-app/branding", "/dashboard/mobile-app/branding")).toBe(true);
-      expect(isRouteActive("/dashboard/mobile-app/preview", "/dashboard/mobile-app/preview")).toBe(true);
-      expect(isRouteActive("/dashboard/analytics", "/dashboard/analytics")).toBe(true);
-      expect(isRouteActive("/dashboard/analytics/sales", "/dashboard/analytics/sales")).toBe(true);
-      expect(isRouteActive("/dashboard/integrations", "/dashboard/integrations")).toBe(true);
-      expect(isRouteActive("/dashboard/integrations/webhooks", "/dashboard/integrations/webhooks")).toBe(true);
-      expect(isRouteActive("/dashboard/automation", "/dashboard/automation")).toBe(true);
-      expect(isRouteActive("/dashboard/automation/workflows", "/dashboard/automation/workflows")).toBe(true);
-      expect(isRouteActive("/dashboard/automation/history", "/dashboard/automation/history")).toBe(true);
+      expect(
+        isRouteActive("/dashboard/mobile-app", "/dashboard/mobile-app"),
+      ).toBe(true);
+      expect(
+        isRouteActive(
+          "/dashboard/mobile-app/branding",
+          "/dashboard/mobile-app/branding",
+        ),
+      ).toBe(true);
+      expect(
+        isRouteActive(
+          "/dashboard/mobile-app/preview",
+          "/dashboard/mobile-app/preview",
+        ),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/analytics", "/dashboard/analytics"),
+      ).toBe(true);
+      expect(
+        isRouteActive(
+          "/dashboard/analytics/sales",
+          "/dashboard/analytics/sales",
+        ),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/integrations", "/dashboard/integrations"),
+      ).toBe(true);
+      expect(
+        isRouteActive(
+          "/dashboard/integrations/webhooks",
+          "/dashboard/integrations/webhooks",
+        ),
+      ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/automation", "/dashboard/automation"),
+      ).toBe(true);
+      expect(
+        isRouteActive(
+          "/dashboard/automation/workflows",
+          "/dashboard/automation/workflows",
+        ),
+      ).toBe(true);
+      expect(
+        isRouteActive(
+          "/dashboard/automation/history",
+          "/dashboard/automation/history",
+        ),
+      ).toBe(true);
     });
 
     it("should correctly match dynamic parameterized order routes to parent item", () => {
@@ -367,14 +429,42 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
 
     it("should correctly match nested team, billing, and support routes", () => {
       expect(isRouteActive("/dashboard/team", "/dashboard/team")).toBe(true);
-      expect(isRouteActive("/dashboard/team/roles", "/dashboard/team/roles")).toBe(true);
-      expect(isRouteActive("/dashboard/billing", "/dashboard/billing")).toBe(true);
-      expect(isRouteActive("/dashboard/billing/plans", "/dashboard/billing/plans")).toBe(true);
-      expect(isRouteActive("/dashboard/billing/invoices", "/dashboard/billing/invoices")).toBe(true);
-      expect(isRouteActive("/dashboard/billing/settings", "/dashboard/billing/settings")).toBe(true);
-      expect(isRouteActive("/dashboard/support", "/dashboard/support")).toBe(true);
-      expect(isRouteActive("/dashboard/support/tickets", "/dashboard/support/tickets")).toBe(true);
-      expect(isRouteActive("/dashboard/support/tickets/TCK-1048", "/dashboard/support/tickets")).toBe(true);
+      expect(
+        isRouteActive("/dashboard/team/roles", "/dashboard/team/roles"),
+      ).toBe(true);
+      expect(isRouteActive("/dashboard/billing", "/dashboard/billing")).toBe(
+        true,
+      );
+      expect(
+        isRouteActive("/dashboard/billing/plans", "/dashboard/billing/plans"),
+      ).toBe(true);
+      expect(
+        isRouteActive(
+          "/dashboard/billing/invoices",
+          "/dashboard/billing/invoices",
+        ),
+      ).toBe(true);
+      expect(
+        isRouteActive(
+          "/dashboard/billing/settings",
+          "/dashboard/billing/settings",
+        ),
+      ).toBe(true);
+      expect(isRouteActive("/dashboard/support", "/dashboard/support")).toBe(
+        true,
+      );
+      expect(
+        isRouteActive(
+          "/dashboard/support/tickets",
+          "/dashboard/support/tickets",
+        ),
+      ).toBe(true);
+      expect(
+        isRouteActive(
+          "/dashboard/support/tickets/TCK-1048",
+          "/dashboard/support/tickets",
+        ),
+      ).toBe(true);
     });
   });
 });

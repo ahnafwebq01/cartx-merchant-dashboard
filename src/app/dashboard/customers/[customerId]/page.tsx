@@ -16,6 +16,7 @@ import {
 } from "@/features/customers/hooks";
 import { useOrdersQuery } from "@/features/orders/hooks";
 import { ArrowLeft } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function CustomerDetailsContent() {
   const params = useParams();
@@ -132,8 +133,10 @@ function CustomerDetailsContent() {
 
 export default function CustomerDetailsPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <CustomerDetailsContent />
-    </Suspense>
+    <PermissionGuard permission="customers.view" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <CustomerDetailsContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }

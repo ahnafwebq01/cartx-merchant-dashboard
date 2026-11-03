@@ -2,6 +2,7 @@ import type {
   Order,
   OrderDelivery,
   OrderFilterParams,
+  OrderItem,
   OrderKPIStats,
   OrderStatus,
   PaginatedOrdersResult,
@@ -1745,6 +1746,102 @@ class MockOrderService {
     ]);
 
     return [headers.join(","), ...rows.map((r) => r.join(","))].join("\r\n");
+  }
+
+  public createOrder(
+    data: Partial<Order> & {
+      customerName: string;
+      customerPhone: string;
+      items: OrderItem[];
+    }
+  ): Order {
+    const list = this.loadOrders();
+    const now = new Date().toISOString();
+    const subtotal = data.subtotal ?? data.items.reduce((s, i) => s + i.total, 0);
+    const discount = data.discount ?? 0;
+    const shippingFee = data.shippingFee ?? (data.delivery?.shippingFee ?? 60);
+    const tax = data.tax ?? 0;
+    const grandTotal = subtotal - discount + shippingFee + tax;
+    const amountPaid = data.amountPaid ?? (data.paymentStatus === "paid" ? grandTotal : 0);
+    const amountDue = Math.max(0, grandTotal - amountPaid);
+
+    const orderNumber = data.orderNumber || `ORD-BD-${Date.now().toString().slice(-6)}`;
+    const id = data.id || `ord-${Date.now().toString(36)}`;
+
+    // Stock deduction for items with trackInventory
+    for (const item of data.items) {
+      try {
+        const prod = mockProductService.getProductById(item.productId);
+        if (prod && prod.trackInventory) {
+          mockProductService.adjustStock({
+            productId: item.productId,
+            type: "lost",
+            quantityChange: -item.quantity,
+            reason: `Order placed: ${orderNumber}`,
+            referenceId: orderNumber,
+          });
+        }
+      } catch (e) {
+        console.warn(`[MockOrderService] Stock deduction failed for item ${item.productId}:`, e);
+      }
+    }
+
+    const newOrder: Order = {
+      id,
+      orderNumber,
+      customerId: data.customerId || `cust-${Date.now().toString(36)}`,
+      customerName: data.customerName,
+      customerPhone: data.customerPhone,
+      customerEmail: data.customerEmail || "customer@example.com",
+      shippingAddress: data.shippingAddress || {
+        fullName: data.customerName,
+        phone: data.customerPhone,
+        addressLine1: "House 12, Road 4, Banani",
+        city: "Dhaka",
+        division: "Dhaka",
+        country: "Bangladesh",
+      },
+      items: data.items,
+      subtotal,
+      discount,
+      shippingFee,
+      tax,
+      grandTotal,
+      amountPaid,
+      amountDue,
+      paymentMethod: data.paymentMethod || "cod",
+      paymentStatus: data.paymentStatus || "unpaid",
+      orderStatus: data.orderStatus || "pending",
+      fulfillmentStatus: data.fulfillmentStatus || "unfulfilled",
+      delivery: data.delivery || {
+        courier: "Steadfast",
+        shippingFee,
+      },
+      timeline: [
+        {
+          id: `evt-${Date.now().toString(36)}`,
+          status: data.orderStatus || "pending",
+          title: "Order Placed",
+          description: `Order ${orderNumber} placed by ${data.customerName}`,
+          actor: "Customer Storefront",
+          timestamp: now,
+        },
+      ],
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    list.unshift(newOrder);
+    this.saveOrders(list);
+
+    // Update customer stats
+    try {
+      mockCustomerService.recalculateCustomerMetrics(newOrder.customerId, list);
+    } catch (e) {
+      console.warn("[MockOrderService] Customer metrics sync error:", e);
+    }
+
+    return newOrder;
   }
 
   public resetDemoOrders(): Order[] {

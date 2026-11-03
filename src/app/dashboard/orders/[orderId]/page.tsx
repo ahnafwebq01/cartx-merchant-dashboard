@@ -26,6 +26,7 @@ import {
 } from "@/features/orders/hooks";
 import type { OrderStatus } from "@/features/orders/types";
 import { Printer } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function OrderDetailsContent() {
   const params = useParams();
@@ -257,8 +258,10 @@ function OrderDetailsContent() {
 
 export default function OrderDetailsPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <OrderDetailsContent />
-    </Suspense>
+    <PermissionGuard permission="orders.view" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <OrderDetailsContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }

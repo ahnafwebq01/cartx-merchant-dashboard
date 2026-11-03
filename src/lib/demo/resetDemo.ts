@@ -1,8 +1,15 @@
 import { mockOnboardingService } from "@/features/onboarding/services/mockOnboarding";
 import { mockStoreSettingsService } from "@/features/store-settings/services/mockStoreSettings";
 import { mockProductService } from "@/features/products/services/mockProducts";
+import { mockOrderService } from "@/features/orders/services/mockOrders";
+import { mockCustomerService } from "@/features/customers/services/mockCustomers";
+import { mockPaymentService } from "@/features/payments/services/mockPayments";
+import { mockShippingService } from "@/features/shipping/services/mockShipping";
 import { mockMarketingService } from "@/features/marketing/services/mockMarketing";
 import { mockStorefrontService } from "@/features/storefront/services/mockStorefront";
+import { mockTeamService } from "@/features/team/services/mockTeam";
+import { mockBillingService } from "@/features/billing/services/mockBilling";
+import { mockSupportService } from "@/features/support/services/mockSupport";
 import { mockMobileAppService } from "@/features/mobile-app/services/mockMobileApp";
 import { mockSegmentationService } from "@/features/segmentation/services/mockSegmentation";
 import { mockIntegrationsService } from "@/features/integrations/services/mockIntegrations";
@@ -73,13 +80,20 @@ export function resetAllDemoData(): void {
     }
   }
 
-  // 3. Reset in-memory services
+  // 3. Reset in-memory services across all Phase 1-9 modules
   try {
     mockOnboardingService.resetOnboarding();
     mockStoreSettingsService.resetSettings();
     mockProductService.resetDemoData();
+    mockOrderService.resetDemoOrders();
+    mockCustomerService.resetDemoCustomers();
+    mockPaymentService.resetDemoPayments();
+    mockShippingService.resetDemoShipping();
     mockMarketingService.resetDemoData();
     mockStorefrontService.resetDemoData();
+    mockTeamService.resetToDefaults();
+    mockBillingService.resetToDefaults();
+    mockSupportService.resetToDefaults();
     // Phase 9 Services
     mockMobileAppService.resetToDefaults();
     mockSegmentationService.resetToDefaults();

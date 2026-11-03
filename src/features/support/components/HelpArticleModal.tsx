@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -70,7 +71,9 @@ export function HelpArticleModal({
           <DialogTitle className="text-xl font-bold text-foreground leading-snug">
             {article.title}
           </DialogTitle>
-          <p className="text-xs text-muted-foreground mt-1">{article.summary}</p>
+          <DialogDescription className="text-xs text-muted-foreground mt-1">
+            {article.summary}
+          </DialogDescription>
         </DialogHeader>
 
         {/* Article Body */}

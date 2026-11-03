@@ -17,13 +17,15 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Plus, FolderTree } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 export default function CategoriesPage() {
   const { data: categories = [], isLoading } = useCategoriesQuery();
   const [showAddModal, setShowAddModal] = useState(false);
 
   return (
-    <div className="space-y-6">
+    <PermissionGuard permission="products.view" showAccessDenied>
+      <div className="space-y-6">
       <PageHeader
         title="Product Categories"
         description="Group and organize products into logical categories for easy discovery on your storefront."
@@ -103,5 +105,6 @@ export default function CategoriesPage() {
         onOpenChange={setShowAddModal}
       />
     </div>
+  </PermissionGuard>
   );
 }

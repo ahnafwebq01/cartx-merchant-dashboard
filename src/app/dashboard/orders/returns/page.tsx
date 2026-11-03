@@ -23,6 +23,7 @@ import {
   Receipt,
   Package,
 } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 export default function OrderReturnsPage() {
   const { data, isLoading } = useOrdersQuery({ limit: 50 });
@@ -45,7 +46,8 @@ export default function OrderReturnsPage() {
   }, 0);
 
   return (
-    <div className="space-y-6">
+    <PermissionGuard permission="orders.view" showAccessDenied>
+      <div className="space-y-6">
       <PageHeader
         title="Returns & Refunds"
         description="Track customer returns, inspect defective or returned merchandise, and verify refunds."
@@ -230,5 +232,6 @@ export default function OrderReturnsPage() {
       </div>
       )}
     </div>
+  </PermissionGuard>
   );
 }

@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { LoadingSkeleton } from "@/components/feedback/LoadingSkeleton";
 import { ShippingRatesForm } from "@/features/shipping/components/ShippingRatesForm";
 import { useShippingRatesQuery } from "@/features/shipping/hooks";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function ShippingSettingsContent() {
   const { data: rates, isLoading } = useShippingRatesQuery();
@@ -28,9 +29,11 @@ function ShippingSettingsContent() {
 
 export default function ShippingSettingsPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <ShippingSettingsContent />
-    </Suspense>
+    <PermissionGuard permission="shipping.manage" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <ShippingSettingsContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }
 

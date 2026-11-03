@@ -119,7 +119,7 @@
 
 ---
 
-### 3.3 Planned Endpoints (Phase 3–5)
+### 3.3 Planned Endpoints (Phase 3–9)
 | Module | Endpoint Group | Description |
 |---|---|---|
 | **Products** | `/products` | CRUD, categories, variants, inventory items |
@@ -127,3 +127,13 @@
 | **Customers** | `/customers` | Customer records, groups, order history |
 | **Payments** | `/payments` | Transactions, gateway credentials, refund requests |
 | **Shipping** | `/shipping` | Shipping zones, rates, courier integration webhooks |
+| **Storefront** | `/store` | Theme settings, custom domains, CMS pages |
+| **Marketing** | `/marketing` | Coupons, discounts, flash sales, campaign analytics |
+| **Team & Access** | `/team` | Team members, invitations, RBAC role overrides |
+| **Billing & Plans**| `/billing` | Subscription tiers, tax invoices, usage metrics |
+| **Support** | `/support` | Ticket threads, knowledge base, status tracking |
+| **Mobile App** | `/mobile-app` | App branding, layout blocks, package build trigger |
+| **Segmentation** | `/segments` | Dynamic audience condition recipes & evaluation |
+| **Analytics Hub** | `/analytics` | Sales, customer retention, product SKU rankings |
+| **Integrations** | `/integrations` | Payment/courier connectors & webhook subscriptions |
+| **Automation** | `/automation` | Trigger-condition-action workflow recipes & audit logs |

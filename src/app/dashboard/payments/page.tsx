@@ -33,6 +33,7 @@ import {
   Sliders,
   Receipt,
 } from "lucide-react";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 function PaymentsOverviewContent() {
   const [filterParams, setFilterParams] = useState<PaymentFilterParams>({
@@ -224,9 +225,11 @@ function PaymentsOverviewContent() {
 
 export default function PaymentsOverviewPage() {
   return (
-    <Suspense fallback={<LoadingSkeleton rows={6} />}>
-      <PaymentsOverviewContent />
-    </Suspense>
+    <PermissionGuard permission="payments.view" showAccessDenied>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>
+        <PaymentsOverviewContent />
+      </Suspense>
+    </PermissionGuard>
   );
 }
 

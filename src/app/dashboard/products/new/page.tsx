@@ -6,6 +6,7 @@ import { Breadcrumbs } from "@/components/navigation/Breadcrumbs";
 import { ProductForm } from "@/features/products/components/ProductForm";
 import { useCategoriesQuery, useCreateProductMutation } from "@/features/products/hooks";
 import type { ProductFormValues } from "@/features/products/schemas";
+import { PermissionGuard } from "@/components/shared/PermissionGuard";
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -56,18 +57,20 @@ export default function NewProductPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <Breadcrumbs
-        items={[
-          { label: "Products", href: "/dashboard/products" },
-          { label: "Add Product" },
-        ]}
-      />
-      <ProductForm
-        categories={categories}
-        onSubmit={handleCreate}
-        isSubmitting={createMutation.isPending}
-      />
-    </div>
+    <PermissionGuard permission="products.create" showAccessDenied>
+      <div className="space-y-6">
+        <Breadcrumbs
+          items={[
+            { label: "Products", href: "/dashboard/products" },
+            { label: "Add Product" },
+          ]}
+        />
+        <ProductForm
+          categories={categories}
+          onSubmit={handleCreate}
+          isSubmitting={createMutation.isPending}
+        />
+      </div>
+    </PermissionGuard>
   );
 }

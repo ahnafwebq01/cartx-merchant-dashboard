@@ -47,13 +47,13 @@ export default function DashboardPage() {
             <Layers className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">Phase 7 Active</div>
+            <div className="text-2xl font-bold text-foreground">Phases 1–9 Complete</div>
             <p className="text-xs text-muted-foreground mt-1">
-              Products, Orders, Payments, Shipping, Storefront & Marketing operational
+              All 16 dashboard modules, mobile app, and automation workflows operational
             </p>
             <div className="mt-3">
               <Badge variant="success" className="text-[10px]">
-                Phase 7 Complete • Marketing & Analytics
+                Production Ready • High-Fidelity Demo Mode
               </Badge>
             </div>
           </CardContent>
