@@ -238,7 +238,74 @@ Phase 8 capabilities are fully implemented and typed using modular browser servi
 
 ---
 
-## 8. Storage & File Upload Contracts
+## 8. Phase 9 Contracts Status (Mobile App, Segmentation, Analytics, Integrations & Automation)
+
+Phase 9 frontend features run in high-fidelity demo mode with SSR-safe `localStorage` persistence and TanStack Query state synchronization. When the Express backend implements authoritative services, the following contracts will be integrated:
+
+### Mobile App Management Endpoints
+
+| Planned Endpoint | Method | Purpose | Frontend Hook / Consumer |
+|---|---|---|---|
+| `/api/v1/mobile-app/config` | `GET` | Get mobile app branding, layout, and settings | `useMobileAppConfigQuery()` |
+| `/api/v1/mobile-app/branding` | `PUT` | Update display name, colors, icons, theme | `useUpdateBrandingMutation()` |
+| `/api/v1/mobile-app/content` | `PUT` | Update homepage layout blocks and navigation routes | `useUpdateContentMutation()` |
+| `/api/v1/mobile-app/settings` | `PUT` | Update package IDs and push preferences | `useUpdateSettingsMutation()` |
+| `/api/v1/mobile-app/build` | `POST` | Trigger cloud compilation pipeline (CI/CD) | `useTriggerBuildMutation()` |
+
+### Customer Segmentation Endpoints
+
+| Planned Endpoint | Method | Purpose | Frontend Hook / Consumer |
+|---|---|---|---|
+| `/api/v1/segments` | `GET` | List customer segment definitions | `useSegmentsQuery()` |
+| `/api/v1/segments` | `POST` | Create new condition recipe segment | `useCreateSegmentMutation()` |
+| `/api/v1/segments/:id` | `GET` | Single segment details and condition groups | `useSegmentQuery(id)` |
+| `/api/v1/segments/:id` | `PUT` | Update segment criteria and logic | `useUpdateSegmentMutation()` |
+| `/api/v1/segments/:id` | `DELETE` | Delete customer segment | `useDeleteSegmentMutation()` |
+| `/api/v1/segments/preview` | `POST` | Evaluate segment conditions against live customer base | `useSegmentPreviewQuery()` |
+
+### Advanced Analytics Endpoints
+
+| Planned Endpoint | Method | Purpose | Frontend Hook / Consumer |
+|---|---|---|---|
+| `/api/v1/analytics/overview` | `GET` | Gross revenue, net orders, customer deltas | `useAnalyticsOverviewQuery(range)` |
+| `/api/v1/analytics/sales` | `GET` | Daily trends, basket size, status distribution | `useSalesAnalyticsQuery(range)` |
+| `/api/v1/analytics/customers` | `GET` | Acquisition rate, 30d retention, VIP rankings | `useCustomerAnalyticsQuery(range)` |
+| `/api/v1/analytics/products` | `GET` | Catalog performance, top SKUs, reorder alerts | `useProductAnalyticsQuery(range)` |
+| `/api/v1/analytics/marketing` | `GET` | Campaign redemptions, attributed revenue | `useMarketingAnalyticsQuery(range)` |
+| `/api/v1/analytics/export` | `POST` | Generate RFC-4180 UTF-8 CSV report file | `useExportAnalyticsReportMutation()` |
+
+### Integrations & Webhooks Endpoints
+
+| Planned Endpoint | Method | Purpose | Frontend Hook / Consumer |
+|---|---|---|---|
+| `/api/v1/integrations` | `GET` | Integration catalog with active status | `useIntegrationsQuery()` |
+| `/api/v1/integrations/:id/config` | `PUT` | Update integration credentials via proxy | `useUpdateIntegrationConfigMutation()` |
+| `/api/v1/integrations/:id/toggle` | `POST` | Enable or disable integration | `useToggleIntegrationMutation()` |
+| `/api/v1/integrations/:id/disconnect` | `POST` | Disconnect and clear server credentials | `useDisconnectIntegrationMutation()` |
+| `/api/v1/webhooks` | `GET` | List registered webhook endpoints | `useWebhooksQuery()` |
+| `/api/v1/webhooks` | `POST` | Register destination HTTPS endpoint | `useCreateWebhookMutation()` |
+| `/api/v1/webhooks/:id` | `PUT` | Update webhook URL and subscribed events | `useUpdateWebhookMutation()` |
+| `/api/v1/webhooks/:id/toggle` | `POST` | Toggle webhook active state | `useToggleWebhookMutation()` |
+| `/api/v1/webhooks/:id` | `DELETE` | Delete webhook endpoint | `useDeleteWebhookMutation()` |
+| `/api/v1/webhooks/:id/deliveries` | `GET` | Historical delivery attempts and responses | `useWebhookDeliveriesQuery(id)` |
+
+### Store Automation Builder Endpoints
+
+| Planned Endpoint | Method | Purpose | Frontend Hook / Consumer |
+|---|---|---|---|
+| `/api/v1/automation/workflows` | `GET` | List store automation recipes | `useWorkflowsQuery()` |
+| `/api/v1/automation/workflows` | `POST` | Create trigger-condition-action workflow | `useCreateWorkflowMutation()` |
+| `/api/v1/automation/workflows/:id` | `GET` | Single workflow recipe configuration | `useWorkflowQuery(id)` |
+| `/api/v1/automation/workflows/:id` | `PUT` | Update workflow steps | `useUpdateWorkflowMutation()` |
+| `/api/v1/automation/workflows/:id` | `DELETE` | Delete workflow recipe | `useDeleteWorkflowMutation()` |
+| `/api/v1/automation/workflows/:id/toggle` | `POST` | Toggle workflow active state | `useToggleWorkflowMutation()` |
+| `/api/v1/automation/workflows/:id/duplicate` | `POST` | Duplicate workflow recipe | `useDuplicateWorkflowMutation()` |
+| `/api/v1/automation/workflows/:id/test` | `POST` | Execute simulated test run | `useSimulateExecutionMutation()` |
+| `/api/v1/automation/executions` | `GET` | Execution history audit logs | `useWorkflowExecutionsQuery()` |
+
+---
+
+## 9. Storage & File Upload Contracts
 
 | Pending Contract          | Description                                                                                                           | Impact on Frontend                                                                                                              | Required Resolution                                                                              |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -246,7 +313,7 @@ Phase 8 capabilities are fully implemented and typed using modular browser servi
 
 ---
 
-## 9. Authentication & Session Management Gaps
+## 10. Authentication & Session Management Gaps
 
 | Pending Contract               | Description                                                                                      | Impact on Frontend                                                                      | Required Resolution                                                                        |
 | ------------------------------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -255,7 +322,7 @@ Phase 8 capabilities are fully implemented and typed using modular browser servi
 
 ---
 
-## 10. Third-Party Gateway & Courier Proxies (Required for Live Mode)
+## 11. Third-Party Gateway & Courier Proxies (Required for Live Mode)
 
 | Pending Contract                       | Description                                                                                                                             | Impact on Frontend                                                                                                     | Required Resolution                                                                         |
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |

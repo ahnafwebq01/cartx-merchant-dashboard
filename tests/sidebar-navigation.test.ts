@@ -32,7 +32,7 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
   );
 
   describe("Route Inventory & Completeness", () => {
-    it("should include all 11 required logical navigation groups", () => {
+    it("should include all 15 required logical navigation groups", () => {
       const groupIds = NAVIGATION_GROUPS.map((g) => g.id);
       expect(groupIds).toEqual([
         "overview",
@@ -41,7 +41,11 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         "payments-finance",
         "shipping-logistics",
         "storefront",
+        "mobile-app",
         "marketing",
+        "analytics",
+        "integrations",
+        "automation",
         "team",
         "billing",
         "support",
@@ -75,12 +79,29 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
         "/dashboard/store/themes",
         "/dashboard/store/pages",
         "/dashboard/store/domains",
+        "/dashboard/mobile-app",
+        "/dashboard/mobile-app/branding",
+        "/dashboard/mobile-app/content",
+        "/dashboard/mobile-app/preview",
+        "/dashboard/mobile-app/settings",
         "/dashboard/marketing",
+        "/dashboard/marketing/segments",
         "/dashboard/marketing/coupons",
         "/dashboard/marketing/discounts",
         "/dashboard/marketing/flash-sales",
         "/dashboard/marketing/analytics",
         "/dashboard/marketing/reports",
+        "/dashboard/analytics",
+        "/dashboard/analytics/sales",
+        "/dashboard/analytics/customers",
+        "/dashboard/analytics/products",
+        "/dashboard/analytics/marketing",
+        "/dashboard/integrations",
+        "/dashboard/integrations/webhooks",
+        "/dashboard/automation",
+        "/dashboard/automation/workflows",
+        "/dashboard/automation/workflows/new",
+        "/dashboard/automation/history",
         "/dashboard/team",
         "/dashboard/team/roles",
         "/dashboard/billing",
@@ -118,10 +139,9 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
       expect(leafLinks.length).toBe(uniqueLeafLinks.size);
     });
 
-    it("should NOT contain any unimplemented Phase 9 routes to avoid 404s", () => {
+    it("should NOT contain any unimplemented future roadmap routes to avoid 404s", () => {
       const unimplementedRoadmapRoutes = [
         "/dashboard/apps",
-        "/dashboard/mobile-app",
         "/dashboard/profile",
         "/dashboard/security",
         "/dashboard/notifications",
@@ -218,6 +238,22 @@ describe("Sidebar Navigation Configuration & Routing Logic", () => {
       expect(
         isRouteActive("/dashboard/marketing/reports", "/dashboard/marketing/reports"),
       ).toBe(true);
+      expect(
+        isRouteActive("/dashboard/marketing/segments", "/dashboard/marketing/segments"),
+      ).toBe(true);
+    });
+
+    it("should correctly match Phase 9 mobile-app, analytics, integrations, and automation routes", () => {
+      expect(isRouteActive("/dashboard/mobile-app", "/dashboard/mobile-app")).toBe(true);
+      expect(isRouteActive("/dashboard/mobile-app/branding", "/dashboard/mobile-app/branding")).toBe(true);
+      expect(isRouteActive("/dashboard/mobile-app/preview", "/dashboard/mobile-app/preview")).toBe(true);
+      expect(isRouteActive("/dashboard/analytics", "/dashboard/analytics")).toBe(true);
+      expect(isRouteActive("/dashboard/analytics/sales", "/dashboard/analytics/sales")).toBe(true);
+      expect(isRouteActive("/dashboard/integrations", "/dashboard/integrations")).toBe(true);
+      expect(isRouteActive("/dashboard/integrations/webhooks", "/dashboard/integrations/webhooks")).toBe(true);
+      expect(isRouteActive("/dashboard/automation", "/dashboard/automation")).toBe(true);
+      expect(isRouteActive("/dashboard/automation/workflows", "/dashboard/automation/workflows")).toBe(true);
+      expect(isRouteActive("/dashboard/automation/history", "/dashboard/automation/history")).toBe(true);
     });
 
     it("should correctly match dynamic parameterized order routes to parent item", () => {

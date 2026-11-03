@@ -3,6 +3,10 @@ import { mockStoreSettingsService } from "@/features/store-settings/services/moc
 import { mockProductService } from "@/features/products/services/mockProducts";
 import { mockMarketingService } from "@/features/marketing/services/mockMarketing";
 import { mockStorefrontService } from "@/features/storefront/services/mockStorefront";
+import { mockMobileAppService } from "@/features/mobile-app/services/mockMobileApp";
+import { mockSegmentationService } from "@/features/segmentation/services/mockSegmentation";
+import { mockIntegrationsService } from "@/features/integrations/services/mockIntegrations";
+import { mockAutomationService } from "@/features/automation/services/mockAutomation";
 
 export const ALL_DEMO_STORAGE_KEYS = [
   "cartx_demo_onboarding_draft_v1",
@@ -34,6 +38,14 @@ export const ALL_DEMO_STORAGE_KEYS = [
   "cartx_demo_billing_subscription_v1",
   "cartx_demo_billing_invoices_v1",
   "cartx_demo_support_tickets_v1",
+  // Phase 9 Keys
+  "cartx_demo_mobile_app_config_v1",
+  "cartx_demo_segments_v1",
+  "cartx_demo_integrations_v1",
+  "cartx_demo_webhooks_v1",
+  "cartx_demo_webhook_deliveries_v1",
+  "cartx_demo_workflows_v1",
+  "cartx_demo_workflow_executions_v1",
 ];
 
 /**
@@ -68,8 +80,12 @@ export function resetAllDemoData(): void {
     mockProductService.resetDemoData();
     mockMarketingService.resetDemoData();
     mockStorefrontService.resetDemoData();
+    // Phase 9 Services
+    mockMobileAppService.resetToDefaults();
+    mockSegmentationService.resetToDefaults();
+    mockIntegrationsService.resetToDefaults();
+    mockAutomationService.resetToDefaults();
   } catch (e) {
     console.warn("[DemoReset] Error resetting in-memory services:", e);
   }
 }
-

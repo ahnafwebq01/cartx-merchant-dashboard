@@ -13,6 +13,10 @@ import {
   ShieldCheck,
   Receipt,
   LifeBuoy,
+  Smartphone,
+  BarChart3,
+  Plug,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
 import type { Permission } from "@/types/auth";
@@ -76,11 +80,8 @@ export function isParentItemActive(item: NavItem, pathname: string): boolean {
 }
 
 /**
- * 100% Implemented Dashboard Navigation Hierarchy.
+ * 100% Implemented Dashboard Navigation Hierarchy (Phases 1 through 9).
  * Organized into logical, collapsible groups containing only verified existing routes.
- * 
- * Unimplemented Phase 6–9 roadmap modules (Analytics, Marketing, Themes, Apps,
- * Mobile App, Team RBAC, Billing, Support) are intentionally excluded to prevent 404s.
  */
 export const NAVIGATION_GROUPS: NavGroup[] = [
   {
@@ -217,6 +218,27 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
     ],
   },
   {
+    id: "mobile-app",
+    title: "Mobile App",
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Mobile App",
+        href: "/dashboard/mobile-app",
+        icon: Smartphone,
+        permission: "storefront.manage",
+        children: [
+          { title: "App Overview", href: "/dashboard/mobile-app", permission: "storefront.manage" },
+          { title: "Branding & Colors", href: "/dashboard/mobile-app/branding", permission: "storefront.manage" },
+          { title: "Content & Layout", href: "/dashboard/mobile-app/content", permission: "storefront.manage" },
+          { title: "Platform Preview", href: "/dashboard/mobile-app/preview", permission: "storefront.manage" },
+          { title: "Push & Settings", href: "/dashboard/mobile-app/settings", permission: "storefront.manage" },
+        ],
+      },
+    ],
+  },
+  {
     id: "marketing",
     title: "Marketing",
     collapsible: true,
@@ -229,11 +251,71 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         permission: "marketing.view",
         children: [
           { title: "Marketing Overview", href: "/dashboard/marketing", permission: "marketing.view" },
+          { title: "Customer Segments", href: "/dashboard/marketing/segments", permission: "marketing.view" },
           { title: "Coupons", href: "/dashboard/marketing/coupons", permission: "discounts.manage" },
           { title: "Discounts", href: "/dashboard/marketing/discounts", permission: "discounts.manage" },
           { title: "Flash Sales", href: "/dashboard/marketing/flash-sales", permission: "discounts.manage" },
           { title: "Marketing Analytics", href: "/dashboard/marketing/analytics", permission: "marketing.view" },
           { title: "Reports", href: "/dashboard/marketing/reports", permission: "reports.view" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "analytics",
+    title: "Analytics & Insights",
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Analytics Hub",
+        href: "/dashboard/analytics",
+        icon: BarChart3,
+        permission: "reports.view",
+        children: [
+          { title: "Overview", href: "/dashboard/analytics", permission: "reports.view" },
+          { title: "Sales Trends", href: "/dashboard/analytics/sales", permission: "reports.view" },
+          { title: "Customer Cohorts", href: "/dashboard/analytics/customers", permission: "reports.view" },
+          { title: "Product Performance", href: "/dashboard/analytics/products", permission: "reports.view" },
+          { title: "Marketing ROI", href: "/dashboard/analytics/marketing", permission: "reports.view" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "integrations",
+    title: "Integrations & APIs",
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Integrations",
+        href: "/dashboard/integrations",
+        icon: Plug,
+        permission: "integrations.manage",
+        children: [
+          { title: "Service Catalog", href: "/dashboard/integrations", permission: "integrations.manage" },
+          { title: "Webhooks", href: "/dashboard/integrations/webhooks", permission: "integrations.manage" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "automation",
+    title: "Automations",
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Workflows",
+        href: "/dashboard/automation",
+        icon: Zap,
+        permission: "integrations.manage",
+        children: [
+          { title: "Automation Overview", href: "/dashboard/automation", permission: "integrations.manage" },
+          { title: "Workflow Recipes", href: "/dashboard/automation/workflows", permission: "integrations.manage" },
+          { title: "Create Recipe", href: "/dashboard/automation/workflows/new", permission: "integrations.manage" },
+          { title: "Execution History", href: "/dashboard/automation/history", permission: "integrations.manage" },
         ],
       },
     ],

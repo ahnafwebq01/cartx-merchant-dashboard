@@ -1,7 +1,7 @@
 # CartX Merchant Dashboard — Feature Status Matrix
 
 **Document Purpose:** Living feature status tracking across all 16 dashboard modules defined in `CARTX_MERCHANT_DASHBOARD.md`.  
-**Last Updated:** October 31, 2026 (Phase 4 Final Audit & Repository Verification)  
+**Last Updated:** November 3, 2026 (Phase 9 Implementation & Final Audit)  
 
 | # | Module / Capability | Documented Route | Planned Phase | Current Status | Notes |
 |---|---|---|---|---|---|
@@ -21,7 +21,11 @@
 | **13** | **Team & Permissions** | `/dashboard/team` | **Phase 8** | **COMPLETED (Demo Mode)** | Team members, invitations lifecycle, role assignments (8 roles x 26 permissions matrix). |
 | **14** | **Subscription & Billing** | `/dashboard/billing` | **Phase 8** | **COMPLETED (Demo Mode)** | CartX SaaS subscription plans, usage limit meters, invoices PDF view, simulated payments. |
 | **15** | **Support & Help Center** | `/dashboard/support` | **Phase 8** | **COMPLETED (Demo Mode)** | Bangladesh e-commerce guides, categorized FAQs, support tickets CRUD, simulated chat thread. |
-| **16** | **Mobile App Builder** | `/dashboard/mobile-app` | Phase 9 | Pending | White-label merchant app branding and push alerts. |
+| **16** | **Mobile App Builder** | `/dashboard/mobile-app` | **Phase 9** | **COMPLETED (Demo Mode)** | White-label branding, home layout blocks, interactive device emulator, push settings, build simulation. |
+| **17** | **Customer Segmentation** | `/dashboard/marketing/segments` | **Phase 9** | **COMPLETED (Demo Mode)** | Compound AND/OR condition builder, deterministic evaluation across 8 criteria, real-time preview. |
+| **18** | **Advanced Analytics Hub** | `/dashboard/analytics` | **Phase 9** | **COMPLETED (Demo Mode)** | Sales, Customers, Products, and Marketing analytics deep-dives, date range filters, RFC-4180 CSV export. |
+| **19** | **Integrations Center & Webhooks** | `/dashboard/integrations` | **Phase 9** | **COMPLETED (Demo Mode)** | Bangladesh payment & courier integrations, global tools, 6-event webhooks with payload previews & test runs. |
+| **20** | **Store Automation Builder** | `/dashboard/automation` | **Phase 9** | **COMPLETED (Demo Mode)** | Trigger-condition-action workflow recipes, execution audit logs, test execution simulation. |
 
 ---
 
