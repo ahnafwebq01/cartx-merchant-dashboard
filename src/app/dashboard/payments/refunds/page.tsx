@@ -15,7 +15,10 @@ function PaymentRefundsContent() {
   const { data, isLoading } = useRefundsQuery({ search });
 
   const totalRefundAmount =
-    data?.refunds?.reduce((acc, r) => acc + (r.status === "processed" ? r.amount : 0), 0) || 0;
+    data?.refunds?.reduce(
+      (acc, r) => acc + (r.status === "processed" ? r.amount : 0),
+      0,
+    ) || 0;
 
   return (
     <div className="space-y-6">
@@ -56,7 +59,9 @@ function PaymentRefundsContent() {
                 Authoritative Refund Protection
               </span>
               <p className="text-muted-foreground text-[11px] leading-relaxed">
-                Refunds in CartX enforce idempotency keys to eliminate double-reversals, validate against original payment balances, and preserve inventory reconciliation.
+                Refunds in CartX enforce idempotency keys to eliminate
+                double-reversals, validate against original payment balances,
+                and preserve inventory reconciliation.
               </p>
             </div>
           </CardContent>

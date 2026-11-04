@@ -30,7 +30,10 @@ function PaymentMethodsContent() {
           <span>Payment Gateway Architecture & Security Baseline</span>
         </div>
         <p className="text-[11px] text-blue-800/80 dark:text-blue-300/80 leading-relaxed">
-          CartX strictly follows zero-trust security principles. Private gateway credentials, API secret keys, and webhook signing certificates are managed solely through encrypted server-side proxy boundaries and are never exposed in browser storage or client networks.
+          CartX strictly follows zero-trust security principles. Private gateway
+          credentials, API secret keys, and webhook signing certificates are
+          managed solely through encrypted server-side proxy boundaries and are
+          never exposed in browser storage or client networks.
         </p>
       </div>
 

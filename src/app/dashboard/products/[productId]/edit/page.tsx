@@ -53,7 +53,14 @@ function EditProductContent() {
           allowBackorders: values.allowBackorders,
           status: values.status,
           images: values.imageUrl
-            ? [{ id: "img-1", url: values.imageUrl, alt: values.title, isMain: true }]
+            ? [
+                {
+                  id: "img-1",
+                  url: values.imageUrl,
+                  alt: values.title,
+                  isMain: true,
+                },
+              ]
             : [],
           variants: values.variants?.map((v, idx) => ({
             id: v.id || `var-${idx + 1}`,
@@ -72,14 +79,19 @@ function EditProductContent() {
         onSuccess: () => {
           router.push("/dashboard/products");
         },
-      }
+      },
     );
   };
 
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Breadcrumbs items={[{ label: "Products", href: "/dashboard/products" }, { label: "Loading..." }]} />
+        <Breadcrumbs
+          items={[
+            { label: "Products", href: "/dashboard/products" },
+            { label: "Loading..." },
+          ]}
+        />
         <LoadingSkeleton rows={8} className="h-96" />
       </div>
     );
@@ -88,7 +100,12 @@ function EditProductContent() {
   if (error || !product) {
     return (
       <div className="space-y-6">
-        <Breadcrumbs items={[{ label: "Products", href: "/dashboard/products" }, { label: "Not Found" }]} />
+        <Breadcrumbs
+          items={[
+            { label: "Products", href: "/dashboard/products" },
+            { label: "Not Found" },
+          ]}
+        />
         <ErrorState
           title="Product Not Found"
           message={`The requested product with ID "${productId}" could not be located in your store's catalog.`}

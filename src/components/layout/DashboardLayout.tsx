@@ -1,47 +1,61 @@
 "use client";
 
 import React, { useState, Suspense } from "react";
+import { usePathname } from "next/navigation";
+import { motion, useReducedMotion } from "motion/react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
-import { cn } from "@/lib/utils";
+import { PageTransition } from "@/components/shared/PageTransition";
+import { DASHBOARD_EASE } from "@/lib/animations";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
 /**
- * Reusable Dashboard Shell Layout for CartX Merchant Dashboard.
- * Integrates persistent desktop sidebar with collapsible support (21st.dev inspired),
- * mobile drawer, sticky topbar, and accessible main container.
+ * Enhanced Dashboard Shell Layout for CartX Merchant Dashboard.
+ * Integrates persistent desktop sidebar with smooth Motion collapsible width,
+ * mobile drawer, sticky topbar, and animated page transitions.
  */
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const pathname = usePathname();
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
-      {/* Desktop Persistent Sidebar with Collapsible Width */}
-      <div
-        className={cn(
-          "hidden md:flex flex-col shrink-0 transition-all duration-300",
-          isCollapsed ? "md:w-16" : "md:w-64"
-        )}
+      {/* Desktop Persistent Sidebar with Animated Collapsible Width */}
+      <motion.div
+        animate={{ width: isCollapsed ? 64 : 256 }}
+        transition={{
+          duration: shouldReduceMotion ? 0.05 : 0.26,
+          ease: DASHBOARD_EASE,
+        }}
+        className="hidden md:flex flex-col shrink-0 overflow-hidden border-r border-border bg-card"
       >
-        <Suspense fallback={<div className="w-64 h-full bg-card border-r border-border" />}>
+        <Suspense fallback={<div className="w-64 h-full bg-card" />}>
           <Sidebar
-            className="h-full"
+            className="h-full w-full border-r-0"
             isCollapsed={isCollapsed}
             onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
           />
         </Suspense>
-      </div>
+      </motion.div>
 
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
         <Topbar />
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 focus:outline-none" tabIndex={-1}>
-          <div className="mx-auto max-w-7xl">{children}</div>
+        <main
+          className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 focus:outline-none"
+          tabIndex={-1}
+        >
+          <div className="mx-auto max-w-7xl">
+            <PageTransition key={pathname}>{children}</PageTransition>
+          </div>
         </main>
       </div>
     </div>
   );
 }
+
+export default DashboardLayout;

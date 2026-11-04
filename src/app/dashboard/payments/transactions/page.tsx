@@ -56,4 +56,3 @@ export default function PaymentTransactionsPage() {
     </PermissionGuard>
   );
 }
-

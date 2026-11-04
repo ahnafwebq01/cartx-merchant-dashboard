@@ -30,7 +30,10 @@ function CourierIntegrationsContent() {
           <span>Courier Adapter Architecture & Security</span>
         </div>
         <p className="text-[11px] text-blue-800/80 dark:text-blue-300/80 leading-relaxed">
-          Courier API keys and merchant tokens are safeguarded in server-side vaults. Consignment creation requests are dispatched via typed adapters ensuring consistent tracking IDs and error normalization across providers.
+          Courier API keys and merchant tokens are safeguarded in server-side
+          vaults. Consignment creation requests are dispatched via typed
+          adapters ensuring consistent tracking IDs and error normalization
+          across providers.
         </p>
       </div>
 
