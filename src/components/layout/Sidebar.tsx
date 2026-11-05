@@ -123,7 +123,7 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        "flex flex-col h-full bg-card select-none overflow-hidden",
+        "flex flex-col h-full bg-transparent select-none overflow-hidden",
         className,
       )}
       aria-label="Merchant Dashboard Navigation"
@@ -131,7 +131,7 @@ export function Sidebar({
       {/* Brand / Store Header */}
       <div
         className={cn(
-          "flex items-center h-16 border-b border-border shrink-0 transition-colors",
+          "flex items-center h-16 border-b border-border/60 bg-card/30 backdrop-blur-xs shrink-0 transition-colors",
           isCollapsed ? "justify-center px-2" : "gap-3 px-6",
         )}
       >
@@ -562,7 +562,7 @@ export function Sidebar({
       </nav>
 
       {/* Footer Area: System Status & Collapse Toggle */}
-      <div className="p-2 border-t border-border shrink-0 flex flex-col gap-1.5 bg-card">
+      <div className="p-2 border-t border-border/60 shrink-0 flex flex-col gap-1.5 bg-card/60 backdrop-blur-xs">
         <AnimatePresence initial={false}>
           {!isCollapsed && (
             <motion.div

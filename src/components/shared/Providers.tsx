@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/lib/auth/context";
+import { AppearanceProvider } from "@/components/theme/AppearanceContext";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -26,12 +28,21 @@ export function Providers({ children }: ProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider delayDuration={200}>
-          {children}
-          <Toaster position="top-right" richColors />
-        </TooltipProvider>
-      </AuthProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <AppearanceProvider>
+          <AuthProvider>
+            <TooltipProvider delayDuration={200}>
+              {children}
+              <Toaster position="top-right" richColors />
+            </TooltipProvider>
+          </AuthProvider>
+        </AppearanceProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

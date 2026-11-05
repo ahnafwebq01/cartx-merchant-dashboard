@@ -1,6 +1,6 @@
-import { StoreSettingsView } from "@/features/store-settings/components/StoreSettingsView";
+import { SettingsCenter } from "@/components/settings/SettingsCenter";
 
 export default function SettingsPage() {
-  return <StoreSettingsView />;
+  return <SettingsCenter />;
 }
 

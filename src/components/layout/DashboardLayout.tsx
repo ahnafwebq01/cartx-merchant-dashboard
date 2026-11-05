@@ -23,7 +23,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
+    <div className="flex h-screen w-full overflow-hidden bg-background relative selection:bg-primary/20">
+      {/* Background Ambient Glow */}
+      <div className="fixed inset-0 pointer-events-none -z-10 ambient-glow-bg opacity-60 dark:opacity-80" />
+
       {/* Desktop Persistent Sidebar with Animated Collapsible Width */}
       <motion.div
         animate={{ width: isCollapsed ? 64 : 256 }}
@@ -31,9 +34,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           duration: shouldReduceMotion ? 0.05 : 0.26,
           ease: DASHBOARD_EASE,
         }}
-        className="hidden md:flex flex-col shrink-0 overflow-hidden border-r border-border bg-card"
+        className="hidden md:flex flex-col shrink-0 overflow-hidden border-r border-border/60 bg-card/85 dark:bg-card/75 backdrop-blur-xl shadow-xs"
       >
-        <Suspense fallback={<div className="w-64 h-full bg-card" />}>
+        <Suspense fallback={<div className="w-64 h-full bg-card/80 backdrop-blur-md" />}>
           <Sidebar
             className="h-full w-full border-r-0"
             isCollapsed={isCollapsed}

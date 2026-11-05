@@ -129,9 +129,9 @@ export default function DashboardPage() {
               variants={cardVariants}
               whileHover={shouldReduceMotion ? undefined : microInteractions.subtleLift}
             >
-              <Card className="rounded-xl border-border shadow-xs hover:border-primary/40 transition-colors h-full">
+              <Card className="rounded-xl border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-md hover:border-primary/50 transition-all h-full">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                  <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Settled Revenue
                   </CardTitle>
                   <div className="h-8 w-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
@@ -176,9 +176,9 @@ export default function DashboardPage() {
               variants={cardVariants}
               whileHover={shouldReduceMotion ? undefined : microInteractions.subtleLift}
             >
-              <Card className="rounded-xl border-border shadow-xs hover:border-primary/40 transition-colors h-full">
+              <Card className="rounded-xl border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-md hover:border-primary/50 transition-all h-full">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                  <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Total Orders
                   </CardTitle>
                   <div className="h-8 w-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
@@ -223,9 +223,9 @@ export default function DashboardPage() {
               variants={cardVariants}
               whileHover={shouldReduceMotion ? undefined : microInteractions.subtleLift}
             >
-              <Card className="rounded-xl border-border shadow-xs hover:border-primary/40 transition-colors h-full">
+              <Card className="rounded-xl border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-md hover:border-primary/50 transition-all h-full">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                  <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Active Catalog
                   </CardTitle>
                   <div className="h-8 w-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
@@ -264,9 +264,9 @@ export default function DashboardPage() {
               variants={cardVariants}
               whileHover={shouldReduceMotion ? undefined : microInteractions.subtleLift}
             >
-              <Card className="rounded-xl border-border shadow-xs hover:border-primary/40 transition-colors h-full">
+              <Card className="rounded-xl border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-md hover:border-primary/50 transition-all h-full">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                  <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Customer Retention
                   </CardTitle>
                   <div className="h-8 w-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
@@ -297,7 +297,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Daily Settlement Bar Chart */}
             <motion.div variants={cardVariants} className="lg:col-span-2">
-              <Card className="rounded-xl border-border shadow-xs h-full">
+              <Card className="rounded-xl border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-md transition-all h-full">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
@@ -361,7 +361,7 @@ export default function DashboardPage() {
                                     delay: idx * 0.02,
                                     ease: "easeOut",
                                   }}
-                                  className="w-full rounded-t-sm bg-primary/80 group-hover:bg-primary transition-colors cursor-pointer"
+                                  className="w-full rounded-t-sm bg-gradient-to-t from-primary/75 to-primary group-hover:from-primary group-hover:to-sky-400 transition-colors cursor-pointer shadow-xs"
                                 />
                               </div>
                             );
@@ -428,7 +428,7 @@ export default function DashboardPage() {
 
             {/* Category Performance Breakdown */}
             <motion.div variants={cardVariants}>
-              <Card className="rounded-xl border-border shadow-xs h-full">
+              <Card className="rounded-xl border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-md transition-all h-full">
                 <CardHeader>
                   <CardTitle className="text-base font-semibold">
                     Category Breakdown
@@ -458,7 +458,7 @@ export default function DashboardPage() {
                             ৳{cat.revenue.toLocaleString("en-BD")} ({percentage}%)
                           </span>
                         </div>
-                        <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-muted/80 rounded-full overflow-hidden">
                           <motion.div
                             initial={
                               shouldReduceMotion ? { width: `${percentage}%` } : { width: 0 }
@@ -469,7 +469,7 @@ export default function DashboardPage() {
                               delay: idx * 0.05,
                               ease: "easeOut",
                             }}
-                            className="h-full bg-primary rounded-full"
+                            className="h-full bg-gradient-to-r from-primary to-sky-400 rounded-full"
                           />
                         </div>
                         <span className="text-[10px] text-muted-foreground">
@@ -479,7 +479,7 @@ export default function DashboardPage() {
                     );
                   })}
 
-                  <Button asChild variant="outline" size="sm" className="w-full mt-2">
+                  <Button asChild variant="outline" size="sm" className="w-full mt-2 cursor-pointer">
                     <Link href="/dashboard/products/categories">
                       <span>Manage Categories</span>
                       <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
@@ -492,7 +492,7 @@ export default function DashboardPage() {
 
           {/* Recent Orders & Activity Table */}
           <motion.div variants={cardVariants}>
-            <Card className="rounded-xl border-border shadow-xs overflow-hidden">
+            <Card className="rounded-xl border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-md transition-all overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
                   <CardTitle className="text-base font-semibold">
@@ -502,7 +502,7 @@ export default function DashboardPage() {
                     Latest checkouts processed through the CartX checkout engine
                   </CardDescription>
                 </div>
-                <Button asChild variant="ghost" size="sm" className="text-xs gap-1">
+                <Button asChild variant="ghost" size="sm" className="text-xs gap-1 cursor-pointer">
                   <Link href="/dashboard/orders">
                     <span>View All Orders</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -531,7 +531,7 @@ export default function DashboardPage() {
                     </TableHeader>
                     <TableBody>
                       {recentOrders.map((order) => (
-                        <TableRow key={order.id} className="hover:bg-muted/30 transition-colors">
+                        <TableRow key={order.id} className="hover:bg-muted/40 transition-colors">
                           <TableCell className="text-xs font-semibold font-mono">
                             <Link
                               href="/dashboard/orders"
@@ -592,7 +592,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               <Link
                 href="/dashboard/products/new"
-                className="flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-card hover:bg-muted/60 transition-colors text-center group"
+                className="flex flex-col items-center justify-center p-3.5 rounded-xl border border-border/70 bg-card/75 dark:bg-card/65 backdrop-blur-md hover:bg-card/95 hover:border-primary/50 hover:shadow-sm hover:-translate-y-0.5 transition-all text-center group cursor-pointer"
               >
                 <Plus className="h-5 w-5 text-primary group-hover:scale-110 transition-transform mb-1.5" />
                 <span className="text-xs font-medium text-foreground">Add SKU</span>
@@ -600,7 +600,7 @@ export default function DashboardPage() {
               </Link>
               <Link
                 href="/dashboard/orders"
-                className="flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-card hover:bg-muted/60 transition-colors text-center group"
+                className="flex flex-col items-center justify-center p-3.5 rounded-xl border border-border/70 bg-card/75 dark:bg-card/65 backdrop-blur-md hover:bg-card/95 hover:border-primary/50 hover:shadow-sm hover:-translate-y-0.5 transition-all text-center group cursor-pointer"
               >
                 <ShoppingCart className="h-5 w-5 text-primary group-hover:scale-110 transition-transform mb-1.5" />
                 <span className="text-xs font-medium text-foreground">Orders</span>
@@ -608,7 +608,7 @@ export default function DashboardPage() {
               </Link>
               <Link
                 href="/dashboard/inventory"
-                className="flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-card hover:bg-muted/60 transition-colors text-center group"
+                className="flex flex-col items-center justify-center p-3.5 rounded-xl border border-border/70 bg-card/75 dark:bg-card/65 backdrop-blur-md hover:bg-card/95 hover:border-primary/50 hover:shadow-sm hover:-translate-y-0.5 transition-all text-center group cursor-pointer"
               >
                 <Boxes className="h-5 w-5 text-primary group-hover:scale-110 transition-transform mb-1.5" />
                 <span className="text-xs font-medium text-foreground">Inventory</span>
@@ -616,7 +616,7 @@ export default function DashboardPage() {
               </Link>
               <Link
                 href="/dashboard/shipping"
-                className="flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-card hover:bg-muted/60 transition-colors text-center group"
+                className="flex flex-col items-center justify-center p-3.5 rounded-xl border border-border/70 bg-card/75 dark:bg-card/65 backdrop-blur-md hover:bg-card/95 hover:border-primary/50 hover:shadow-sm hover:-translate-y-0.5 transition-all text-center group cursor-pointer"
               >
                 <Truck className="h-5 w-5 text-primary group-hover:scale-110 transition-transform mb-1.5" />
                 <span className="text-xs font-medium text-foreground">Shipping</span>
@@ -624,7 +624,7 @@ export default function DashboardPage() {
               </Link>
               <Link
                 href="/dashboard/marketing/coupons"
-                className="flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-card hover:bg-muted/60 transition-colors text-center group"
+                className="flex flex-col items-center justify-center p-3.5 rounded-xl border border-border/70 bg-card/75 dark:bg-card/65 backdrop-blur-md hover:bg-card/95 hover:border-primary/50 hover:shadow-sm hover:-translate-y-0.5 transition-all text-center group cursor-pointer"
               >
                 <Tag className="h-5 w-5 text-primary group-hover:scale-110 transition-transform mb-1.5" />
                 <span className="text-xs font-medium text-foreground">Coupons</span>
@@ -632,7 +632,7 @@ export default function DashboardPage() {
               </Link>
               <Link
                 href="/dashboard/store/themes"
-                className="flex flex-col items-center justify-center p-3 rounded-xl border border-border bg-card hover:bg-muted/60 transition-colors text-center group"
+                className="flex flex-col items-center justify-center p-3.5 rounded-xl border border-border/70 bg-card/75 dark:bg-card/65 backdrop-blur-md hover:bg-card/95 hover:border-primary/50 hover:shadow-sm hover:-translate-y-0.5 transition-all text-center group cursor-pointer"
               >
                 <Store className="h-5 w-5 text-primary group-hover:scale-110 transition-transform mb-1.5" />
                 <span className="text-xs font-medium text-foreground">Storefront</span>
@@ -643,15 +643,15 @@ export default function DashboardPage() {
 
           {/* Architecture Foundation Status Grid */}
           <div className="grid gap-4 md:grid-cols-3">
-            <Card className="border-border shadow-xs">
+            <Card className="border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-sm transition-all">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Architecture Phase</CardTitle>
+                <CardTitle className="text-sm font-semibold">Architecture Phase</CardTitle>
                 <Layers className="h-4 w-4 text-primary" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-foreground">Phases 1–9 Complete</div>
+                <div className="text-2xl font-bold text-foreground">Phase 10 Modern UI</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  All 16 dashboard modules, mobile app, and automation workflows operational
+                  Glassmorphism design system, dark/light theme tokens, and full SaaS experience
                 </p>
                 <div className="mt-3">
                   <Badge variant="success" className="text-[10px]">
@@ -661,9 +661,9 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-border shadow-xs">
+            <Card className="border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-sm transition-all">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Tenant Context</CardTitle>
+                <CardTitle className="text-sm font-semibold">Tenant Context</CardTitle>
                 <Store className="h-4 w-4 text-primary" />
               </CardHeader>
               <CardContent>
@@ -679,9 +679,9 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-border shadow-xs">
+            <Card className="border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-sm transition-all">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Role & Permissions</CardTitle>
+                <CardTitle className="text-sm font-semibold">Role & Permissions</CardTitle>
                 <ShieldCheck className="h-4 w-4 text-primary" />
               </CardHeader>
               <CardContent>

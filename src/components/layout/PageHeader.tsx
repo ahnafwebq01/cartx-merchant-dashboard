@@ -18,7 +18,7 @@ export function PageHeader({
   className,
 }: PageHeaderProps) {
   return (
-    <div className={cn("flex flex-col gap-4 pb-6 border-b border-border mb-6", className)}>
+    <div className={cn("flex flex-col gap-3 pb-5 border-b border-border/60 mb-6", className)}>
       {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

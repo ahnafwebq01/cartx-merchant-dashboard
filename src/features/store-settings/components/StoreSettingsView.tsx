@@ -37,7 +37,11 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-export function StoreSettingsView() {
+export interface StoreSettingsViewProps {
+  embedded?: boolean;
+}
+
+export function StoreSettingsView({ embedded = false }: StoreSettingsViewProps = {}) {
   const { data: store, isLoading, isError, error, refetch } = useCurrentStore();
   const updateMutation = useUpdateStore();
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -114,11 +118,13 @@ export function StoreSettingsView() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <PageHeader
-          title="Store Settings"
-          description="Manage store identity, location, contacts, and locale preferences."
-          breadcrumbs={[{ label: "Store Settings" }]}
-        />
+        {!embedded && (
+          <PageHeader
+            title="Store Settings"
+            description="Manage store identity, location, contacts, and locale preferences."
+            breadcrumbs={[{ label: "Store Settings" }]}
+          />
+        )}
         <LoadingSkeleton rows={6} />
       </div>
     );
@@ -127,11 +133,13 @@ export function StoreSettingsView() {
   if (isError) {
     return (
       <div className="space-y-6">
-        <PageHeader
-          title="Store Settings"
-          description="Manage store identity, location, contacts, and locale preferences."
-          breadcrumbs={[{ label: "Store Settings" }]}
-        />
+        {!embedded && (
+          <PageHeader
+            title="Store Settings"
+            description="Manage store identity, location, contacts, and locale preferences."
+            breadcrumbs={[{ label: "Store Settings" }]}
+          />
+        )}
         <ErrorState
           title="Failed to load store settings"
           message={
@@ -148,28 +156,30 @@ export function StoreSettingsView() {
   return (
     <PermissionGuard permission="settings.manage" showAccessDenied>
       <div className="space-y-6">
-        <PageHeader
-          title="Store Settings"
-          description="Manage store identity, location, contacts, and locale preferences."
-          breadcrumbs={[{ label: "Store Settings" }]}
-          actions={
-            <div className="flex items-center gap-2">
-              {store?.slug && (
-                <Button variant="outline" size="sm" asChild>
-                  <a
-                    href={`https://${store.slug}.cartx.com.bd`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="gap-1.5"
-                  >
-                    <ExternalLink className="h-3.5 w-3.5" />
-                    View Storefront
-                  </a>
-                </Button>
-              )}
-            </div>
-          }
-        />
+        {!embedded && (
+          <PageHeader
+            title="Store Settings"
+            description="Manage store identity, location, contacts, and locale preferences."
+            breadcrumbs={[{ label: "Store Settings" }]}
+            actions={
+              <div className="flex items-center gap-2">
+                {store?.slug && (
+                  <Button variant="outline" size="sm" asChild>
+                    <a
+                      href={`https://${store.slug}.cartx.com.bd`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="gap-1.5"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      View Storefront
+                    </a>
+                  </Button>
+                )}
+              </div>
+            }
+          />
+        )}
 
         {/* Feedback Alerts */}
         {saveSuccess && (
