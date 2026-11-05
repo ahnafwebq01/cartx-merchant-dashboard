@@ -94,10 +94,11 @@ export function RegisterForm() {
 
   const passwordVal = watch("password", "");
   const strength = useMemo(() => computePasswordStrength(passwordVal), [passwordVal]);
+  const isNavigatingToOnboardingRef = React.useRef(false);
 
   // If already authenticated, redirect to dashboard
   useEffect(() => {
-    if (isAuthenticated && user) {
+    if (isAuthenticated && user && !isNavigatingToOnboardingRef.current) {
       router.push("/dashboard");
     }
   }, [isAuthenticated, user, router]);
@@ -106,6 +107,7 @@ export function RegisterForm() {
     setErrorMessage(null);
     setIsSubmitting(true);
     try {
+      isNavigatingToOnboardingRef.current = true;
       const result = await registerUser({
         name: values.name,
         email: values.email,
@@ -118,11 +120,13 @@ export function RegisterForm() {
         toast.success("Demo Store Registered!", {
           description: `Welcome ${values.name}! Your demo account for "${values.storeName}" is ready.`,
         });
-        router.push("/dashboard");
+        router.push("/onboarding");
       } else {
+        isNavigatingToOnboardingRef.current = false;
         setErrorMessage(result.error || "Failed to register demo account.");
       }
     } catch {
+      isNavigatingToOnboardingRef.current = false;
       setErrorMessage("An unexpected registration error occurred.");
     } finally {
       setIsSubmitting(false);

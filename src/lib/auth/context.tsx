@@ -88,7 +88,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(() => {
-    if (typeof window === "undefined") return DEMO_USER;
+    if (typeof window === "undefined") return null;
     try {
       const stored = window.localStorage.getItem(AUTH_STORAGE_KEY);
       if (stored) {
@@ -98,11 +98,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // ignore
     }
-    return DEMO_USER;
+    return null;
   });
 
   const [currentStore, setCurrentStore] = useState<StoreSummary | null>(() => {
-    if (typeof window === "undefined") return DEMO_STORE;
+    if (typeof window === "undefined") return null;
     try {
       const stored = window.localStorage.getItem(AUTH_STORAGE_KEY);
       if (stored) {
@@ -112,11 +112,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // ignore
     }
-    return DEMO_STORE;
+    return null;
   });
 
   const [currentRole, setCurrentRole] = useState<MerchantRole | null>(() => {
-    if (typeof window === "undefined") return "owner";
+    if (typeof window === "undefined") return null;
     try {
       const stored = window.localStorage.getItem(AUTH_STORAGE_KEY);
       if (stored) {
@@ -126,11 +126,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // ignore
     }
-    return "owner";
+    return null;
   });
 
   const [memberships, setMemberships] = useState<StoreMembership[]>(() => {
-    if (typeof window === "undefined") return DEMO_MEMBERSHIPS;
+    if (typeof window === "undefined") return [];
     try {
       const stored = window.localStorage.getItem(AUTH_STORAGE_KEY);
       if (stored) {
@@ -140,7 +140,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // ignore
     }
-    return DEMO_MEMBERSHIPS;
+    return [];
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -375,6 +375,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (typeof window !== "undefined") {
           try {
             window.localStorage.setItem(DEMO_USERS_REGISTRY_KEY, JSON.stringify(existingRegistry));
+            // Ensure newly registered user starts with a clean onboarding draft
+            window.localStorage.removeItem("cartx_demo_onboarding_draft_v1");
           } catch {
             // ignore storage quota
           }

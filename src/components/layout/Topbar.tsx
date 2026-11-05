@@ -2,6 +2,7 @@
 
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Menu,
   Bell,
@@ -53,10 +54,16 @@ import { toast } from "sonner";
 import { RotateCcw } from "lucide-react";
 
 export function Topbar() {
+  const router = useRouter();
   const { user, currentStore, currentRole, logout, loginAsDemo } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const queryClient = useQueryClient();
+
+  const handleSignOut = async () => {
+    await logout();
+    router.push("/");
+  };
 
   const handleQuickReset = async () => {
     resetAllDemoData();
@@ -218,7 +225,7 @@ export function Topbar() {
                   <span>Switch Account / Sign In</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => logout()} className="text-destructive cursor-pointer">
+              <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Sign Out</span>
               </DropdownMenuItem>

@@ -26,7 +26,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
       {/* Top Header / Bar */}
       <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
         <Link
-          href="/dashboard"
+          href="/"
           className="flex items-center gap-2.5 group cursor-pointer"
         >
           <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-primary to-sky-400 text-white flex items-center justify-center shadow-md shadow-primary/25 transition-transform group-hover:scale-105">
@@ -57,11 +57,11 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
           <ThemeSwitcher />
 
           <Link
-            href="/dashboard"
+            href="/"
             className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors px-2.5 py-1.5 rounded-md hover:bg-muted/50"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to Dashboard</span>
+            <span>Back to Home</span>
           </Link>
         </div>
       </header>
@@ -92,6 +92,10 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
         </div>
         <div className="flex items-center gap-3">
           <span>Demo Authentication Environment</span>
+          <span>•</span>
+          <Link href="/" className="hover:underline">
+            Home
+          </Link>
           <span>•</span>
           <Link href="/dashboard" className="hover:underline">
             Dashboard
