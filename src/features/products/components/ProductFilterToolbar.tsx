@@ -2,12 +2,30 @@
 
 import React from "react";
 import Link from "next/link";
-import { Search, Plus, RotateCcw, Download, Trash2, Archive, X } from "lucide-react";
+import {
+  Search,
+  Plus,
+  RotateCcw,
+  Download,
+  Trash2,
+  Archive,
+  X,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import type { ProductCategory, ProductFilterParams, ProductSortBy } from "../types";
+import type {
+  ProductCategory,
+  ProductFilterParams,
+  ProductSortBy,
+} from "../types";
 
 interface ProductFilterToolbarProps {
   filters: ProductFilterParams;
@@ -40,7 +58,7 @@ export function ProductFilterToolbar({
       {/* Top Status Tabs & Primary Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Status Filter Buttons */}
-        <div className="flex items-center gap-1.5 p-1 bg-muted/60 rounded-lg border border-border w-fit overflow-x-auto">
+        <div className="flex items-center gap-1.5 p-1 bg-muted/60 rounded-lg border border-border w-fit max-w-full overflow-x-auto">
           {(
             [
               { label: "All Products", value: "all" },
@@ -100,14 +118,16 @@ export function ProductFilterToolbar({
 
       {/* Bulk Actions Banner (Shown when items are selected) */}
       {selectedCount > 0 ? (
-        <div className="flex items-center justify-between p-2.5 px-3 bg-primary/10 border border-primary/20 rounded-lg text-xs animate-in fade-in">
+        <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 px-3 bg-primary/10 border border-primary/20 rounded-lg text-xs animate-in fade-in">
           <div className="flex items-center gap-2">
             <Badge variant="default" className="text-[10px]">
               {selectedCount} selected
             </Badge>
-            <span className="text-muted-foreground">Select bulk action:</span>
+            <span className="text-muted-foreground hidden xs:inline">
+              Select bulk action:
+            </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <Button
               type="button"
               variant="outline"
@@ -147,7 +167,9 @@ export function ProductFilterToolbar({
               type="text"
               placeholder="Search by title, SKU, brand..."
               value={filters.search || ""}
-              onChange={(e) => onFilterChange({ search: e.target.value, page: 1 })}
+              onChange={(e) =>
+                onFilterChange({ search: e.target.value, page: 1 })
+              }
               className="pl-8 text-xs h-9 bg-card"
             />
           </div>
@@ -187,7 +209,9 @@ export function ProductFilterToolbar({
               <SelectItem value="all">All Stock Levels</SelectItem>
               <SelectItem value="in_stock">In Stock (&gt; Low)</SelectItem>
               <SelectItem value="low_stock">Low Stock (≤ Alert)</SelectItem>
-              <SelectItem value="out_of_stock">Out of Stock (0 units)</SelectItem>
+              <SelectItem value="out_of_stock">
+                Out of Stock (0 units)
+              </SelectItem>
             </SelectContent>
           </Select>
 

@@ -75,7 +75,8 @@ export function ProductListTable({
   const [deleteProductId, setDeleteProductId] = useState<string | null>(null);
 
   const isAllSelected =
-    data.items.length > 0 && data.items.every((p) => selectedIds.includes(p.id));
+    data.items.length > 0 &&
+    data.items.every((p) => selectedIds.includes(p.id));
 
   const productToDelete = data.items.find((p) => p.id === deleteProductId);
 
@@ -100,7 +101,10 @@ export function ProductListTable({
                 <TableHead className="w-28 text-center">Stock</TableHead>
                 <TableHead className="w-24 text-center">Status</TableHead>
                 <TableHead className="w-28 text-right">Updated</TableHead>
-                <TableHead className="w-12 text-center" aria-label="Actions"></TableHead>
+                <TableHead
+                  className="w-12 text-center"
+                  aria-label="Actions"
+                ></TableHead>
               </TableRow>
             </TableHeader>
 
@@ -117,10 +121,15 @@ export function ProductListTable({
                           No products found
                         </h4>
                         <p className="text-xs text-muted-foreground max-w-sm">
-                          No items match your active search or filters. Try adjusting your query or reset filters.
+                          No items match your active search or filters. Try
+                          adjusting your query or reset filters.
                         </p>
                       </div>
-                      <Button variant="outline" size="sm" onClick={onClearFilters}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={onClearFilters}
+                      >
                         Reset All Filters
                       </Button>
                     </div>
@@ -194,20 +203,27 @@ export function ProductListTable({
                       <TableCell className="text-right">
                         <div className="flex flex-col items-end">
                           <span className="font-semibold text-xs text-foreground">
-                            ৳{(product.salePrice ?? product.price).toLocaleString("en-BD")}
+                            ৳
+                            {(
+                              product.salePrice ?? product.price
+                            ).toLocaleString("en-BD")}
                           </span>
-                          {product.salePrice && product.salePrice < product.price && (
-                            <span className="text-[10px] text-muted-foreground line-through">
-                              ৳{product.price.toLocaleString("en-BD")}
-                            </span>
-                          )}
+                          {product.salePrice &&
+                            product.salePrice < product.price && (
+                              <span className="text-[10px] text-muted-foreground line-through">
+                                ৳{product.price.toLocaleString("en-BD")}
+                              </span>
+                            )}
                         </div>
                       </TableCell>
 
                       {/* Stock Level */}
                       <TableCell className="text-center">
                         {product.stock === 0 ? (
-                          <Badge variant="destructive" className="text-[10px] px-1.5 py-0">
+                          <Badge
+                            variant="destructive"
+                            className="text-[10px] px-1.5 py-0"
+                          >
                             Out of stock
                           </Badge>
                         ) : product.stock <= product.lowStockThreshold ? (
@@ -231,8 +247,8 @@ export function ProductListTable({
                             product.status === "active"
                               ? "default"
                               : product.status === "draft"
-                              ? "secondary"
-                              : "outline"
+                                ? "secondary"
+                                : "outline"
                           }
                           className="capitalize text-[10px] px-2 py-0"
                         >
@@ -242,10 +258,13 @@ export function ProductListTable({
 
                       {/* Updated Date */}
                       <TableCell className="text-right text-[11px] text-muted-foreground">
-                        {new Date(product.updatedAt).toLocaleDateString("en-BD", {
-                          month: "short",
-                          day: "numeric",
-                        })}
+                        {new Date(product.updatedAt).toLocaleDateString(
+                          "en-BD",
+                          {
+                            month: "short",
+                            day: "numeric",
+                          },
+                        )}
                       </TableCell>
 
                       {/* Row Actions Menu */}
@@ -261,24 +280,38 @@ export function ProductListTable({
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-40 text-xs">
+                          <DropdownMenuContent
+                            align="end"
+                            className="w-40 text-xs"
+                          >
                             <DropdownMenuLabel className="text-[10px]">
                               Actions
                             </DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => setViewProduct(product)}>
+                            <DropdownMenuItem
+                              onClick={() => setViewProduct(product)}
+                            >
                               <Eye className="h-3.5 w-3.5 mr-2" /> View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                              <Link href={`/dashboard/products/${product.id}/edit`}>
-                                <Edit className="h-3.5 w-3.5 mr-2" /> Edit Product
+                              <Link
+                                href={`/dashboard/products/${product.id}/edit`}
+                              >
+                                <Edit className="h-3.5 w-3.5 mr-2" /> Edit
+                                Product
                               </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => onDuplicate(product.id)}>
+                            <DropdownMenuItem
+                              onClick={() => onDuplicate(product.id)}
+                            >
                               <Copy className="h-3.5 w-3.5 mr-2" /> Duplicate
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => onArchive(product.id)}>
+                            <DropdownMenuItem
+                              onClick={() => onArchive(product.id)}
+                            >
                               <Archive className="h-3.5 w-3.5 mr-2" />
-                              {product.status === "archived" ? "Unarchive" : "Archive"}
+                              {product.status === "archived"
+                                ? "Unarchive"
+                                : "Archive"}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
@@ -310,10 +343,14 @@ export function ProductListTable({
               <span className="font-semibold text-foreground">
                 {Math.min(data.page * data.limit, data.total)}
               </span>{" "}
-              of <span className="font-semibold text-foreground">{data.total}</span> products
+              of{" "}
+              <span className="font-semibold text-foreground">
+                {data.total}
+              </span>{" "}
+              products
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2">
               <span className="text-[11px]">Rows per page:</span>
               <select
                 aria-label="Rows per page"
@@ -327,7 +364,7 @@ export function ProductListTable({
                 <option value={50}>50</option>
               </select>
 
-              <div className="flex items-center gap-1 ml-2">
+              <div className="flex items-center gap-1 sm:ml-2">
                 <Button
                   variant="outline"
                   size="icon"
@@ -382,7 +419,8 @@ export function ProductListTable({
               (SKU: {productToDelete?.sku})? This action cannot be undone.
               <br />
               <span className="mt-2 block text-muted-foreground text-[11px]">
-                Tip: If this product has historical orders, consider archiving it instead so sales reports remain consistent.
+                Tip: If this product has historical orders, consider archiving
+                it instead so sales reports remain consistent.
               </span>
             </AlertDialogDescription>
           </AlertDialogHeader>

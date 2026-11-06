@@ -71,14 +71,17 @@ export function PaymentTransactionsTable({
     link.setAttribute("href", url);
     link.setAttribute(
       "download",
-      `cartx-transactions-${new Date().toISOString().slice(0, 10)}.csv`
+      `cartx-transactions-${new Date().toISOString().slice(0, 10)}.csv`,
     );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const statusTabs: { label: string; value: PaymentTransactionStatus | "all" }[] = [
+  const statusTabs: {
+    label: string;
+    value: PaymentTransactionStatus | "all";
+  }[] = [
     { label: "All Transactions", value: "all" },
     { label: "Successful", value: "successful" },
     { label: "Pending", value: "pending" },
@@ -91,8 +94,7 @@ export function PaymentTransactionsTable({
       {/* Status Filter Tabs */}
       <div className="flex flex-wrap items-center gap-1.5 border-b border-border pb-3">
         {statusTabs.map((tab) => {
-          const isSelected =
-            (filterParams.status || "all") === tab.value;
+          const isSelected = (filterParams.status || "all") === tab.value;
           return (
             <button
               key={tab.value}
@@ -117,7 +119,9 @@ export function PaymentTransactionsTable({
             <Input
               placeholder="Search by order #, TrxID, customer, phone..."
               value={filterParams.search || ""}
-              onChange={(e) => onFilterChange({ search: e.target.value, page: 1 })}
+              onChange={(e) =>
+                onFilterChange({ search: e.target.value, page: 1 })
+              }
               className="pl-8 text-xs h-9"
             />
           </div>
@@ -187,27 +191,39 @@ export function PaymentTransactionsTable({
         <Table>
           <TableHeader className="bg-muted/50">
             <TableRow className="hover:bg-transparent">
-              <TableHead className="text-xs font-semibold">Trx ID / Ref</TableHead>
+              <TableHead className="text-xs font-semibold">
+                Trx ID / Ref
+              </TableHead>
               <TableHead className="text-xs font-semibold">Order #</TableHead>
               <TableHead className="text-xs font-semibold">Customer</TableHead>
               <TableHead className="text-xs font-semibold">Gateway</TableHead>
-              <TableHead className="text-xs font-semibold">Amount (BDT)</TableHead>
+              <TableHead className="text-xs font-semibold">
+                Amount (BDT)
+              </TableHead>
               <TableHead className="text-xs font-semibold">Status</TableHead>
               <TableHead className="text-xs font-semibold">Date</TableHead>
-              <TableHead className="text-xs font-semibold text-right">Action</TableHead>
+              <TableHead className="text-xs font-semibold text-right">
+                Action
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8 text-xs text-muted-foreground">
+                <TableCell
+                  colSpan={8}
+                  className="text-center py-8 text-xs text-muted-foreground"
+                >
                   <RefreshCw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
                   Loading payment transactions...
                 </TableCell>
               </TableRow>
             ) : transactions.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8 text-xs text-muted-foreground">
+                <TableCell
+                  colSpan={8}
+                  className="text-center py-8 text-xs text-muted-foreground"
+                >
                   No payment transactions found matching the selected filters.
                 </TableCell>
               </TableRow>
@@ -215,12 +231,16 @@ export function PaymentTransactionsTable({
               transactions.map((tx) => (
                 <TableRow key={tx.id} className="hover:bg-muted/30">
                   <TableCell className="font-mono text-xs">
-                    <span className="font-semibold text-foreground block">{tx.id}</span>
+                    <span className="font-semibold text-foreground block">
+                      {tx.id}
+                    </span>
                     <span className="text-[10px] text-muted-foreground">
                       {tx.gatewayTransactionId ? (
                         `TrxID: ${tx.gatewayTransactionId}`
                       ) : (
-                        <span className="italic">Ref: {tx.gatewayReference || "N/A"}</span>
+                        <span className="italic">
+                          Ref: {tx.gatewayReference || "N/A"}
+                        </span>
                       )}
                     </span>
                   </TableCell>
@@ -234,13 +254,18 @@ export function PaymentTransactionsTable({
                     </Link>
                   </TableCell>
                   <TableCell className="text-xs">
-                    <div className="font-medium text-foreground">{tx.customerName}</div>
+                    <div className="font-medium text-foreground">
+                      {tx.customerName}
+                    </div>
                     <div className="text-[11px] text-muted-foreground font-mono">
                       {tx.customerPhone}
                     </div>
                   </TableCell>
                   <TableCell className="text-xs">
-                    <Badge variant="secondary" className="uppercase font-semibold tracking-wider text-[10px]">
+                    <Badge
+                      variant="secondary"
+                      className="uppercase font-semibold tracking-wider text-[10px]"
+                    >
                       {tx.provider}
                     </Badge>
                   </TableCell>
@@ -280,7 +305,7 @@ export function PaymentTransactionsTable({
         </Table>
 
         {/* Clamped Pagination */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-muted/20 text-xs text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-border bg-muted/20 text-xs text-muted-foreground text-center sm:text-left">
           <div>
             Showing {transactions.length > 0 ? (page - 1) * limit + 1 : 0} to{" "}
             {Math.min(page * limit, total)} of {total} transactions
@@ -323,4 +348,3 @@ export function PaymentTransactionsTable({
     </div>
   );
 }
-

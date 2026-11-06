@@ -23,7 +23,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background relative selection:bg-primary/20">
+    <div className="flex h-screen h-[100dvh] w-full overflow-hidden bg-background relative selection:bg-primary/20">
       {/* Background Ambient Glow */}
       <div className="fixed inset-0 pointer-events-none -z-10 ambient-glow-bg opacity-60 dark:opacity-80" />
 
@@ -49,10 +49,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
         <Topbar />
         <main
-          className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 focus:outline-none"
+          className="flex-1 overflow-y-auto p-3 sm:p-6 lg:p-8 focus:outline-none"
           tabIndex={-1}
         >
-          <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-7xl w-full min-w-0">
             <PageTransition key={pathname}>{children}</PageTransition>
           </div>
         </main>

@@ -41,7 +41,7 @@ export function DemoModeBadge() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 text-xs font-medium transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 text-[11px] sm:text-xs font-medium transition-colors cursor-pointer shrink-0"
           aria-label="Demo Mode Details"
         >
           <span className="relative flex h-2 w-2">

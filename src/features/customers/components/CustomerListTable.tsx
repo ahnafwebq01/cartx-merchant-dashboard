@@ -232,12 +232,12 @@ export function CustomerListTable({
 
       {/* Pagination Footer */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 border-t border-border text-xs text-muted-foreground bg-muted/20">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
           <span>
             Showing {customers.length > 0 ? (page - 1) * limit + 1 : 0} to{" "}
             {Math.min(page * limit, total)} of {total} customers
           </span>
-          <div className="flex items-center gap-1.5 ml-3">
+          <div className="flex items-center gap-1.5 sm:ml-3">
             <span>Rows:</span>
             <Select
               value={String(limit)}
@@ -283,4 +283,3 @@ export function CustomerListTable({
     </div>
   );
 }
-

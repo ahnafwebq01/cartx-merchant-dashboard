@@ -15,7 +15,13 @@ import {
   User,
 } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,9 +40,10 @@ export function AppPreview() {
 
   const primaryColor = config?.brandColors.primary || "#2563EB";
   const secondaryColor = config?.brandColors.secondary || "#1D4ED8";
-  const activeSections = config?.homepageLayout
-    .filter((s) => s.enabled)
-    .sort((a, b) => a.order - b.order) || [];
+  const activeSections =
+    config?.homepageLayout
+      .filter((s) => s.enabled)
+      .sort((a, b) => a.order - b.order) || [];
   const activeNavItems = config?.navigationItems.filter((n) => n.enabled) || [];
 
   return (
@@ -58,9 +65,7 @@ export function AppPreview() {
               </Link>
             </Button>
             <Button asChild size="sm" className="gap-2">
-              <Link href="/dashboard/mobile-app/branding">
-                Customize Skin
-              </Link>
+              <Link href="/dashboard/mobile-app/branding">Customize Skin</Link>
             </Button>
           </div>
         }
@@ -71,7 +76,9 @@ export function AppPreview() {
         <Info className="h-5 w-5 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" />
         <div>
           <span className="font-semibold">Simulated Device Emulator: </span>
-          This emulator renders dynamic widgets, brand themes, and catalog products. No mobile binary build or App Store / Play Store verification is involved.
+          This emulator renders dynamic widgets, brand themes, and catalog
+          products. No mobile binary build or App Store / Play Store
+          verification is involved.
         </div>
       </div>
 
@@ -80,19 +87,35 @@ export function AppPreview() {
         <div className="w-full lg:w-72 space-y-4">
           <Card className="rounded-xl shadow-xs">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold">Preview Configuration</CardTitle>
-              <CardDescription className="text-xs">Select operating system skin</CardDescription>
+              <CardTitle className="text-sm font-semibold">
+                Preview Configuration
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Select operating system skin
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <span className="text-xs font-medium text-muted-foreground">Operating Platform</span>
-                <Tabs value={device} onValueChange={(v) => setDevice(v as AppPreviewDevice)} className="w-full">
+                <span className="text-xs font-medium text-muted-foreground">
+                  Operating Platform
+                </span>
+                <Tabs
+                  value={device}
+                  onValueChange={(v) => setDevice(v as AppPreviewDevice)}
+                  className="w-full"
+                >
                   <TabsList className="grid grid-cols-2 w-full">
-                    <TabsTrigger value="android" className="flex items-center gap-2 text-xs">
+                    <TabsTrigger
+                      value="android"
+                      className="flex items-center gap-2 text-xs"
+                    >
                       <Smartphone className="h-3.5 w-3.5" />
                       Android OS
                     </TabsTrigger>
-                    <TabsTrigger value="ios" className="flex items-center gap-2 text-xs">
+                    <TabsTrigger
+                      value="ios"
+                      className="flex items-center gap-2 text-xs"
+                    >
                       <Apple className="h-3.5 w-3.5" />
                       Apple iOS
                     </TabsTrigger>
@@ -103,24 +126,44 @@ export function AppPreview() {
               <div className="p-3 rounded-lg bg-muted/40 space-y-2 text-xs">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">App Name:</span>
-                  <span className="font-medium text-foreground">{config?.displayName}</span>
+                  <span className="font-medium text-foreground">
+                    {config?.displayName}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Theme:</span>
-                  <span className="font-medium text-foreground capitalize">{config?.theme}</span>
+                  <span className="font-medium text-foreground capitalize">
+                    {config?.theme}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Active Widgets:</span>
-                  <span className="font-medium text-foreground">{activeSections.length} sections</span>
+                  <span className="font-medium text-foreground">
+                    {activeSections.length} sections
+                  </span>
                 </div>
               </div>
 
               <div className="flex flex-col gap-2 pt-2">
-                <Button asChild variant="outline" size="sm" className="w-full text-xs">
-                  <Link href="/dashboard/mobile-app/content">Reorder Sections</Link>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="w-full text-xs"
+                >
+                  <Link href="/dashboard/mobile-app/content">
+                    Reorder Sections
+                  </Link>
                 </Button>
-                <Button asChild variant="outline" size="sm" className="w-full text-xs">
-                  <Link href="/dashboard/mobile-app/settings">Push Settings</Link>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="w-full text-xs"
+                >
+                  <Link href="/dashboard/mobile-app/settings">
+                    Push Settings
+                  </Link>
                 </Button>
               </div>
             </CardContent>
@@ -128,10 +171,10 @@ export function AppPreview() {
         </div>
 
         {/* Device Mockup Shell */}
-        <div className="relative">
+        <div className="relative w-full flex justify-center overflow-hidden">
           {/* Outer Phone Bezel */}
           <div
-            className={`w-[360px] h-[720px] rounded-[48px] p-3 shadow-2xl border-[6px] transition-all relative overflow-hidden flex flex-col ${
+            className={`w-full max-w-[310px] xs:max-w-[360px] h-[640px] xs:h-[720px] rounded-[36px] xs:rounded-[48px] p-2.5 xs:p-3 shadow-2xl border-[5px] xs:border-[6px] transition-all relative overflow-hidden flex flex-col ${
               device === "ios"
                 ? "border-slate-800 bg-slate-950 dark:border-slate-700"
                 : "border-zinc-800 bg-zinc-950 dark:border-zinc-700"
@@ -162,13 +205,17 @@ export function AppPreview() {
               >
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center font-bold text-xs">
-                    {config?.displayName ? config.displayName.slice(0, 2).toUpperCase() : "GH"}
+                    {config?.displayName
+                      ? config.displayName.slice(0, 2).toUpperCase()
+                      : "GH"}
                   </div>
                   <div>
                     <div className="text-xs font-bold leading-tight truncate max-w-[170px]">
                       {config?.displayName || "Green Harvest BD"}
                     </div>
-                    <div className="text-[9px] text-white/80 leading-tight">ঢাকা ডেলিভারি ৳৬০</div>
+                    <div className="text-[9px] text-white/80 leading-tight">
+                      ঢাকা ডেলিভারি ৳৬০
+                    </div>
                   </div>
                 </div>
 
@@ -200,8 +247,12 @@ export function AppPreview() {
                         <Badge className="bg-amber-400 text-black hover:bg-amber-400 text-[9px] font-bold uppercase mb-1">
                           ঈদ ধামাকা অফার
                         </Badge>
-                        <h4 className="font-bold text-sm leading-snug">{sec.title}</h4>
-                        <p className="text-[10px] text-white/80 mt-1">সব পোশাকে ফ্ল্যাট ২৫% পর্যন্ত মূল্যছাড়!</p>
+                        <h4 className="font-bold text-sm leading-snug">
+                          {sec.title}
+                        </h4>
+                        <p className="text-[10px] text-white/80 mt-1">
+                          সব পোশাকে ফ্ল্যাট ২৫% পর্যন্ত মূল্যছাড়!
+                        </p>
                         <button
                           type="button"
                           className="mt-2.5 px-3 py-1 rounded-md text-[10px] font-semibold bg-white text-slate-900 shadow-2xs"
@@ -217,7 +268,10 @@ export function AppPreview() {
                       <div key={sec.id} className="space-y-1.5">
                         <div className="flex justify-between items-center text-[11px] font-semibold">
                           <span>{sec.title}</span>
-                          <span className="text-[10px] font-normal" style={{ color: primaryColor }}>
+                          <span
+                            className="text-[10px] font-normal"
+                            style={{ color: primaryColor }}
+                          >
                             সবগুলো দেখুন
                           </span>
                         </div>
@@ -228,9 +282,14 @@ export function AppPreview() {
                             { name: "মধু ও ঘি", icon: "🧈" },
                             { name: "হ্যান্ডিক্রাফট", icon: "🧺" },
                           ].map((cat, idx) => (
-                            <div key={idx} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 flex flex-col items-center">
+                            <div
+                              key={idx}
+                              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 flex flex-col items-center"
+                            >
                               <span className="text-base">{cat.icon}</span>
-                              <span className="text-[9px] font-medium mt-1 truncate w-full">{cat.name}</span>
+                              <span className="text-[9px] font-medium mt-1 truncate w-full">
+                                {cat.name}
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -238,12 +297,18 @@ export function AppPreview() {
                     );
                   }
 
-                  if (sec.type === "featured_products" || sec.type === "new_arrivals") {
+                  if (
+                    sec.type === "featured_products" ||
+                    sec.type === "new_arrivals"
+                  ) {
                     return (
                       <div key={sec.id} className="space-y-1.5">
                         <div className="flex justify-between items-center text-[11px] font-semibold">
                           <span>{sec.title}</span>
-                          <span className="text-[10px] font-normal" style={{ color: primaryColor }}>
+                          <span
+                            className="text-[10px] font-normal"
+                            style={{ color: primaryColor }}
+                          >
                             সকল পণ্য
                           </span>
                         </div>
@@ -269,15 +334,25 @@ export function AppPreview() {
                               <div className="h-16 rounded bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-medium text-slate-500">
                                 [পণ্য ছবি]
                               </div>
-                              <Badge variant="outline" className="text-[8px] py-0 px-1 border-primary text-primary">
+                              <Badge
+                                variant="outline"
+                                className="text-[8px] py-0 px-1 border-primary text-primary"
+                              >
                                 {prod.tag}
                               </Badge>
-                              <div className="font-semibold text-[10px] truncate leading-tight">{prod.title}</div>
+                              <div className="font-semibold text-[10px] truncate leading-tight">
+                                {prod.title}
+                              </div>
                               <div className="flex items-center gap-1">
-                                <span className="font-bold text-[11px]" style={{ color: primaryColor }}>
+                                <span
+                                  className="font-bold text-[11px]"
+                                  style={{ color: primaryColor }}
+                                >
                                   {prod.price}
                                 </span>
-                                <span className="text-[9px] text-muted-foreground line-through">{prod.old}</span>
+                                <span className="text-[9px] text-muted-foreground line-through">
+                                  {prod.old}
+                                </span>
                               </div>
                             </div>
                           ))}
@@ -293,10 +368,18 @@ export function AppPreview() {
                         className="rounded-lg p-2.5 border border-dashed border-amber-300 bg-amber-50 dark:bg-amber-950/20 text-[10px] flex items-center justify-between"
                       >
                         <div className="space-y-0.5">
-                          <span className="font-bold text-amber-800 dark:text-amber-300">⚡ কুপন কোড: EID2026</span>
-                          <p className="text-amber-700 dark:text-amber-400">সর্বনিম্ন ৳ ১,০০০ অর্ডারে ২০০ টাকা ছাড়</p>
+                          <span className="font-bold text-amber-800 dark:text-amber-300">
+                            ⚡ কুপন কোড: EID2026
+                          </span>
+                          <p className="text-amber-700 dark:text-amber-400">
+                            সর্বনিম্ন ৳ ১,০০০ অর্ডারে ২০০ টাকা ছাড়
+                          </p>
                         </div>
-                        <Button size="sm" variant="outline" className="h-6 text-[9px] px-2 border-amber-400 text-amber-800">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-6 text-[9px] px-2 border-amber-400 text-amber-800"
+                        >
                           কপি করুন
                         </Button>
                       </div>
@@ -310,21 +393,29 @@ export function AppPreview() {
               {/* Bottom Navigation Bar */}
               <div className="h-14 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-2 flex items-center justify-around shrink-0 z-20">
                 {activeNavItems.map((item) => {
-                  const isActive = previewTab === item.id || (previewTab === "home" && item.id === "nav_home");
+                  const isActive =
+                    previewTab === item.id ||
+                    (previewTab === "home" && item.id === "nav_home");
                   return (
                     <button
                       key={item.id}
                       type="button"
                       onClick={() => setPreviewTab(item.id)}
                       className={`flex flex-col items-center justify-center flex-1 py-1 transition-colors ${
-                        isActive ? "text-primary font-semibold" : "text-slate-400 dark:text-slate-500"
+                        isActive
+                          ? "text-primary font-semibold"
+                          : "text-slate-400 dark:text-slate-500"
                       }`}
                       style={{ color: isActive ? primaryColor : undefined }}
                     >
                       {item.icon === "Home" && <Home className="h-4 w-4" />}
                       {item.icon === "Grid" && <Grid className="h-4 w-4" />}
-                      {item.icon === "ShoppingCart" && <ShoppingCart className="h-4 w-4" />}
-                      {item.icon === "Package" && <Package className="h-4 w-4" />}
+                      {item.icon === "ShoppingCart" && (
+                        <ShoppingCart className="h-4 w-4" />
+                      )}
+                      {item.icon === "Package" && (
+                        <Package className="h-4 w-4" />
+                      )}
                       {item.icon === "User" && <User className="h-4 w-4" />}
                       <span className="text-[9px] mt-0.5">{item.label}</span>
                     </button>
@@ -345,4 +436,3 @@ export function AppPreview() {
     </div>
   );
 }
-

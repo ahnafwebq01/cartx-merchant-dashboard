@@ -197,7 +197,7 @@ export function RegionalSettings() {
           {/* Live Preview Card */}
           <div className="p-3.5 rounded-xl border border-border/60 bg-muted/30 space-y-2 mt-4">
             <h5 className="text-xs font-semibold text-foreground">Live Telemetry Preview</h5>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
               <div>
                 <span className="text-muted-foreground text-[10px] block">Sample Currency Output</span>
                 <span className="font-mono font-semibold text-foreground">{formattedAmountPreview}</span>
@@ -216,7 +216,7 @@ export function RegionalSettings() {
       </Card>
 
       {/* Save Action */}
-      <div className="flex items-center justify-between p-4 rounded-xl border border-border/70 bg-card/80 backdrop-blur-md">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-xl border border-border/70 bg-card/80 backdrop-blur-md">
         {isDirty ? (
           <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">Unsaved regional changes</span>
         ) : (
@@ -226,7 +226,7 @@ export function RegionalSettings() {
           size="sm"
           onClick={handleSave}
           disabled={!isDirty}
-          className="gap-1.5 cursor-pointer shadow-xs"
+          className="gap-1.5 cursor-pointer shadow-xs w-full sm:w-auto justify-center"
         >
           <Save className="h-3.5 w-3.5" />
           <span>Save Regional Preferences</span>

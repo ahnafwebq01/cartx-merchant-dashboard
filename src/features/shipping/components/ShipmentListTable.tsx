@@ -63,7 +63,9 @@ export function ShipmentListTable({
   onFilterChange,
   isLoading = false,
 }: ShipmentListTableProps) {
-  const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(null);
+  const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(
+    null,
+  );
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const handleExportCSV = () => {
@@ -74,14 +76,17 @@ export function ShipmentListTable({
     link.setAttribute("href", url);
     link.setAttribute(
       "download",
-      `cartx-shipments-${new Date().toISOString().slice(0, 10)}.csv`
+      `cartx-shipments-${new Date().toISOString().slice(0, 10)}.csv`,
     );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const statusTabs: { label: string; value: NormalizedShipmentStatus | "all" }[] = [
+  const statusTabs: {
+    label: string;
+    value: NormalizedShipmentStatus | "all";
+  }[] = [
     { label: "All Parcels", value: "all" },
     { label: "In Transit", value: "in_transit" },
     { label: "Delivered", value: "delivered" },
@@ -130,7 +135,9 @@ export function ShipmentListTable({
             <Input
               placeholder="Search by consignment, tracking ID, customer, order #..."
               value={filterParams.search || ""}
-              onChange={(e) => onFilterChange({ search: e.target.value, page: 1 })}
+              onChange={(e) =>
+                onFilterChange({ search: e.target.value, page: 1 })
+              }
               className="pl-8 text-xs h-9"
             />
           </div>
@@ -177,27 +184,41 @@ export function ShipmentListTable({
         <Table>
           <TableHeader className="bg-muted/50">
             <TableRow className="hover:bg-transparent">
-              <TableHead className="text-xs font-semibold">Consignment / Tracking</TableHead>
+              <TableHead className="text-xs font-semibold">
+                Consignment / Tracking
+              </TableHead>
               <TableHead className="text-xs font-semibold">Order #</TableHead>
               <TableHead className="text-xs font-semibold">Courier</TableHead>
-              <TableHead className="text-xs font-semibold">Recipient & Destination</TableHead>
-              <TableHead className="text-xs font-semibold">COD Amount</TableHead>
+              <TableHead className="text-xs font-semibold">
+                Recipient & Destination
+              </TableHead>
+              <TableHead className="text-xs font-semibold">
+                COD Amount
+              </TableHead>
               <TableHead className="text-xs font-semibold">Status</TableHead>
               <TableHead className="text-xs font-semibold">Date</TableHead>
-              <TableHead className="text-xs font-semibold text-right">Action</TableHead>
+              <TableHead className="text-xs font-semibold text-right">
+                Action
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8 text-xs text-muted-foreground">
+                <TableCell
+                  colSpan={8}
+                  className="text-center py-8 text-xs text-muted-foreground"
+                >
                   <RefreshCw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
                   Loading shipments...
                 </TableCell>
               </TableRow>
             ) : shipments.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8 text-xs text-muted-foreground">
+                <TableCell
+                  colSpan={8}
+                  className="text-center py-8 text-xs text-muted-foreground"
+                >
                   No shipments found matching the selected filters.
                 </TableCell>
               </TableRow>
@@ -227,7 +248,9 @@ export function ShipmentListTable({
                     </Badge>
                   </TableCell>
                   <TableCell className="text-xs">
-                    <div className="font-medium text-foreground">{shp.recipientName}</div>
+                    <div className="font-medium text-foreground">
+                      {shp.recipientName}
+                    </div>
                     <div className="text-[11px] text-muted-foreground truncate max-w-xs">
                       {shp.city}, {shp.district} • {shp.recipientPhone}
                     </div>
@@ -236,7 +259,9 @@ export function ShipmentListTable({
                     {shp.codAmount > 0 ? (
                       `৳${shp.codAmount.toLocaleString("en-BD")}`
                     ) : (
-                      <span className="text-muted-foreground font-normal">Prepaid (৳0)</span>
+                      <span className="text-muted-foreground font-normal">
+                        Prepaid (৳0)
+                      </span>
                     )}
                   </TableCell>
                   <TableCell>
@@ -266,7 +291,7 @@ export function ShipmentListTable({
         </Table>
 
         {/* Clamped Pagination */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-muted/20 text-xs text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-border bg-muted/20 text-xs text-muted-foreground text-center sm:text-left">
           <div>
             Showing {shipments.length > 0 ? (page - 1) * limit + 1 : 0} to{" "}
             {Math.min(page * limit, total)} of {total} shipments
@@ -317,4 +342,3 @@ export function ShipmentListTable({
     </div>
   );
 }
-

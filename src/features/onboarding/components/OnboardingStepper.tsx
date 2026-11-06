@@ -23,6 +23,16 @@ export function OnboardingStepper({
       className={cn("w-full bg-card border-b border-border py-4 px-4 sm:px-8", className)}
     >
       <div className="max-w-5xl mx-auto">
+        {/* Mobile Compact Progress Indicator */}
+        <div className="sm:hidden flex items-center justify-between pb-2 mb-2 border-b border-border/50 text-xs">
+          <span className="font-semibold text-primary truncate max-w-[200px]">
+            Step {currentStep} of {ONBOARDING_STEPS.length}: {ONBOARDING_STEPS.find((s) => s.step === currentStep)?.title}
+          </span>
+          <span className="text-[10px] text-muted-foreground font-mono shrink-0">
+            {Math.round((completedSteps.length / ONBOARDING_STEPS.length) * 100)}% Done
+          </span>
+        </div>
+
         <ol className="flex items-center justify-between overflow-x-auto no-scrollbar py-1 gap-2 sm:gap-4">
           {ONBOARDING_STEPS.map((stepDef) => {
             const isCompleted = completedSteps.includes(stepDef.step);

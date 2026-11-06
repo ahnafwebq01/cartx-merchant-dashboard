@@ -299,7 +299,7 @@ export default function DashboardPage() {
             <motion.div variants={cardVariants} className="lg:col-span-2">
               <Card className="rounded-xl border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-md transition-all h-full">
                 <CardHeader>
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <div>
                       <CardTitle className="text-base font-semibold">
                         Daily Sales & Volume Trajectory
@@ -308,7 +308,7 @@ export default function DashboardPage() {
                         Daily revenue and order checkouts recorded across the selected timeframe
                       </CardDescription>
                     </div>
-                    <Badge variant="outline" className="text-[11px] gap-1 font-mono">
+                    <Badge variant="outline" className="text-[11px] gap-1 font-mono w-fit">
                       <Calendar className="h-3 w-3 text-muted-foreground" />
                       {analytics.sales.dailyRevenue.length} Days Recorded
                     </Badge>
@@ -321,52 +321,54 @@ export default function DashboardPage() {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {/* Responsive SVG / Column Bar Chart */}
-                      <div className="h-48 w-full flex items-end gap-1.5 pt-6 pb-2 px-1 border-b border-border/80">
-                        {(() => {
-                          const maxRevenue = Math.max(
-                            ...analytics.sales.dailyRevenue.map((d) => d.revenue),
-                            1
-                          );
-
-                          return analytics.sales.dailyRevenue.map((d, idx) => {
-                            const heightPercent = Math.max(
-                              Math.round((d.revenue / maxRevenue) * 100),
-                              6
+                      {/* Responsive Column Bar Chart */}
+                      <div className="w-full overflow-x-auto pb-1">
+                        <div className="h-48 min-w-[280px] w-full flex items-end gap-1 sm:gap-1.5 pt-6 pb-2 px-1 border-b border-border/80">
+                          {(() => {
+                            const maxRevenue = Math.max(
+                              ...analytics.sales.dailyRevenue.map((d) => d.revenue),
+                              1
                             );
 
-                            return (
-                              <div
-                                key={d.date}
-                                className="flex-1 flex flex-col items-center group relative h-full justify-end"
-                              >
-                                {/* Tooltip */}
-                                <div className="absolute -top-12 z-20 hidden group-hover:flex flex-col items-center bg-popover text-popover-foreground border border-border shadow-md rounded-md p-1.5 text-[10px] whitespace-nowrap pointer-events-none">
-                                  <span className="font-semibold">
-                                    ৳{d.revenue.toLocaleString("en-BD")}
-                                  </span>
-                                  <span className="text-muted-foreground">
-                                    {d.orders} orders ({d.date.slice(5)})
-                                  </span>
+                            return analytics.sales.dailyRevenue.map((d, idx) => {
+                              const heightPercent = Math.max(
+                                Math.round((d.revenue / maxRevenue) * 100),
+                                6
+                              );
+
+                              return (
+                                <div
+                                  key={d.date}
+                                  className="flex-1 flex flex-col items-center group relative h-full justify-end"
+                                >
+                                  {/* Tooltip */}
+                                  <div className="absolute -top-12 z-20 hidden group-hover:flex flex-col items-center bg-popover text-popover-foreground border border-border shadow-md rounded-md p-1.5 text-[10px] whitespace-nowrap pointer-events-none">
+                                    <span className="font-semibold">
+                                      ৳{d.revenue.toLocaleString("en-BD")}
+                                    </span>
+                                    <span className="text-muted-foreground">
+                                      {d.orders} orders ({d.date.slice(5)})
+                                    </span>
+                                  </div>
+
+                                  {/* Animated Column */}
+                                  <motion.div
+                                    initial={
+                                      shouldReduceMotion ? { height: `${heightPercent}%` } : { height: 0 }
+                                    }
+                                    animate={{ height: `${heightPercent}%` }}
+                                    transition={{
+                                      duration: 0.35,
+                                      delay: idx * 0.02,
+                                      ease: "easeOut",
+                                    }}
+                                    className="w-full rounded-t-sm bg-gradient-to-t from-primary/75 to-primary group-hover:from-primary group-hover:to-sky-400 transition-colors cursor-pointer shadow-xs"
+                                  />
                                 </div>
-
-                                {/* Animated Column */}
-                                <motion.div
-                                  initial={
-                                    shouldReduceMotion ? { height: `${heightPercent}%` } : { height: 0 }
-                                  }
-                                  animate={{ height: `${heightPercent}%` }}
-                                  transition={{
-                                    duration: 0.35,
-                                    delay: idx * 0.02,
-                                    ease: "easeOut",
-                                  }}
-                                  className="w-full rounded-t-sm bg-gradient-to-t from-primary/75 to-primary group-hover:from-primary group-hover:to-sky-400 transition-colors cursor-pointer shadow-xs"
-                                />
-                              </div>
-                            );
-                          });
-                        })()}
+                              );
+                            });
+                          })()}
+                        </div>
                       </div>
 
                       {/* Timeline Date Bounds & Summary */}
@@ -493,7 +495,7 @@ export default function DashboardPage() {
           {/* Recent Orders & Activity Table */}
           <motion.div variants={cardVariants}>
             <Card className="rounded-xl border-border/60 bg-card/75 dark:bg-card/70 backdrop-blur-md shadow-xs hover:shadow-md transition-all overflow-hidden">
-              <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3">
                 <div>
                   <CardTitle className="text-base font-semibold">
                     Recent Merchant Orders

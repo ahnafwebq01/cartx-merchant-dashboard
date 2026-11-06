@@ -210,15 +210,15 @@ export function NotificationSettings() {
       </Card>
 
       {/* Save & Reset Actions */}
-      <div className="flex items-center justify-between p-4 rounded-xl border border-border/70 bg-card/80 backdrop-blur-md">
-        <Button variant="ghost" size="sm" onClick={handleReset} className="cursor-pointer text-xs">
+      <div className="flex flex-col-reverse xs:flex-row items-stretch xs:items-center justify-between gap-3 p-4 rounded-xl border border-border/70 bg-card/80 backdrop-blur-md">
+        <Button variant="ghost" size="sm" onClick={handleReset} className="cursor-pointer text-xs justify-center">
           Reset to Defaults
         </Button>
         <Button
           size="sm"
           onClick={handleSave}
           disabled={!isDirty}
-          className="gap-1.5 cursor-pointer shadow-xs"
+          className="gap-1.5 cursor-pointer shadow-xs justify-center"
         >
           <Save className="h-3.5 w-3.5" />
           <span>Save Notification Preferences</span>

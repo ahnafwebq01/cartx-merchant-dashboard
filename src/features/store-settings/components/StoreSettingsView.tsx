@@ -41,7 +41,9 @@ export interface StoreSettingsViewProps {
   embedded?: boolean;
 }
 
-export function StoreSettingsView({ embedded = false }: StoreSettingsViewProps = {}) {
+export function StoreSettingsView({
+  embedded = false,
+}: StoreSettingsViewProps = {}) {
   const { data: store, isLoading, isError, error, refetch } = useCurrentStore();
   const updateMutation = useUpdateStore();
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -281,10 +283,10 @@ export function StoreSettingsView({ embedded = false }: StoreSettingsViewProps =
                     <div className="flex rounded-md shadow-sm">
                       <Input
                         id="slug"
-                        className="rounded-r-none font-mono text-sm lowercase"
+                        className="rounded-r-none font-mono text-sm lowercase min-w-0"
                         {...register("slug")}
                       />
-                      <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-input bg-muted text-muted-foreground text-xs font-mono">
+                      <span className="inline-flex items-center px-2 sm:px-3 rounded-r-md border border-border bg-muted text-muted-foreground text-[11px] sm:text-xs font-mono shrink-0">
                         .cartx.com.bd
                       </span>
                     </div>
@@ -538,7 +540,7 @@ export function StoreSettingsView({ embedded = false }: StoreSettingsViewProps =
           </Tabs>
 
           {/* Form Actions Footer */}
-          <div className="flex items-center justify-between pt-6 border-t border-border mt-6">
+          <div className="flex flex-col-reverse xs:flex-row items-stretch xs:items-center justify-between gap-3 pt-6 border-t border-border mt-6">
             <Button
               type="button"
               variant="outline"

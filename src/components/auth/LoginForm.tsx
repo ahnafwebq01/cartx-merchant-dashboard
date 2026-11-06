@@ -107,7 +107,7 @@ export function LoginForm() {
   };
 
   return (
-    <GlassCard variant="elevated" className="p-6 sm:p-8 space-y-6">
+    <GlassCard variant="elevated" className="p-4 sm:p-8 space-y-5 sm:space-y-6">
       {/* Demo Mode Notice Banner */}
       <div className="p-3 rounded-lg border border-primary/20 bg-primary/5 text-xs text-muted-foreground flex items-start gap-2.5">
         <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />
@@ -210,7 +210,7 @@ export function LoginForm() {
 
       {/* Demo Credentials Quick-Access Picker */}
       <div className="pt-2 border-t border-border/60 space-y-3">
-        <div className="flex items-center justify-between text-xs">
+        <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1 text-xs">
           <span className="font-semibold text-foreground flex items-center gap-1.5">
             <KeyRound className="h-3.5 w-3.5 text-primary" />
             Quick Demo Access
@@ -218,7 +218,7 @@ export function LoginForm() {
           <span className="text-[10px] text-muted-foreground">Click role to auto-sign in</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 xs:grid-cols-2 gap-2">
           {DEMO_CREDENTIALS.map((cred) => (
             <button
               key={cred.role}

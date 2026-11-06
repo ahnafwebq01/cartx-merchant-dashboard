@@ -134,7 +134,7 @@ export function RegisterForm() {
   };
 
   return (
-    <GlassCard variant="elevated" className="p-6 sm:p-8 space-y-6">
+    <GlassCard variant="elevated" className="p-4 sm:p-8 space-y-5 sm:space-y-6">
       {/* Demo Mode Notice */}
       <div className="p-3 rounded-lg border border-primary/20 bg-primary/5 text-xs text-muted-foreground flex items-start gap-2.5">
         <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />

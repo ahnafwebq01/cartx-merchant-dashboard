@@ -159,13 +159,13 @@ export function ProfileSettings() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-border/60">
+          <div className="flex flex-col-reverse xs:flex-row items-stretch xs:items-center justify-between gap-3 pt-2 border-t border-border/60">
             {isDirty ? (
               <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">Unsaved changes</span>
             ) : (
               <span className="text-xs text-muted-foreground">Information synced locally</span>
             )}
-            <Button type="submit" size="sm" disabled={isSaving || !isDirty} className="cursor-pointer">
+            <Button type="submit" size="sm" disabled={isSaving || !isDirty} className="cursor-pointer justify-center">
               {isSaving ? "Saving..." : "Save Profile Changes"}
             </Button>
           </div>

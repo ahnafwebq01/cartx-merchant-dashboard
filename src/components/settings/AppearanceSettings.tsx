@@ -257,12 +257,12 @@ export function AppearanceSettings() {
       </div>
 
       {/* Reset to Defaults Footer */}
-      <div className="flex items-center justify-between p-4 rounded-xl border border-border/70 bg-card/80 backdrop-blur-md">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-xl border border-border/70 bg-card/80 backdrop-blur-md">
         <div>
           <h4 className="text-xs font-semibold text-foreground">Restore Visual Defaults</h4>
           <p className="text-[11px] text-muted-foreground">Reset theme mode, accent colors, and density to original presets.</p>
         </div>
-        <Button variant="outline" size="sm" onClick={handleReset} className="gap-1.5 cursor-pointer">
+        <Button variant="outline" size="sm" onClick={handleReset} className="gap-1.5 cursor-pointer shrink-0">
           <RotateCcw className="h-3.5 w-3.5" />
           <span>Reset Defaults</span>
         </Button>

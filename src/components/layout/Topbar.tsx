@@ -74,19 +74,19 @@ export function Topbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border/60 bg-card/80 dark:bg-card/75 backdrop-blur-md px-4 md:px-6 transition-colors shadow-xs">
+    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border/60 bg-card/80 dark:bg-card/75 backdrop-blur-md px-2.5 sm:px-4 md:px-6 transition-colors shadow-xs">
       {/* Left: Mobile Navigation Trigger & Store Selector */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
         {/* Mobile Drawer Trigger */}
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
             <Button
               variant="outline"
               size="icon"
-              className="md:hidden"
+              className="md:hidden h-8 w-8 sm:h-9 sm:w-9 shrink-0"
               aria-label="Open navigation menu"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-64 border-r border-border glass-sidebar">
@@ -101,17 +101,17 @@ export function Topbar() {
         </Sheet>
 
         {/* Current Store Selector */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border/70 bg-background/50 backdrop-blur-xs hover:bg-muted/60 cursor-pointer transition-colors max-w-[180px] sm:max-w-xs shadow-xs">
-          <Building className="h-4 w-4 text-primary shrink-0" />
+        <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-border/70 bg-background/50 backdrop-blur-xs hover:bg-muted/60 cursor-pointer transition-colors max-w-[110px] xs:max-w-[150px] sm:max-w-[180px] md:max-w-xs shadow-xs shrink min-w-0">
+          <Building className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary shrink-0" />
           <div className="flex flex-col text-left min-w-0">
-            <span className="text-xs font-semibold leading-tight text-foreground truncate">
+            <span className="text-[11px] sm:text-xs font-semibold leading-tight text-foreground truncate">
               {currentStore?.name || "CartX Demo Store"}
             </span>
-            <span className="text-[10px] text-muted-foreground truncate">
+            <span className="text-[9px] sm:text-[10px] text-muted-foreground truncate hidden xs:inline">
               {currentStore?.currency || "BDT (৳)"}
             </span>
           </div>
-          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground ml-1 shrink-0" />
+          <ChevronDown className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-muted-foreground ml-0.5 sm:ml-1 shrink-0" />
         </div>
       </div>
 
@@ -133,7 +133,7 @@ export function Topbar() {
       </div>
 
       {/* Right: Actions & User Profile */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 sm:gap-2 shrink-0">
         {/* Demo Mode Badge */}
         <DemoModeBadge />
 
@@ -144,7 +144,7 @@ export function Topbar() {
         <Button
           variant="ghost"
           size="icon"
-          className="h-9 w-9 text-muted-foreground hover:text-foreground cursor-pointer"
+          className="hidden sm:inline-flex h-8 w-8 sm:h-9 sm:w-9 text-muted-foreground hover:text-foreground cursor-pointer"
           aria-label="Help and merchant support"
           onClick={() => setHelpOpen(true)}
         >
@@ -155,7 +155,7 @@ export function Topbar() {
         <Button
           variant="ghost"
           size="icon"
-          className="relative h-9 w-9 text-muted-foreground hover:text-foreground cursor-pointer"
+          className="relative h-8 w-8 sm:h-9 sm:w-9 text-muted-foreground hover:text-foreground cursor-pointer"
           aria-label="Notifications"
         >
           <Bell className="h-4 w-4" />
@@ -168,16 +168,16 @@ export function Topbar() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="flex items-center gap-2 pl-2 pr-1 h-9 rounded-full focus:outline-none cursor-pointer hover:bg-muted/50"
+                className="flex items-center gap-1 sm:gap-2 pl-1.5 sm:pl-2 pr-1 h-8 sm:h-9 rounded-full focus:outline-none cursor-pointer hover:bg-muted/50"
                 aria-label="User account menu"
               >
-                <Avatar className="h-7 w-7 border border-border">
+                <Avatar className="h-6 w-6 sm:h-7 sm:w-7 border border-border">
                   <AvatarImage src={user?.avatarUrl} alt={user?.name || "Merchant"} />
-                  <AvatarFallback className="text-[11px] bg-primary text-primary-foreground font-semibold">
+                  <AvatarFallback className="text-[10px] sm:text-[11px] bg-primary text-primary-foreground font-semibold">
                     {user?.name ? user.name.slice(0, 2).toUpperCase() : "CX"}
                   </AvatarFallback>
                 </Avatar>
-                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground hidden sm:block shrink-0" />
+                <ChevronDown className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-muted-foreground hidden sm:block shrink-0" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 glass-panel">

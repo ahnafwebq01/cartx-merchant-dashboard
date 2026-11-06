@@ -182,7 +182,7 @@ export function DataPrivacySettings() {
             Irreversibly restore all mock products, demo shipments, orders, and custom settings to initial defaults.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex items-center justify-between">
+        <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <span className="text-xs text-muted-foreground">
             Action will reset onboarding checklists and newly created SKUs.
           </span>

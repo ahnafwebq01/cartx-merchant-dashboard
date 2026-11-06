@@ -6,7 +6,13 @@ import { usePublishStore } from "../hooks";
 import type { OnboardingDraft } from "../types";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Store,
@@ -37,7 +43,9 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
 
   // Check required steps completion
   const hasStep1 = Boolean(draft?.step1?.storeName && draft?.step1?.storeSlug);
-  const hasStep2 = Boolean(draft?.step2?.businessAddress && draft?.step2?.district);
+  const hasStep2 = Boolean(
+    draft?.step2?.businessAddress && draft?.step2?.district,
+  );
   const hasStep3 = Boolean(draft?.step3?.brandColor && draft?.step3?.themeId);
   const hasStep4 = Boolean(draft?.step4?.productName && draft?.step4?.price);
 
@@ -47,7 +55,9 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
     try {
       const result = await publishMutation.mutateAsync();
       setPublishedData({
-        storefrontUrl: result.storefrontUrl || `https://${draft?.step1?.storeSlug || "store"}.cartx.com.bd`,
+        storefrontUrl:
+          result.storefrontUrl ||
+          `https://${draft?.step1?.storeSlug || "store"}.cartx.com.bd`,
         publishedAt: result.publishedAt || new Date().toISOString(),
       });
       toast.success("Storefront published live (Demo Mode)!", {
@@ -63,7 +73,9 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
   const storefrontUrl =
     publishedData?.storefrontUrl ||
     draft?.storefrontUrl ||
-    (draft?.step1?.storeSlug ? `https://${draft.step1.storeSlug}.cartx.com.bd` : null);
+    (draft?.step1?.storeSlug
+      ? `https://${draft.step1.storeSlug}.cartx.com.bd`
+      : null);
 
   if (isPublished) {
     return (
@@ -77,20 +89,28 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
               Congratulations! Your Store is Published!
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              আপনার ই-কমার্স স্টোরটি সফলভাবে সক্রিয় হয়েছে। এখন থেকে গ্রাহকেরা আপনার স্টোর ভিজিট করে অর্ডার করতে পারবেন।
+              আপনার ই-কমার্স স্টোরটি সফলভাবে সক্রিয় হয়েছে। এখন থেকে গ্রাহকেরা
+              আপনার স্টোর ভিজিট করে অর্ডার করতে পারবেন।
             </p>
           </div>
 
           {storefrontUrl && (
             <div className="p-3 rounded-lg border border-border bg-card flex items-center justify-between gap-3 text-left">
               <div className="truncate">
-                <p className="text-xs text-muted-foreground">Storefront Public URL</p>
+                <p className="text-xs text-muted-foreground">
+                  Storefront Public URL
+                </p>
                 <p className="text-sm font-semibold text-primary truncate font-mono">
                   {storefrontUrl}
                 </p>
               </div>
               <Button size="sm" variant="outline" asChild>
-                <a href={storefrontUrl} target="_blank" rel="noreferrer" className="gap-1.5 shrink-0">
+                <a
+                  href={storefrontUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="gap-1.5 shrink-0"
+                >
                   <ExternalLink className="h-3.5 w-3.5" />
                   Visit
                 </a>
@@ -114,7 +134,9 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
   return (
     <Card className="border-border shadow-sm">
       <CardHeader>
-        <CardTitle className="text-xl">Step 7 — Review & Publish Store</CardTitle>
+        <CardTitle className="text-xl">
+          Step 7 — Review & Publish Store
+        </CardTitle>
         <CardDescription>
           স্টোরের সকল কনফিগারেশন যাচাই করুন এবং স্টোরফ্রন্ট লাইভ করুন।
         </CardDescription>
@@ -129,8 +151,12 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
                 Incomplete Required Steps Before Publishing (অসম্পূর্ণ ধাপসমূহ)
               </p>
               <ul className="list-disc list-inside space-y-0.5 text-muted-foreground">
-                {!hasStep1 && <li>Step 1: Store name & subdomain slug missing</li>}
-                {!hasStep2 && <li>Step 2: Business address & district missing</li>}
+                {!hasStep1 && (
+                  <li>Step 1: Store name & subdomain slug missing</li>
+                )}
+                {!hasStep2 && (
+                  <li>Step 2: Business address & district missing</li>
+                )}
                 {!hasStep3 && <li>Step 3: Theme or brand color missing</li>}
                 {!hasStep4 && <li>Step 4: Initial product missing</li>}
               </ul>
@@ -140,7 +166,8 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
           <div className="p-4 rounded-xl border border-success/30 bg-success/5 text-success flex items-center gap-3">
             <CheckCircle2 className="h-5 w-5 shrink-0" />
             <p className="text-xs text-foreground font-medium">
-              All essential requirements are verified. Your store is ready to launch!
+              All essential requirements are verified. Your store is ready to
+              launch!
             </p>
           </div>
         )}
@@ -165,14 +192,34 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
               <span className="font-semibold text-foreground flex items-center gap-1.5">
                 <Store className="h-4 w-4 text-primary" /> Store Identity
               </span>
-              <Link href="/onboarding/store" className="text-primary hover:underline font-medium">
+              <Link
+                href="/onboarding/store"
+                className="text-primary hover:underline font-medium"
+              >
                 Edit
               </Link>
             </div>
             <div className="text-muted-foreground space-y-1">
-              <p>Name: <span className="text-foreground font-medium">{draft?.step1?.storeName || "Not set"}</span></p>
-              <p>Subdomain: <span className="font-mono text-foreground">{draft?.step1?.storeSlug ? `${draft.step1.storeSlug}.cartx.com.bd` : "Not set"}</span></p>
-              <p>Owner: <span className="text-foreground">{draft?.step1?.ownerName || "Not set"}</span></p>
+              <p>
+                Name:{" "}
+                <span className="text-foreground font-medium">
+                  {draft?.step1?.storeName || "Not set"}
+                </span>
+              </p>
+              <p>
+                Subdomain:{" "}
+                <span className="font-mono text-foreground">
+                  {draft?.step1?.storeSlug
+                    ? `${draft.step1.storeSlug}.cartx.com.bd`
+                    : "Not set"}
+                </span>
+              </p>
+              <p>
+                Owner:{" "}
+                <span className="text-foreground">
+                  {draft?.step1?.ownerName || "Not set"}
+                </span>
+              </p>
             </div>
           </div>
 
@@ -182,13 +229,29 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
               <span className="font-semibold text-foreground flex items-center gap-1.5">
                 <MapPin className="h-4 w-4 text-primary" /> Business Details
               </span>
-              <Link href="/onboarding/business" className="text-primary hover:underline font-medium">
+              <Link
+                href="/onboarding/business"
+                className="text-primary hover:underline font-medium"
+              >
                 Edit
               </Link>
             </div>
             <div className="text-muted-foreground space-y-1">
-              <p>Location: <span className="text-foreground">{draft?.step2?.cityArea ? `${draft.step2.cityArea}, ${draft.step2.district}` : "Not set"}</span></p>
-              <p>Category: <span className="text-foreground capitalize">{draft?.step2?.businessCategory?.replace(/_/g, " ") || "Not set"}</span></p>
+              <p>
+                Location:{" "}
+                <span className="text-foreground">
+                  {draft?.step2?.cityArea
+                    ? `${draft.step2.cityArea}, ${draft.step2.district}`
+                    : "Not set"}
+                </span>
+              </p>
+              <p>
+                Category:{" "}
+                <span className="text-foreground capitalize">
+                  {draft?.step2?.businessCategory?.replace(/_/g, " ") ||
+                    "Not set"}
+                </span>
+              </p>
             </div>
           </div>
 
@@ -198,7 +261,10 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
               <span className="font-semibold text-foreground flex items-center gap-1.5">
                 <Palette className="h-4 w-4 text-primary" /> Storefront Design
               </span>
-              <Link href="/onboarding/storefront" className="text-primary hover:underline font-medium">
+              <Link
+                href="/onboarding/storefront"
+                className="text-primary hover:underline font-medium"
+              >
                 Edit
               </Link>
             </div>
@@ -207,11 +273,21 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
                 <span>Brand Color:</span>
                 <span
                   className="h-3 w-3 rounded-full border border-black/10 inline-block"
-                  style={{ backgroundColor: draft?.step3?.brandColor || "#2563EB" }}
+                  style={{
+                    backgroundColor: draft?.step3?.brandColor || "#2563EB",
+                  }}
                 />
-                <span className="font-mono text-foreground">{draft?.step3?.brandColor || "#2563EB"}</span>
+                <span className="font-mono text-foreground">
+                  {draft?.step3?.brandColor || "#2563EB"}
+                </span>
               </div>
-              <p>Theme: <span className="text-foreground capitalize">{draft?.step3?.themeId?.replace(/_/g, " ") || "Modern Commerce"}</span></p>
+              <p>
+                Theme:{" "}
+                <span className="text-foreground capitalize">
+                  {draft?.step3?.themeId?.replace(/_/g, " ") ||
+                    "Modern Commerce"}
+                </span>
+              </p>
             </div>
           </div>
 
@@ -221,14 +297,32 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
               <span className="font-semibold text-foreground flex items-center gap-1.5">
                 <Package className="h-4 w-4 text-primary" /> Initial Product
               </span>
-              <Link href="/onboarding/products" className="text-primary hover:underline font-medium">
+              <Link
+                href="/onboarding/products"
+                className="text-primary hover:underline font-medium"
+              >
                 Edit
               </Link>
             </div>
             <div className="text-muted-foreground space-y-1">
-              <p>Product: <span className="text-foreground font-medium">{draft?.step4?.productName || "None"}</span></p>
-              <p>Price: <span className="text-foreground font-medium">৳{draft?.step4?.price ?? 0} BDT</span></p>
-              <p>Initial Stock: <span className="text-foreground">{draft?.step4?.initialStock ?? 0} units</span></p>
+              <p>
+                Product:{" "}
+                <span className="text-foreground font-medium">
+                  {draft?.step4?.productName || "None"}
+                </span>
+              </p>
+              <p>
+                Price:{" "}
+                <span className="text-foreground font-medium">
+                  ৳{draft?.step4?.price ?? 0} BDT
+                </span>
+              </p>
+              <p>
+                Initial Stock:{" "}
+                <span className="text-foreground">
+                  {draft?.step4?.initialStock ?? 0} units
+                </span>
+              </p>
             </div>
           </div>
 
@@ -238,13 +332,26 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
               <span className="font-semibold text-foreground flex items-center gap-1.5">
                 <CreditCard className="h-4 w-4 text-primary" /> Payment Method
               </span>
-              <Link href="/onboarding/payments" className="text-primary hover:underline font-medium">
+              <Link
+                href="/onboarding/payments"
+                className="text-primary hover:underline font-medium"
+              >
                 Edit
               </Link>
             </div>
             <div className="text-muted-foreground space-y-1">
-              <p>Cash on Delivery: <Badge variant="success" className="text-[10px]">Active</Badge></p>
-              <p>Online Gateways: <span className="text-muted-foreground">Configurable in Phase 5</span></p>
+              <p>
+                Cash on Delivery:{" "}
+                <Badge variant="success" className="text-[10px]">
+                  Active
+                </Badge>
+              </p>
+              <p>
+                Online Gateways:{" "}
+                <span className="text-muted-foreground">
+                  Configurable in Phase 5
+                </span>
+              </p>
             </div>
           </div>
 
@@ -254,26 +361,39 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
               <span className="font-semibold text-foreground flex items-center gap-1.5">
                 <Truck className="h-4 w-4 text-primary" /> Delivery Charges
               </span>
-              <Link href="/onboarding/shipping" className="text-primary hover:underline font-medium">
+              <Link
+                href="/onboarding/shipping"
+                className="text-primary hover:underline font-medium"
+              >
                 Edit
               </Link>
             </div>
             <div className="text-muted-foreground space-y-1">
-              <p>Inside Dhaka: <span className="text-foreground font-medium">৳{draft?.step6?.insideDhakaRate ?? 60}</span></p>
-              <p>Outside Dhaka: <span className="text-foreground font-medium">৳{draft?.step6?.outsideDhakaRate ?? 120}</span></p>
+              <p>
+                Inside Dhaka:{" "}
+                <span className="text-foreground font-medium">
+                  ৳{draft?.step6?.insideDhakaRate ?? 60}
+                </span>
+              </p>
+              <p>
+                Outside Dhaka:{" "}
+                <span className="text-foreground font-medium">
+                  ৳{draft?.step6?.outsideDhakaRate ?? 120}
+                </span>
+              </p>
             </div>
           </div>
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center justify-between pt-4 border-t border-border">
+        <div className="flex flex-col-reverse xs:flex-row items-stretch xs:items-center justify-between gap-3 pt-4 border-t border-border">
           <Button
             type="button"
             variant="outline"
-            onClick={() => {}}
+            className="w-full xs:w-auto"
             asChild
           >
-            <Link href="/onboarding/shipping" className="gap-2">
+            <Link href="/onboarding/shipping" className="gap-2 justify-center">
               <ArrowLeft className="h-4 w-4" />
               Back
             </Link>
@@ -283,7 +403,7 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
             type="button"
             disabled={!isReadyToPublish || publishMutation.isPending}
             onClick={handlePublish}
-            className="gap-2 bg-success text-success-foreground hover:bg-success/90"
+            className="gap-2 bg-success text-success-foreground hover:bg-success/90 w-full xs:w-auto justify-center"
           >
             {publishMutation.isPending ? (
               <>
@@ -302,4 +422,3 @@ export function StepPreviewPublish({ draft }: StepPreviewPublishProps) {
     </Card>
   );
 }
-

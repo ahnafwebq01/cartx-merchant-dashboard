@@ -33,8 +33,8 @@ export function ThemeSwitcher({
       <div
         className={cn(
           variant === "segmented"
-            ? "flex items-center gap-1 p-1 rounded-lg border border-border bg-muted/40 h-9 w-[180px]"
-            : "h-9 w-9 rounded-lg border border-border bg-muted/40",
+            ? "flex items-center gap-1 p-1 rounded-lg border border-border bg-muted/40 h-8 sm:h-9 w-[180px]"
+            : "h-8 w-8 sm:h-9 sm:w-9 rounded-lg border border-border bg-muted/40",
           className
         )}
       />
@@ -93,7 +93,7 @@ export function ThemeSwitcher({
           variant="ghost"
           size="icon"
           className={cn(
-            "h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-muted/60 relative cursor-pointer",
+            "h-8 w-8 sm:h-9 sm:w-9 text-muted-foreground hover:text-foreground hover:bg-muted/60 relative cursor-pointer",
             className
           )}
           aria-label="Toggle theme (Light, Dark, System)"

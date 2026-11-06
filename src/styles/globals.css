@@ -2,6 +2,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --breakpoint-xs: 380px;
+}
+
 @layer base {
   :root {
     /* CartX Design System Colors (Section 5.2) */

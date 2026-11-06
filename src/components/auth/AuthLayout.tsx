@@ -24,28 +24,28 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
       </div>
 
       {/* Top Header / Bar */}
-      <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
+      <header className="w-full max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 py-3 sm:py-5 flex items-center justify-between gap-2">
         <Link
           href="/"
-          className="flex items-center gap-2.5 group cursor-pointer"
+          className="flex items-center gap-2 group cursor-pointer min-w-0"
         >
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-primary to-sky-400 text-white flex items-center justify-center shadow-md shadow-primary/25 transition-transform group-hover:scale-105">
-            <Store className="h-5 w-5" />
+          <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-tr from-primary to-sky-400 text-white flex items-center justify-center shadow-md shadow-primary/25 transition-transform group-hover:scale-105 shrink-0">
+            <Store className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-base tracking-tight leading-tight flex items-center gap-1.5">
+          <div className="flex flex-col min-w-0">
+            <span className="font-bold text-sm sm:text-base tracking-tight leading-tight flex items-center gap-1.5 truncate">
               CartX
-              <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+              <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 shrink-0">
                 Merchant
               </span>
             </span>
-            <span className="text-[10px] text-muted-foreground leading-none">
+            <span className="text-[9px] sm:text-[10px] text-muted-foreground leading-none truncate hidden xs:inline">
               E-Commerce Management Platform
             </span>
           </div>
         </Link>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           <Badge
             variant="outline"
             className="hidden sm:inline-flex items-center gap-1.5 py-1 px-2.5 text-[11px] font-mono border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/10"
@@ -67,8 +67,8 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
       </header>
 
       {/* Main Authentication Card Container */}
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8">
-        <div className="w-full max-w-md sm:max-w-lg">
+      <main className="flex-1 flex items-center justify-center px-3 xs:px-4 sm:px-6 py-6 sm:py-8">
+        <div className="w-full max-w-md sm:max-w-lg min-w-0">
           {/* Header titles */}
           <div className="text-center mb-6 space-y-1.5">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">

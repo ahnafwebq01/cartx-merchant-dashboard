@@ -92,7 +92,7 @@ export function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen w-full relative flex items-center justify-center overflow-hidden bg-background text-foreground px-4 sm:px-6 py-12 selection:bg-primary/20">
+    <div className="min-h-screen w-full relative flex items-center justify-center overflow-hidden bg-background text-foreground px-3 xs:px-4 sm:px-6 py-8 sm:py-12 selection:bg-primary/20">
       {/* Subtle Background Ambient Mesh & Animations */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden" aria-hidden="true">
         <motion.div
@@ -115,7 +115,7 @@ export function LandingPage() {
         animate="visible"
         className="w-full max-w-md sm:max-w-lg mx-auto relative z-10 flex flex-col items-center"
       >
-        <div className="w-full rounded-2xl border border-border/70 bg-card/80 dark:bg-card/65 backdrop-blur-xl shadow-xl shadow-black/5 dark:shadow-black/30 p-8 sm:p-10 flex flex-col items-center text-center">
+        <div className="w-full rounded-2xl border border-border/70 bg-card/80 dark:bg-card/65 backdrop-blur-xl shadow-xl shadow-black/5 dark:shadow-black/30 p-5 xs:p-8 sm:p-10 flex flex-col items-center text-center">
           {/* CartX Branding / Logo */}
           <motion.div
             variants={itemVariants}
