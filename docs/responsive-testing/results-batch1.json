@@ -1,0 +1,864 @@
+{
+  "results": [
+    {
+      "route": "/",
+      "name": "landing",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    },
+    {
+      "route": "/login",
+      "name": "login",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    },
+    {
+      "route": "/register",
+      "name": "register",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    },
+    {
+      "route": "/onboarding",
+      "name": "onboarding",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    },
+    {
+      "route": "/onboarding/store",
+      "name": "onboarding-store",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    },
+    {
+      "route": "/onboarding/business",
+      "name": "onboarding-business",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    },
+    {
+      "route": "/onboarding/products",
+      "name": "onboarding-products",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    },
+    {
+      "route": "/onboarding/payments",
+      "name": "onboarding-payments",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    },
+    {
+      "route": "/onboarding/shipping",
+      "name": "onboarding-shipping",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    },
+    {
+      "route": "/onboarding/storefront",
+      "name": "onboarding-storefront",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    },
+    {
+      "route": "/onboarding/publish",
+      "name": "onboarding-publish",
+      "viewports": {
+        "small-mobile": {
+          "width": 320,
+          "height": 568,
+          "isOverflowing": false,
+          "bodyScrollWidth": 320,
+          "docWidth": 320,
+          "culprits": []
+        },
+        "mobile": {
+          "width": 375,
+          "height": 667,
+          "isOverflowing": false,
+          "bodyScrollWidth": 375,
+          "docWidth": 375,
+          "culprits": []
+        },
+        "large-mobile": {
+          "width": 425,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 425,
+          "docWidth": 425,
+          "culprits": []
+        },
+        "small-tablet": {
+          "width": 640,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 640,
+          "docWidth": 640,
+          "culprits": []
+        },
+        "tablet": {
+          "width": 768,
+          "height": 1024,
+          "isOverflowing": false,
+          "bodyScrollWidth": 768,
+          "docWidth": 768,
+          "culprits": []
+        },
+        "small-laptop": {
+          "width": 1024,
+          "height": 768,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1024,
+          "docWidth": 1024,
+          "culprits": []
+        },
+        "laptop": {
+          "width": 1280,
+          "height": 800,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1280,
+          "docWidth": 1280,
+          "culprits": []
+        },
+        "desktop": {
+          "width": 1440,
+          "height": 900,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1440,
+          "docWidth": 1440,
+          "culprits": []
+        },
+        "large-desktop": {
+          "width": 1920,
+          "height": 1080,
+          "isOverflowing": false,
+          "bodyScrollWidth": 1920,
+          "docWidth": 1920,
+          "culprits": []
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "timestamp": "2026-11-06T05:02:56.550Z"
+}

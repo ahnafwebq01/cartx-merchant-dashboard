@@ -74,9 +74,9 @@ export function StepPaymentSetup({ draft }: StepPaymentSetupProps) {
           )}
 
           {/* Cash on Delivery (COD) Option */}
-          <div className="flex items-center justify-between p-4 rounded-xl border border-border bg-card">
-            <div className="space-y-0.5 max-w-[80%]">
-              <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between p-3.5 sm:p-4 rounded-xl border border-border bg-card gap-3">
+            <div className="space-y-0.5 flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                 <span className="text-sm font-semibold text-foreground">
                   Cash on Delivery / COD (ক্যাশ অন ডেলিভারি)
                 </span>
@@ -96,6 +96,7 @@ export function StepPaymentSetup({ draft }: StepPaymentSetupProps) {
                   checked={field.value}
                   onCheckedChange={field.onChange}
                   aria-label="Toggle Cash on Delivery"
+                  className="shrink-0"
                 />
               )}
             />
@@ -145,20 +146,21 @@ export function StepPaymentSetup({ draft }: StepPaymentSetupProps) {
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center justify-between pt-4 border-t border-border">
+          <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-border">
             <Button
               type="button"
               variant="outline"
               onClick={() => router.push("/onboarding/products")}
-              className="gap-2"
+              className="gap-2 w-full sm:w-auto"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
             </Button>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
               <Button
                 type="button"
                 variant="ghost"
+                className="w-full sm:w-auto"
                 onClick={() => {
                   setValue("cashOnDelivery", true);
                   setValue("providerStatus", "unconfigured");
@@ -174,7 +176,7 @@ export function StepPaymentSetup({ draft }: StepPaymentSetupProps) {
               <Button
                 type="submit"
                 disabled={saveStepMutation.isPending}
-                className="gap-2"
+                className="gap-2 w-full sm:w-auto"
               >
                 {saveStepMutation.isPending ? (
                   <>

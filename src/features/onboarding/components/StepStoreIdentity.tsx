@@ -234,7 +234,7 @@ export function StepStoreIdentity({ draft }: StepStoreIdentityProps) {
             <Button
               type="submit"
               disabled={saveStepMutation.isPending}
-              className="gap-2"
+              className="gap-2 w-full xs:w-auto"
             >
               {saveStepMutation.isPending ? (
                 <>

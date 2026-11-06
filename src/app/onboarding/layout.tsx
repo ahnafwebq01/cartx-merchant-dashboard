@@ -33,32 +33,32 @@ export default function OnboardingLayout({
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Top Header */}
-      <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-card px-4 sm:px-8">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold shadow-sm">
-            <Store className="h-5 w-5" />
+      <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-card px-3 sm:px-8 max-w-full overflow-hidden">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold shadow-sm shrink-0">
+            <Store className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div>
-            <span className="font-bold text-sm leading-tight text-foreground block">
+          <div className="min-w-0">
+            <span className="font-bold text-xs sm:text-sm leading-tight text-foreground truncate block">
               CartX Onboarding
             </span>
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[10px] sm:text-[11px] text-muted-foreground truncate hidden xs:block">
               New Merchant Setup Wizard
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild className="text-xs text-muted-foreground">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <Button variant="ghost" size="sm" asChild className="h-8 px-2 sm:px-3 text-xs text-muted-foreground">
             <Link href="/dashboard/support">
-              <HelpCircle className="h-4 w-4 mr-1.5" />
-              Need Help?
+              <HelpCircle className="h-4 w-4 sm:mr-1.5 shrink-0" />
+              <span className="hidden sm:inline">Need Help?</span>
             </Link>
           </Button>
-          <Button variant="outline" size="sm" asChild className="text-xs">
+          <Button variant="outline" size="sm" asChild className="h-8 px-2 sm:px-3 text-xs">
             <Link href="/dashboard">
-              <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
-              Dashboard
+              <ArrowLeft className="h-3.5 w-3.5 sm:mr-1.5 shrink-0" />
+              <span className="hidden xs:inline">Dashboard</span>
             </Link>
           </Button>
         </div>
@@ -71,7 +71,7 @@ export default function OnboardingLayout({
       />
 
       {/* Main Form Content */}
-      <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 max-w-4xl w-full mx-auto">
+      <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 max-w-4xl w-full mx-auto min-w-0">
         {children}
       </main>
     </div>

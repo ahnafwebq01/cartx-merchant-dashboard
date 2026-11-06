@@ -180,12 +180,12 @@ export function StepShippingSetup({ draft }: StepShippingSetupProps) {
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center justify-between pt-4 border-t border-border">
+          <div className="flex flex-col-reverse xs:flex-row items-stretch xs:items-center justify-between gap-3 pt-4 border-t border-border">
             <Button
               type="button"
               variant="outline"
               onClick={() => router.push("/onboarding/payments")}
-              className="gap-2"
+              className="gap-2 w-full xs:w-auto"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -193,7 +193,7 @@ export function StepShippingSetup({ draft }: StepShippingSetupProps) {
             <Button
               type="submit"
               disabled={saveStepMutation.isPending}
-              className="gap-2"
+              className="gap-2 w-full xs:w-auto"
             >
               {saveStepMutation.isPending ? (
                 <>

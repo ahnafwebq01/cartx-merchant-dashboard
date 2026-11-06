@@ -4,16 +4,32 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { storefrontSetupSchema, type StorefrontSetupFormValues } from "../schemas";
+import {
+  storefrontSetupSchema,
+  type StorefrontSetupFormValues,
+} from "../schemas";
 import { useSaveStep } from "../hooks";
 import type { OnboardingDraft } from "../types";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, AlertCircle, ArrowRight, ArrowLeft, Info, Check } from "lucide-react";
+import {
+  Loader2,
+  AlertCircle,
+  ArrowRight,
+  ArrowLeft,
+  Info,
+  Check,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface StepStorefrontProps {
@@ -33,19 +49,22 @@ const THEMES = [
   {
     id: "modern_clean",
     name: "Modern Commerce",
-    description: "Clean, spacious grid layout designed for high-conversion retail.",
+    description:
+      "Clean, spacious grid layout designed for high-conversion retail.",
     tag: "Recommended",
   },
   {
     id: "minimal_boutique",
     name: "Minimal Boutique",
-    description: "Elegant typography and generous whitespace for fashion and lifestyle.",
+    description:
+      "Elegant typography and generous whitespace for fashion and lifestyle.",
     tag: "Popular",
   },
   {
     id: "bold_express",
     name: "Express Superstore",
-    description: "Dense, catalog-focused layout optimized for electronics and supermarkets.",
+    description:
+      "Dense, catalog-focused layout optimized for electronics and supermarkets.",
     tag: "Catalog",
   },
 ];
@@ -89,7 +108,9 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
   return (
     <Card className="border-border shadow-sm">
       <CardHeader>
-        <CardTitle className="text-xl">Step 3 — Storefront & Branding</CardTitle>
+        <CardTitle className="text-xl">
+          Step 3 — Storefront & Branding
+        </CardTitle>
         <CardDescription>
           স্টোরের ব্র্যান্ডিং রঙ, লোগো এবং থিম নির্বাচন করুন।
         </CardDescription>
@@ -109,26 +130,36 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
 
           {/* Store Description */}
           <div className="space-y-1.5">
-            <Label htmlFor="storeDescription">Store Description (স্টোরের বিবরণ) *</Label>
+            <Label htmlFor="storeDescription">
+              Store Description (স্টোরের বিবরণ) *
+            </Label>
             <Textarea
               id="storeDescription"
               placeholder="e.g. Bangladesh's premier destination for authentic organic products, delivered directly to your doorstep."
               {...register("storeDescription")}
             />
             {errors.storeDescription && (
-              <p className="text-xs text-destructive">{errors.storeDescription.message}</p>
+              <p className="text-xs text-destructive">
+                {errors.storeDescription.message}
+              </p>
             )}
           </div>
 
           {/* Brand Color Selection */}
           <div className="space-y-2">
-            <Label htmlFor="brandColor">Primary Brand Color (ব্র্যান্ডের মূল রঙ) *</Label>
+            <Label htmlFor="brandColor">
+              Primary Brand Color (ব্র্যান্ডের মূল রঙ) *
+            </Label>
             <div className="flex items-center gap-3">
               <input
                 type="color"
                 id="brandColorPicker"
                 value={watchedColor}
-                onChange={(e) => setValue("brandColor", e.target.value, { shouldValidate: true })}
+                onChange={(e) =>
+                  setValue("brandColor", e.target.value, {
+                    shouldValidate: true,
+                  })
+                }
                 className="h-10 w-12 rounded cursor-pointer border border-border p-1 bg-card"
                 aria-label="Color Picker"
               />
@@ -145,7 +176,9 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
                 <button
                   key={color.hex}
                   type="button"
-                  onClick={() => setValue("brandColor", color.hex, { shouldValidate: true })}
+                  onClick={() =>
+                    setValue("brandColor", color.hex, { shouldValidate: true })
+                  }
                   className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs border border-border bg-card hover:bg-muted transition-colors"
                 >
                   <span
@@ -157,7 +190,9 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
               ))}
             </div>
             {errors.brandColor && (
-              <p className="text-xs text-destructive">{errors.brandColor.message}</p>
+              <p className="text-xs text-destructive">
+                {errors.brandColor.message}
+              </p>
             )}
           </div>
 
@@ -167,10 +202,14 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
             <div className="p-3 rounded-lg border border-border bg-muted/30 text-xs text-muted-foreground flex items-start gap-2">
               <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-foreground">Cloud Storage Upload Contract Notice</p>
+                <p className="font-medium text-foreground">
+                  Cloud Storage Upload Contract Notice
+                </p>
                 <p className="mt-0.5">
-                  Direct local file upload requires backend presigned S3/Cloudinary URLs (documented in <code>API_GAPS.md</code>).
-                  For now, you may provide an existing public logo image URL, or leave blank to use your store initials.
+                  Direct local file upload requires backend presigned
+                  S3/Cloudinary URLs (documented in <code>API_GAPS.md</code>).
+                  For now, you may provide an existing public logo image URL, or
+                  leave blank to use your store initials.
                 </p>
               </div>
             </div>
@@ -180,20 +219,26 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
               {...register("logoUrl")}
             />
             {errors.logoUrl && (
-              <p className="text-xs text-destructive">{errors.logoUrl.message}</p>
+              <p className="text-xs text-destructive">
+                {errors.logoUrl.message}
+              </p>
             )}
           </div>
 
           {/* Theme Selection */}
           <div className="space-y-3">
-            <Label>Select Storefront Theme (ওয়েবসাইটের থিম নির্বাচন করুন) *</Label>
+            <Label>
+              Select Storefront Theme (ওয়েবসাইটের থিম নির্বাচন করুন) *
+            </Label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {THEMES.map((theme) => {
                 const isSelected = watchedTheme === theme.id;
                 return (
                   <div
                     key={theme.id}
-                    onClick={() => setValue("themeId", theme.id, { shouldValidate: true })}
+                    onClick={() =>
+                      setValue("themeId", theme.id, { shouldValidate: true })
+                    }
                     className={`relative p-4 rounded-xl border cursor-pointer transition-all ${
                       isSelected
                         ? "border-primary bg-primary/5 ring-2 ring-primary/20"
@@ -201,7 +246,9 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <h4 className="font-semibold text-sm text-foreground">{theme.name}</h4>
+                      <h4 className="font-semibold text-sm text-foreground">
+                        {theme.name}
+                      </h4>
                       {isSelected ? (
                         <span className="h-5 w-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
                           <Check className="h-3 w-3 stroke-[3]" />
@@ -220,17 +267,19 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
               })}
             </div>
             {errors.themeId && (
-              <p className="text-xs text-destructive">{errors.themeId.message}</p>
+              <p className="text-xs text-destructive">
+                {errors.themeId.message}
+              </p>
             )}
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center justify-between pt-4 border-t border-border">
+          <div className="flex flex-col-reverse xs:flex-row items-stretch xs:items-center justify-between gap-3 pt-4 border-t border-border">
             <Button
               type="button"
               variant="outline"
               onClick={() => router.push("/onboarding/business")}
-              className="gap-2"
+              className="gap-2 w-full xs:w-auto"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -238,7 +287,7 @@ export function StepStorefront({ draft }: StepStorefrontProps) {
             <Button
               type="submit"
               disabled={saveStepMutation.isPending}
-              className="gap-2"
+              className="gap-2 w-full xs:w-auto"
             >
               {saveStepMutation.isPending ? (
                 <>
