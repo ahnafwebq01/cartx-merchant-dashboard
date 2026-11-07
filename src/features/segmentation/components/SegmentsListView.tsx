@@ -220,27 +220,177 @@ export function SegmentsListView() {
             onAction={handleCreate}
           />
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold">Segment Name</TableHead>
-                <TableHead className="text-xs font-semibold">Criteria Conditions</TableHead>
-                <TableHead className="text-xs font-semibold text-center">Matched Audience</TableHead>
-                <TableHead className="text-xs font-semibold">Status</TableHead>
-                <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {segments.map((seg) => (
-                <TableRow key={seg.id} className="hover:bg-muted/30">
-                  <TableCell className="py-3">
-                    <div className="font-semibold text-xs text-foreground">{seg.name}</div>
-                    <div className="text-[11px] text-muted-foreground line-clamp-1 max-w-xs">
-                      {seg.description || "No description provided"}
-                    </div>
-                  </TableCell>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/50">
+                    <TableHead className="text-xs font-semibold">Segment Name</TableHead>
+                    <TableHead className="text-xs font-semibold">Criteria Conditions</TableHead>
+                    <TableHead className="text-xs font-semibold text-center">Matched Audience</TableHead>
+                    <TableHead className="text-xs font-semibold">Status</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {segments.map((seg) => (
+                    <TableRow key={seg.id} className="hover:bg-muted/30">
+                      <TableCell className="py-3">
+                        <div className="font-semibold text-xs text-foreground">{seg.name}</div>
+                        <div className="text-[11px] text-muted-foreground line-clamp-1 max-w-xs">
+                          {seg.description || "No description provided"}
+                        </div>
+                      </TableCell>
 
-                  <TableCell className="py-3">
+                      <TableCell className="py-3">
+                        <div className="flex flex-wrap gap-1">
+                          {seg.conditionGroups.map((grp, idx) => (
+                            <Badge
+                              key={grp.id}
+                              variant="secondary"
+                              className="text-[10px] font-mono px-1.5 py-0.5"
+                            >
+                              {grp.conditions.length} condition{grp.conditions.length > 1 ? "s" : ""}
+                              {idx < seg.conditionGroups.length - 1 && (
+                                <span className="ml-1 text-primary font-bold">{seg.groupLogic}</span>
+                              )}
+                            </Badge>
+                          ))}
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="py-3 text-center">
+                        <Badge variant="outline" className="font-mono text-xs">
+                          {seg.matchingCustomerCount} customers
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell className="py-3">
+                        <Badge
+                          variant="outline"
+                          className={`text-[10px] font-medium capitalize ${
+                            seg.isActive
+                              ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200"
+                              : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200"
+                          }`}
+                        >
+                          {seg.isActive ? "Active" : "Inactive"}
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell className="py-3 text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Open menu</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-40">
+                            <DropdownMenuItem onClick={() => handleEdit(seg)} className="text-xs cursor-pointer">
+                              <Edit className="h-3.5 w-3.5 mr-2" />
+                              Edit Segment
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => duplicateMutation.mutate(seg.id)}
+                              className="text-xs cursor-pointer"
+                            >
+                              <Copy className="h-3.5 w-3.5 mr-2" />
+                              Duplicate
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => toggleMutation.mutate(seg.id)}
+                              className="text-xs cursor-pointer"
+                            >
+                              <CheckCircle2 className="h-3.5 w-3.5 mr-2" />
+                              {seg.isActive ? "Deactivate" : "Activate"}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => setDeleteTarget(seg)}
+                              className="text-xs text-destructive cursor-pointer"
+                            >
+                              <Trash2 className="h-3.5 w-3.5 mr-2" />
+                              Delete Segment
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card-Based Transformation View */}
+            <div className="block md:hidden divide-y divide-border/60">
+              {segments.map((seg) => (
+                <div key={seg.id} className="p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <span className="font-semibold text-xs text-foreground block truncate">
+                        {seg.name}
+                      </span>
+                      <p className="text-[11px] text-muted-foreground line-clamp-2 mt-0.5">
+                        {seg.description || "No description provided"}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Badge
+                        variant="outline"
+                        className={`text-[10px] font-medium capitalize ${
+                          seg.isActive
+                            ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200"
+                            : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200"
+                        }`}
+                      >
+                        {seg.isActive ? "Active" : "Inactive"}
+                      </Badge>
+
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Open menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-40">
+                          <DropdownMenuItem onClick={() => handleEdit(seg)} className="text-xs cursor-pointer">
+                            <Edit className="h-3.5 w-3.5 mr-2" />
+                            Edit Segment
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => duplicateMutation.mutate(seg.id)}
+                            className="text-xs cursor-pointer"
+                          >
+                            <Copy className="h-3.5 w-3.5 mr-2" />
+                            Duplicate
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => toggleMutation.mutate(seg.id)}
+                            className="text-xs cursor-pointer"
+                          >
+                            <CheckCircle2 className="h-3.5 w-3.5 mr-2" />
+                            {seg.isActive ? "Deactivate" : "Activate"}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => setDeleteTarget(seg)}
+                            className="text-xs text-destructive cursor-pointer"
+                          >
+                            <Trash2 className="h-3.5 w-3.5 mr-2" />
+                            Delete Segment
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </div>
+
+                  {/* Conditions */}
+                  <div className="text-xs pt-1 border-t border-border/40">
+                    <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block mb-1">Criteria Conditions</span>
                     <div className="flex flex-wrap gap-1">
                       {seg.conditionGroups.map((grp, idx) => (
                         <Badge
@@ -255,69 +405,19 @@ export function SegmentsListView() {
                         </Badge>
                       ))}
                     </div>
-                  </TableCell>
+                  </div>
 
-                  <TableCell className="py-3 text-center">
-                    <Badge variant="outline" className="font-mono text-xs">
+                  {/* Matched Audience */}
+                  <div className="flex items-center justify-between pt-1 border-t border-border/40 text-xs">
+                    <span className="text-[11px] text-muted-foreground">Matched Audience</span>
+                    <Badge variant="outline" className="font-mono text-xs font-semibold">
                       {seg.matchingCustomerCount} customers
                     </Badge>
-                  </TableCell>
-
-                  <TableCell className="py-3">
-                    <Badge
-                      variant="outline"
-                      className={`text-[10px] font-medium capitalize ${
-                        seg.isActive
-                          ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200"
-                          : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200"
-                      }`}
-                    >
-                      {seg.isActive ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
-
-                  <TableCell className="py-3 text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Open menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-40">
-                        <DropdownMenuItem onClick={() => handleEdit(seg)} className="text-xs cursor-pointer">
-                          <Edit className="h-3.5 w-3.5 mr-2" />
-                          Edit Segment
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => duplicateMutation.mutate(seg.id)}
-                          className="text-xs cursor-pointer"
-                        >
-                          <Copy className="h-3.5 w-3.5 mr-2" />
-                          Duplicate
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => toggleMutation.mutate(seg.id)}
-                          className="text-xs cursor-pointer"
-                        >
-                          <CheckCircle2 className="h-3.5 w-3.5 mr-2" />
-                          {seg.isActive ? "Deactivate" : "Activate"}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => setDeleteTarget(seg)}
-                          className="text-xs text-destructive cursor-pointer"
-                        >
-                          <Trash2 className="h-3.5 w-3.5 mr-2" />
-                          Delete Segment
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
+                  </div>
+                </div>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+          </>
         )}
       </Card>
 

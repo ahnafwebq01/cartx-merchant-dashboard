@@ -181,114 +181,213 @@ export function ShipmentListTable({
 
       {/* Shipments Table */}
       <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-        <Table>
-          <TableHeader className="bg-muted/50">
-            <TableRow className="hover:bg-transparent">
-              <TableHead className="text-xs font-semibold">
-                Consignment / Tracking
-              </TableHead>
-              <TableHead className="text-xs font-semibold">Order #</TableHead>
-              <TableHead className="text-xs font-semibold">Courier</TableHead>
-              <TableHead className="text-xs font-semibold">
-                Recipient & Destination
-              </TableHead>
-              <TableHead className="text-xs font-semibold">
-                COD Amount
-              </TableHead>
-              <TableHead className="text-xs font-semibold">Status</TableHead>
-              <TableHead className="text-xs font-semibold">Date</TableHead>
-              <TableHead className="text-xs font-semibold text-right">
-                Action
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={8}
-                  className="text-center py-8 text-xs text-muted-foreground"
-                >
-                  <RefreshCw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
-                  Loading shipments...
-                </TableCell>
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
+          <Table>
+            <TableHeader className="bg-muted/50">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="text-xs font-semibold">
+                  Consignment / Tracking
+                </TableHead>
+                <TableHead className="text-xs font-semibold">Order #</TableHead>
+                <TableHead className="text-xs font-semibold">Courier</TableHead>
+                <TableHead className="text-xs font-semibold">
+                  Recipient & Destination
+                </TableHead>
+                <TableHead className="text-xs font-semibold">
+                  COD Amount
+                </TableHead>
+                <TableHead className="text-xs font-semibold">Status</TableHead>
+                <TableHead className="text-xs font-semibold">Date</TableHead>
+                <TableHead className="text-xs font-semibold text-right">
+                  Action
+                </TableHead>
               </TableRow>
-            ) : shipments.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={8}
-                  className="text-center py-8 text-xs text-muted-foreground"
-                >
-                  No shipments found matching the selected filters.
-                </TableCell>
-              </TableRow>
-            ) : (
-              shipments.map((shp) => (
-                <TableRow key={shp.id} className="hover:bg-muted/30">
-                  <TableCell className="font-mono text-xs">
-                    <span className="font-semibold text-foreground block">
-                      {shp.consignmentId}
-                    </span>
-                    <span className="text-[10px] text-primary font-medium">
-                      {shp.trackingId}
-                    </span>
-                  </TableCell>
-                  <TableCell className="font-mono text-xs">
-                    <Link
-                      href={`/dashboard/orders/${shp.orderId}`}
-                      className="text-primary hover:underline font-semibold flex items-center gap-1"
-                    >
-                      {shp.orderNumber}
-                      <ExternalLink className="h-2.5 w-2.5 opacity-60" />
-                    </Link>
-                  </TableCell>
-                  <TableCell className="text-xs font-medium">
-                    <Badge variant="secondary" className="text-[10px]">
-                      {shp.courierName}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    <div className="font-medium text-foreground">
-                      {shp.recipientName}
-                    </div>
-                    <div className="text-[11px] text-muted-foreground truncate max-w-xs">
-                      {shp.city}, {shp.district} • {shp.recipientPhone}
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-mono text-xs font-semibold text-foreground">
-                    {shp.codAmount > 0 ? (
-                      `৳${shp.codAmount.toLocaleString("en-BD")}`
-                    ) : (
-                      <span className="text-muted-foreground font-normal">
-                        Prepaid (৳0)
-                      </span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <ShipmentStatusBadge status={shp.status} />
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground font-mono">
-                    {new Date(shp.createdAt).toLocaleDateString("en-BD", {
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setSelectedShipment(shp)}
-                      className="h-7 px-2 text-xs gap-1"
-                    >
-                      <Eye className="h-3.5 w-3.5" />
-                      <span>Track</span>
-                    </Button>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={8}
+                    className="text-center py-8 text-xs text-muted-foreground"
+                  >
+                    <RefreshCw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
+                    Loading shipments...
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : shipments.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={8}
+                    className="text-center py-8 text-xs text-muted-foreground"
+                  >
+                    No shipments found matching the selected filters.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                shipments.map((shp) => (
+                  <TableRow key={shp.id} className="hover:bg-muted/30">
+                    <TableCell className="font-mono text-xs">
+                      <span className="font-semibold text-foreground block">
+                        {shp.consignmentId}
+                      </span>
+                      <span className="text-[10px] text-primary font-medium">
+                        {shp.trackingId}
+                      </span>
+                    </TableCell>
+                    <TableCell className="font-mono text-xs">
+                      <Link
+                        href={`/dashboard/orders/${shp.orderId}`}
+                        className="text-primary hover:underline font-semibold flex items-center gap-1"
+                      >
+                        {shp.orderNumber}
+                        <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-xs font-medium">
+                      <Badge variant="secondary" className="text-[10px]">
+                        {shp.courierName}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-xs">
+                      <div className="font-medium text-foreground">
+                        {shp.recipientName}
+                      </div>
+                      <div className="text-[11px] text-muted-foreground truncate max-w-xs">
+                        {shp.city}, {shp.district} • {shp.recipientPhone}
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-mono text-xs font-semibold text-foreground">
+                      {shp.codAmount > 0 ? (
+                        `৳${shp.codAmount.toLocaleString("en-BD")}`
+                      ) : (
+                        <span className="text-muted-foreground font-normal">
+                          Prepaid (৳0)
+                        </span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <ShipmentStatusBadge status={shp.status} />
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground font-mono">
+                      {new Date(shp.createdAt).toLocaleDateString("en-BD", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedShipment(shp)}
+                        className="h-7 px-2 text-xs gap-1"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        <span>Track</span>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block lg:hidden">
+          {isLoading ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              <RefreshCw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
+              Loading shipments...
+            </div>
+          ) : shipments.length === 0 ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              No shipments found matching the selected filters.
+            </div>
+          ) : (
+            <div className="divide-y divide-border/60">
+              {shipments.map((shp) => (
+                <div key={shp.id} className="p-4 space-y-3">
+                  {/* Top: Tracking ID, Courier, Status, Track Action */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-mono font-bold text-xs text-foreground">
+                          {shp.consignmentId}
+                        </span>
+                        <Badge variant="secondary" className="text-[10px]">
+                          {shp.courierName}
+                        </Badge>
+                      </div>
+                      <span className="font-mono text-[10px] text-primary font-medium block mt-0.5">
+                        Track: {shp.trackingId}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <ShipmentStatusBadge status={shp.status} />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedShipment(shp)}
+                        className="h-7 px-2 text-xs gap-1"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        <span>Track</span>
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Order & Recipient */}
+                  <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                    <div>
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Order #</span>
+                      <Link
+                        href={`/dashboard/orders/${shp.orderId}`}
+                        className="text-primary hover:underline font-mono font-semibold flex items-center gap-1 mt-0.5"
+                      >
+                        {shp.orderNumber}
+                        <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                      </Link>
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">COD Amount</span>
+                      <span className="font-mono font-bold text-foreground block mt-0.5">
+                        {shp.codAmount > 0 ? (
+                          `৳${shp.codAmount.toLocaleString("en-BD")}`
+                        ) : (
+                          <span className="text-muted-foreground font-normal">Prepaid (৳0)</span>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Destination Details */}
+                  <div className="text-xs pt-1 border-t border-border/40">
+                    <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Recipient</span>
+                    <span className="font-medium text-foreground block mt-0.5">{shp.recipientName}</span>
+                    <span className="text-[11px] text-muted-foreground block truncate">
+                      {shp.city}, {shp.district} • {shp.recipientPhone}
+                    </span>
+                  </div>
+
+                  {/* Date Footer */}
+                  <div className="flex items-center justify-between pt-1 border-t border-border/40 text-[11px] text-muted-foreground font-mono">
+                    <span>Created Date</span>
+                    <span>
+                      {new Date(shp.createdAt).toLocaleDateString("en-BD", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Clamped Pagination */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-border bg-muted/20 text-xs text-muted-foreground text-center sm:text-left">

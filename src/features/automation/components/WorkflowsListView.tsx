@@ -148,73 +148,147 @@ export function WorkflowsListView() {
             }}
           />
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold">Workflow</TableHead>
-                <TableHead className="text-xs font-semibold">Event Trigger</TableHead>
-                <TableHead className="text-xs font-semibold">Rules</TableHead>
-                <TableHead className="text-xs font-semibold text-center">Status</TableHead>
-                <TableHead className="text-xs font-semibold text-center">Runs</TableHead>
-                <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/50">
+                    <TableHead className="text-xs font-semibold">Workflow</TableHead>
+                    <TableHead className="text-xs font-semibold">Event Trigger</TableHead>
+                    <TableHead className="text-xs font-semibold">Rules</TableHead>
+                    <TableHead className="text-xs font-semibold text-center">Status</TableHead>
+                    <TableHead className="text-xs font-semibold text-center">Runs</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {workflows.map((wf) => (
+                    <TableRow key={wf.id} className="hover:bg-muted/30">
+                      <TableCell className="py-3">
+                        <div className="font-semibold text-xs text-foreground">{wf.name}</div>
+                        <div className="text-[11px] text-muted-foreground line-clamp-1 max-w-xs">
+                          {wf.description || "No description provided"}
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="py-3">
+                        <Badge variant="outline" className="font-mono text-[10px]">
+                          {wf.trigger.label}
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell className="py-3">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <span>{wf.conditions.length} condition{wf.conditions.length === 1 ? "" : "s"}</span>
+                          <span>•</span>
+                          <span>{wf.actions.length} action{wf.actions.length === 1 ? "" : "s"}</span>
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="py-3 text-center">
+                        <Badge
+                          variant="outline"
+                          className={`text-[10px] font-medium capitalize ${
+                            wf.status === "active"
+                              ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200"
+                              : wf.status === "draft"
+                              ? "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200"
+                              : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200"
+                          }`}
+                        >
+                          {wf.status}
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell className="py-3 text-center font-mono text-xs">
+                        {wf.executionCount}
+                      </TableCell>
+
+                      <TableCell className="py-3 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => simulateMutation.mutate(wf.id)}
+                            disabled={simulateMutation.isPending}
+                            className="h-7 text-xs gap-1 text-primary hover:text-primary"
+                            title="Simulate executing this workflow"
+                          >
+                            <Play className="h-3 w-3" />
+                            Test Run
+                          </Button>
+
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-7 w-7">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-40">
+                              <DropdownMenuItem asChild>
+                                <Link href={`/dashboard/automation/workflows/${wf.id}/edit`} className="text-xs cursor-pointer flex items-center">
+                                  <Edit className="h-3.5 w-3.5 mr-2" />
+                                  Edit Recipe
+                                </Link>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => duplicateMutation.mutate(wf.id)}
+                                className="text-xs cursor-pointer"
+                              >
+                                <Copy className="h-3.5 w-3.5 mr-2" />
+                                Duplicate
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => toggleMutation.mutate(wf.id)}
+                                className="text-xs cursor-pointer"
+                              >
+                                <CheckCircle2 className="h-3.5 w-3.5 mr-2" />
+                                {wf.status === "active" ? "Deactivate" : "Activate"}
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() => setDeleteTarget(wf)}
+                                className="text-xs text-destructive cursor-pointer"
+                              >
+                                <Trash2 className="h-3.5 w-3.5 mr-2" />
+                                Delete Recipe
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card-Based Transformation View */}
+            <div className="block md:hidden divide-y divide-border/60">
               {workflows.map((wf) => (
-                <TableRow key={wf.id} className="hover:bg-muted/30">
-                  <TableCell className="py-3">
-                    <div className="font-semibold text-xs text-foreground">{wf.name}</div>
-                    <div className="text-[11px] text-muted-foreground line-clamp-1 max-w-xs">
-                      {wf.description || "No description provided"}
+                <div key={wf.id} className="p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <span className="font-semibold text-xs text-foreground block truncate">{wf.name}</span>
+                      <p className="text-[11px] text-muted-foreground line-clamp-2 mt-0.5">
+                        {wf.description || "No description provided"}
+                      </p>
                     </div>
-                  </TableCell>
 
-                  <TableCell className="py-3">
-                    <Badge variant="outline" className="font-mono text-[10px]">
-                      {wf.trigger.label}
-                    </Badge>
-                  </TableCell>
-
-                  <TableCell className="py-3">
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <span>{wf.conditions.length} condition{wf.conditions.length === 1 ? "" : "s"}</span>
-                      <span>•</span>
-                      <span>{wf.actions.length} action{wf.actions.length === 1 ? "" : "s"}</span>
-                    </div>
-                  </TableCell>
-
-                  <TableCell className="py-3 text-center">
-                    <Badge
-                      variant="outline"
-                      className={`text-[10px] font-medium capitalize ${
-                        wf.status === "active"
-                          ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200"
-                          : wf.status === "draft"
-                          ? "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200"
-                          : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200"
-                      }`}
-                    >
-                      {wf.status}
-                    </Badge>
-                  </TableCell>
-
-                  <TableCell className="py-3 text-center font-mono text-xs">
-                    {wf.executionCount}
-                  </TableCell>
-
-                  <TableCell className="py-3 text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <Button
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Badge
                         variant="outline"
-                        size="sm"
-                        onClick={() => simulateMutation.mutate(wf.id)}
-                        disabled={simulateMutation.isPending}
-                        className="h-7 text-xs gap-1 text-primary hover:text-primary"
-                        title="Simulate executing this workflow"
+                        className={`text-[10px] font-medium capitalize ${
+                          wf.status === "active"
+                            ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200"
+                            : wf.status === "draft"
+                            ? "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200"
+                            : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200"
+                        }`}
                       >
-                        <Play className="h-3 w-3" />
-                        Test Run
-                      </Button>
+                        {wf.status}
+                      </Badge>
 
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -254,11 +328,43 @@ export function WorkflowsListView() {
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
-                  </TableCell>
-                </TableRow>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-border/40 text-xs">
+                    <div>
+                      <span className="text-[10px] text-muted-foreground uppercase block font-medium">Trigger</span>
+                      <Badge variant="outline" className="font-mono text-[10px] mt-0.5">
+                        {wf.trigger.label}
+                      </Badge>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="text-[10px] text-muted-foreground uppercase block font-medium">Rules</span>
+                      <span className="text-[11px] text-muted-foreground">
+                        {wf.conditions.length} cond • {wf.actions.length} act
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1 border-t border-border/40 text-xs">
+                    <span className="text-[11px] text-muted-foreground font-mono">
+                      {wf.executionCount} simulated runs
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => simulateMutation.mutate(wf.id)}
+                      disabled={simulateMutation.isPending}
+                      className="h-7 text-xs gap-1 text-primary hover:text-primary"
+                    >
+                      <Play className="h-3 w-3" />
+                      Test Run
+                    </Button>
+                  </div>
+                </div>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+          </>
         )}
       </Card>
 

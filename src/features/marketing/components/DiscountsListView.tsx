@@ -254,7 +254,8 @@ export function DiscountsListView() {
 
       {/* Discounts Table */}
       <Card>
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/30">
@@ -389,6 +390,136 @@ export function DiscountsListView() {
               )}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block lg:hidden">
+          {isLoading ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              Loading discount campaigns...
+            </div>
+          ) : discounts.length === 0 ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <Percent className="h-8 w-8 text-muted-foreground/40" />
+                <span>No discount campaigns found matching the filter.</span>
+                <Button variant="outline" size="sm" onClick={openCreateDialog} className="mt-2 text-xs">
+                  <Plus className="h-3.5 w-3.5 mr-1" />
+                  Create First Campaign
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="divide-y divide-border/60">
+              {discounts.map((discount) => (
+                <div key={discount.id} className="p-4 space-y-3">
+                  {/* Top: Name, Status, Action buttons */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <span className="font-semibold text-xs text-foreground block truncate">
+                        {discount.name}
+                      </span>
+                      <p className="text-[11px] text-muted-foreground line-clamp-1 mt-0.5">
+                        {discount.description || "Automatic checkout promotion"}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Badge
+                        variant={
+                          discount.status === "active"
+                            ? "success"
+                            : discount.status === "scheduled"
+                            ? "warning"
+                            : discount.status === "ended"
+                            ? "outline"
+                            : "secondary"
+                        }
+                        className="text-[10px] capitalize"
+                      >
+                        {discount.status}
+                      </Badge>
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openEditDialog(discount)}
+                        className="h-7 w-7 p-0"
+                        title="Edit Campaign"
+                      >
+                        <Edit2 className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setDiscountToDelete(discount)}
+                        className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+                        title="Delete Campaign"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Scope & Discount Rate */}
+                  <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                    <div>
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Scope</span>
+                      <Badge variant="outline" className="text-[10px] capitalize flex items-center gap-1 w-fit mt-0.5">
+                        {discount.scope === "storewide" ? (
+                          <Store className="h-3 w-3" />
+                        ) : discount.scope === "category" ? (
+                          <Layers className="h-3 w-3" />
+                        ) : (
+                          <Package className="h-3 w-3" />
+                        )}
+                        {discount.scope}
+                      </Badge>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Discount Rate</span>
+                      <span className="font-bold text-sm text-foreground">
+                        {discount.discountType === "percentage"
+                          ? `${discount.discountValue}% OFF`
+                          : `৳${discount.discountValue.toLocaleString("en-BD")} OFF`}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Min Spend */}
+                  <div className="flex items-center justify-between text-xs pt-1 border-t border-border/40">
+                    <span className="text-[11px] text-muted-foreground">Minimum Spend Threshold</span>
+                    <span className="font-medium text-foreground">
+                      {discount.minOrderAmount && discount.minOrderAmount > 0
+                        ? `৳${discount.minOrderAmount.toLocaleString("en-BD")}`
+                        : "None (No minimum)"}
+                    </span>
+                  </div>
+
+                  {/* Performance stats row */}
+                  <div className="grid grid-cols-3 gap-2 text-xs pt-1 border-t border-border/40 bg-muted/20 p-2 rounded-md">
+                    <div>
+                      <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">Orders</span>
+                      <span className="font-mono font-bold text-foreground">{discount.ordersCount}</span>
+                    </div>
+                    <div className="text-center">
+                      <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">Revenue</span>
+                      <span className="font-mono font-bold text-foreground">
+                        ৳{(discount.revenueAttributed || 0).toLocaleString("en-BD")}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">Savings</span>
+                      <span className="font-mono font-bold text-amber-600">
+                        ৳{(discount.totalDiscountGiven || 0).toLocaleString("en-BD")}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </Card>
 

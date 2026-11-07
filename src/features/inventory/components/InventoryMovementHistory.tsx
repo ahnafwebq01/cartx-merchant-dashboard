@@ -90,7 +90,8 @@ export function InventoryMovementHistory({
       </div>
 
       <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <Table>
             <TableHeader className="bg-muted/40 text-xs">
               <TableRow>
@@ -198,6 +199,82 @@ export function InventoryMovementHistory({
               )}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block md:hidden">
+          {filtered.length === 0 ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              No adjustment movements found.
+            </div>
+          ) : (
+            <div className="divide-y divide-border/60">
+              {filtered.map((m) => (
+                <div key={m.id} className="p-4 space-y-2.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <span className="font-semibold text-xs text-foreground block truncate">
+                        {m.productName}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground font-mono">
+                        {m.sku} • {new Date(m.timestamp).toLocaleDateString("en-BD", {
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                    <div>{getTypeBadge(m.type)}</div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                    <div>
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Quantity Change</span>
+                      <span
+                        className={`font-mono font-bold text-sm ${
+                          m.quantityChange > 0
+                            ? "text-emerald-600"
+                            : m.quantityChange < 0
+                              ? "text-destructive"
+                              : "text-muted-foreground"
+                        }`}
+                      >
+                        {m.quantityChange > 0 ? `+${m.quantityChange}` : m.quantityChange} units
+                      </span>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Balance</span>
+                      <div className="inline-flex items-center gap-1 font-mono text-xs">
+                        <span className="text-muted-foreground">{m.beforeQuantity}</span>
+                        <ArrowRight className="h-3 w-3 text-muted-foreground" />
+                        <span className="font-bold text-foreground">{m.afterQuantity}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-xs pt-1 border-t border-border/40">
+                    <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Reason & Reference</span>
+                    <p className="text-foreground text-xs leading-snug mt-0.5">{m.reason}</p>
+                    {m.referenceId && (
+                      <span className="text-[10px] text-muted-foreground font-mono block mt-0.5">
+                        Ref: {m.referenceId}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1 border-t border-border/40 text-xs">
+                    <span className="text-[11px] text-muted-foreground">Adjusted by</span>
+                    <div className="inline-flex items-center gap-1 text-[11px] font-medium text-foreground">
+                      <User className="h-3 w-3 text-muted-foreground" />
+                      <span>{m.actor}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

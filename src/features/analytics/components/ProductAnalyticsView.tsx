@@ -147,40 +147,66 @@ export function ProductAnalyticsView() {
             Performance rankings calculated from processed orders
           </CardDescription>
         </CardHeader>
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/50">
-              <TableHead className="text-xs font-semibold">SKU</TableHead>
-              <TableHead className="text-xs font-semibold">
-                Product Title
-              </TableHead>
-              <TableHead className="text-xs font-semibold text-center">
-                Units Sold
-              </TableHead>
-              <TableHead className="text-xs font-semibold text-right">
-                Attributed Revenue
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {products.topSellingProducts.map((p) => (
-              <TableRow key={p.id} className="hover:bg-muted/30">
-                <TableCell className="text-xs font-mono font-medium">
-                  {p.sku}
-                </TableCell>
-                <TableCell className="text-xs font-semibold text-foreground">
-                  {p.name}
-                </TableCell>
-                <TableCell className="text-xs text-center font-mono">
-                  <Badge variant="outline">{p.sales} units</Badge>
-                </TableCell>
-                <TableCell className="text-xs font-bold text-right text-primary">
-                  ৳{p.revenue.toLocaleString("en-BD")}
-                </TableCell>
+
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead className="text-xs font-semibold">SKU</TableHead>
+                <TableHead className="text-xs font-semibold">
+                  Product Title
+                </TableHead>
+                <TableHead className="text-xs font-semibold text-center">
+                  Units Sold
+                </TableHead>
+                <TableHead className="text-xs font-semibold text-right">
+                  Attributed Revenue
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {products.topSellingProducts.map((p) => (
+                <TableRow key={p.id} className="hover:bg-muted/30">
+                  <TableCell className="text-xs font-mono font-medium">
+                    {p.sku}
+                  </TableCell>
+                  <TableCell className="text-xs font-semibold text-foreground">
+                    {p.name}
+                  </TableCell>
+                  <TableCell className="text-xs text-center font-mono">
+                    <Badge variant="outline">{p.sales} units</Badge>
+                  </TableCell>
+                  <TableCell className="text-xs font-bold text-right text-primary">
+                    ৳{p.revenue.toLocaleString("en-BD")}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block md:hidden divide-y divide-border/60">
+          {products.topSellingProducts.map((p) => (
+            <div key={p.id} className="p-4 space-y-2">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <span className="font-semibold text-xs text-foreground block truncate">{p.name}</span>
+                  <span className="text-[10px] text-muted-foreground font-mono">{p.sku}</span>
+                </div>
+                <Badge variant="outline" className="text-[10px] shrink-0 font-mono">
+                  {p.sales} units
+                </Badge>
+              </div>
+
+              <div className="flex items-center justify-between pt-1 border-t border-border/40 text-xs">
+                <span className="text-[11px] text-muted-foreground">Revenue Generated</span>
+                <span className="font-mono font-bold text-primary">৳{p.revenue.toLocaleString("en-BD")}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </Card>
 
       {/* Two-Column: Low Stock & Category Performance */}
@@ -195,37 +221,58 @@ export function ProductAnalyticsView() {
               SKUs requiring warehouse replenishment
             </CardDescription>
           </CardHeader>
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold">SKU</TableHead>
-                <TableHead className="text-xs font-semibold">Title</TableHead>
-                <TableHead className="text-xs font-semibold text-right">
-                  Current Stock
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {products.lowStockProducts.map((item) => (
-                <TableRow key={item.id} className="hover:bg-muted/30">
-                  <TableCell className="text-xs font-mono">
-                    {item.sku}
-                  </TableCell>
-                  <TableCell className="text-xs font-medium truncate max-w-[140px]">
-                    {item.name}
-                  </TableCell>
-                  <TableCell className="text-xs text-right">
-                    <Badge
-                      variant="destructive"
-                      className="font-mono text-[10px]"
-                    >
-                      {item.stock} left (reorder at {item.threshold})
-                    </Badge>
-                  </TableCell>
+
+          {/* Desktop Table */}
+          <div className="hidden sm:block overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/50">
+                  <TableHead className="text-xs font-semibold">SKU</TableHead>
+                  <TableHead className="text-xs font-semibold">Title</TableHead>
+                  <TableHead className="text-xs font-semibold text-right">
+                    Current Stock
+                  </TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {products.lowStockProducts.map((item) => (
+                  <TableRow key={item.id} className="hover:bg-muted/30">
+                    <TableCell className="text-xs font-mono">
+                      {item.sku}
+                    </TableCell>
+                    <TableCell className="text-xs font-medium truncate max-w-[140px]">
+                      {item.name}
+                    </TableCell>
+                    <TableCell className="text-xs text-right">
+                      <Badge
+                        variant="destructive"
+                        className="font-mono text-[10px]"
+                      >
+                        {item.stock} left (reorder at {item.threshold})
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Mobile Card-Based Transformation View */}
+          <div className="block sm:hidden divide-y divide-border/60">
+            {products.lowStockProducts.map((item) => (
+              <div key={item.id} className="p-3.5 space-y-1.5 text-xs">
+                <div className="flex items-start justify-between gap-2">
+                  <span className="font-medium text-foreground block truncate">{item.name}</span>
+                  <span className="font-mono text-[10px] text-muted-foreground shrink-0">{item.sku}</span>
+                </div>
+                <div className="pt-1 border-t border-border/40">
+                  <Badge variant="destructive" className="font-mono text-[10px] w-full justify-center">
+                    {item.stock} left (reorder at {item.threshold})
+                  </Badge>
+                </div>
+              </div>
+            ))}
+          </div>
         </Card>
 
         <Card className="rounded-xl shadow-xs overflow-hidden">
@@ -238,36 +285,56 @@ export function ProductAnalyticsView() {
               Product catalog share and gross sales per category
             </CardDescription>
           </CardHeader>
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold">
-                  Category
-                </TableHead>
-                <TableHead className="text-xs font-semibold text-center">
-                  Products
-                </TableHead>
-                <TableHead className="text-xs font-semibold text-right">
-                  Gross Sales
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {products.categoryPerformance.map((cat) => (
-                <TableRow key={cat.category} className="hover:bg-muted/30">
-                  <TableCell className="text-xs font-semibold text-foreground">
-                    {cat.category}
-                  </TableCell>
-                  <TableCell className="text-xs text-center font-mono">
-                    <Badge variant="secondary">{cat.products}</Badge>
-                  </TableCell>
-                  <TableCell className="text-xs font-bold text-right text-primary">
-                    ৳{cat.revenue.toLocaleString("en-BD")}
-                  </TableCell>
+
+          {/* Desktop Table */}
+          <div className="hidden sm:block overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/50">
+                  <TableHead className="text-xs font-semibold">
+                    Category
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-center">
+                    Products
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-right">
+                    Gross Sales
+                  </TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {products.categoryPerformance.map((cat) => (
+                  <TableRow key={cat.category} className="hover:bg-muted/30">
+                    <TableCell className="text-xs font-semibold text-foreground">
+                      {cat.category}
+                    </TableCell>
+                    <TableCell className="text-xs text-center font-mono">
+                      <Badge variant="secondary">{cat.products}</Badge>
+                    </TableCell>
+                    <TableCell className="text-xs font-bold text-right text-primary">
+                      ৳{cat.revenue.toLocaleString("en-BD")}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Mobile Card-Based Transformation View */}
+          <div className="block sm:hidden divide-y divide-border/60">
+            {products.categoryPerformance.map((cat) => (
+              <div key={cat.category} className="p-3.5 space-y-1.5 text-xs">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-semibold text-foreground">{cat.category}</span>
+                  <Badge variant="secondary" className="text-[10px]">{cat.products} SKUs</Badge>
+                </div>
+                <div className="flex items-center justify-between pt-1 border-t border-border/40">
+                  <span className="text-[11px] text-muted-foreground">Gross Sales</span>
+                  <span className="font-mono font-bold text-primary">৳{cat.revenue.toLocaleString("en-BD")}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </Card>
       </div>
     </div>

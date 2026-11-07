@@ -305,7 +305,8 @@ export function DomainManagementView() {
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
@@ -445,6 +446,115 @@ export function DomainManagementView() {
               </TableBody>
             </Table>
           </div>
+
+          {/* Mobile Cards View */}
+          <div className="block md:hidden divide-y divide-border/60">
+            {domains.map((dom) => (
+              <div key={dom.id} className="p-4 space-y-3 hover:bg-muted/10 transition-colors">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <Globe className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                    <span className="font-mono text-xs font-semibold text-foreground break-all">{dom.domain}</span>
+                  </div>
+                  <div className="shrink-0">
+                    {dom.isDefaultSubdomain ? (
+                      <Badge variant="secondary" className="text-[10px]">
+                        Default
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-[10px]">
+                        Custom FQDN
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                  <div>
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Status</span>
+                    {dom.status === "active" ? (
+                      <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px] mt-0.5">
+                        ✓ Connected
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-[10px] mt-0.5">
+                        Pending
+                      </Badge>
+                    )}
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">SSL Certificate</span>
+                    {dom.sslStatus === "active" ? (
+                      <span className="inline-flex items-center gap-1 text-emerald-600 font-medium text-[11px] mt-0.5">
+                        <ShieldCheck className="h-3.5 w-3.5" />
+                        Active
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-amber-600 font-medium text-[11px] mt-0.5">
+                        <ShieldAlert className="h-3.5 w-3.5" />
+                        Not Active
+                      </span>
+                    )}
+                  </div>
+                  <div className="col-span-2 pt-0.5">
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Target Value</span>
+                    <span className="font-mono text-[11px] text-muted-foreground break-all">{dom.targetValue}</span>
+                  </div>
+                </div>
+
+                {!dom.isDefaultSubdomain && (
+                  <div className="flex items-center justify-end gap-1.5 pt-2 border-t border-border/40">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => verifyMutation.mutate(dom.id)}
+                      disabled={verifyMutation.isPending}
+                      className="h-8 text-xs px-2.5 gap-1 flex-1"
+                    >
+                      <RefreshCw className={`h-3 w-3 mr-1 ${verifyMutation.isPending ? "animate-spin" : ""}`} />
+                      Verify DNS
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowDnsModal(true)}
+                      className="h-8 text-xs px-2.5 flex-1"
+                    >
+                      DNS Records
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 shrink-0"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Remove Custom Domain?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to disconnect <strong>{dom.domain}</strong>? Traffic to this domain will stop routing to your storefront.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => removeDomainMutation.mutate(dom.id)}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            Remove Domain
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
 
@@ -462,64 +572,136 @@ export function DomainManagementView() {
           </DialogHeader>
 
           <div className="space-y-4 pt-2">
-            <div className="overflow-x-auto rounded-lg border border-border">
-              <Table>
-                <TableHeader>
-                  <TableRow className="hover:bg-transparent bg-muted/40">
-                    <TableHead className="text-xs font-semibold">Record Type</TableHead>
-                    <TableHead className="text-xs font-semibold">Host / Name</TableHead>
-                    <TableHead className="text-xs font-semibold">Value / Target</TableHead>
-                    <TableHead className="text-xs font-semibold">TTL</TableHead>
-                    <TableHead className="text-xs font-semibold text-right">Copy</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow className="text-xs">
-                    <TableCell className="font-bold text-primary">CNAME</TableCell>
-                    <TableCell className="font-mono">shop (or @)</TableCell>
-                    <TableCell className="font-mono text-emerald-600 font-semibold">
+            <div className="rounded-lg border border-border overflow-hidden">
+              {/* Desktop Table View */}
+              <div className="hidden sm:block overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="hover:bg-transparent bg-muted/40">
+                      <TableHead className="text-xs font-semibold">Record Type</TableHead>
+                      <TableHead className="text-xs font-semibold">Host / Name</TableHead>
+                      <TableHead className="text-xs font-semibold">Value / Target</TableHead>
+                      <TableHead className="text-xs font-semibold">TTL</TableHead>
+                      <TableHead className="text-xs font-semibold text-right">Copy</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow className="text-xs">
+                      <TableCell className="font-bold text-primary">CNAME</TableCell>
+                      <TableCell className="font-mono">shop (or @)</TableCell>
+                      <TableCell className="font-mono text-emerald-600 font-semibold">
+                        cname.cartx.com.bd
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">Automatic / 3600</TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => copyToClipboard("cname.cartx.com.bd", "cname-val")}
+                          className="h-7 px-2"
+                        >
+                          {copiedKey === "cname-val" ? (
+                            <Check className="h-3 w-3 text-emerald-600" />
+                          ) : (
+                            <Copy className="h-3 w-3" />
+                          )}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="text-xs">
+                      <TableCell className="font-bold text-primary">A</TableCell>
+                      <TableCell className="font-mono">@ (Apex Root)</TableCell>
+                      <TableCell className="font-mono text-emerald-600 font-semibold">
+                        104.21.45.120
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">3600</TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => copyToClipboard("104.21.45.120", "a-val")}
+                          className="h-7 px-2"
+                        >
+                          {copiedKey === "a-val" ? (
+                            <Check className="h-3 w-3 text-emerald-600" />
+                          ) : (
+                            <Copy className="h-3 w-3" />
+                          )}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Mobile Cards View */}
+              <div className="block sm:hidden divide-y divide-border/60">
+                <div className="p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-primary">CNAME Record</span>
+                    <span className="text-[10px] text-muted-foreground">TTL: Automatic / 3600</span>
+                  </div>
+                  <div className="text-xs flex items-center justify-between">
+                    <span className="text-muted-foreground">Host: <code className="font-mono text-foreground font-semibold">shop (or @)</code></span>
+                  </div>
+                  <div className="flex items-center justify-between gap-2 p-2 rounded bg-muted/40 border border-border/50">
+                    <span className="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold break-all">
                       cname.cartx.com.bd
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">Automatic / 3600</TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => copyToClipboard("cname.cartx.com.bd", "cname-val")}
-                        className="h-7 px-2"
-                      >
-                        {copiedKey === "cname-val" ? (
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard("cname.cartx.com.bd", "cname-val")}
+                      className="h-7 px-2 shrink-0 gap-1 text-xs"
+                    >
+                      {copiedKey === "cname-val" ? (
+                        <>
                           <Check className="h-3 w-3 text-emerald-600" />
-                        ) : (
+                          <span>Copied</span>
+                        </>
+                      ) : (
+                        <>
                           <Copy className="h-3 w-3" />
-                        )}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow className="text-xs">
-                    <TableCell className="font-bold text-primary">A</TableCell>
-                    <TableCell className="font-mono">@ (Apex Root)</TableCell>
-                    <TableCell className="font-mono text-emerald-600 font-semibold">
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-primary">A Record</span>
+                    <span className="text-[10px] text-muted-foreground">TTL: 3600</span>
+                  </div>
+                  <div className="text-xs flex items-center justify-between">
+                    <span className="text-muted-foreground">Host: <code className="font-mono text-foreground font-semibold">@ (Apex Root)</code></span>
+                  </div>
+                  <div className="flex items-center justify-between gap-2 p-2 rounded bg-muted/40 border border-border/50">
+                    <span className="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold break-all">
                       104.21.45.120
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">3600</TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => copyToClipboard("104.21.45.120", "a-val")}
-                        className="h-7 px-2"
-                      >
-                        {copiedKey === "a-val" ? (
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard("104.21.45.120", "a-val")}
+                      className="h-7 px-2 shrink-0 gap-1 text-xs"
+                    >
+                      {copiedKey === "a-val" ? (
+                        <>
                           <Check className="h-3 w-3 text-emerald-600" />
-                        ) : (
+                          <span>Copied</span>
+                        </>
+                      ) : (
+                        <>
                           <Copy className="h-3 w-3" />
-                        )}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="p-3.5 rounded-lg border border-border/80 bg-muted/20 space-y-2 text-xs text-muted-foreground">

@@ -1,0 +1,172 @@
+{
+  "totalChecks": 264,
+  "totalOverflowFailures": 0,
+  "results": [
+    {
+      "page": "dashboard-overview",
+      "path": "/dashboard",
+      "passed": true
+    },
+    {
+      "page": "orders-list",
+      "path": "/dashboard/orders",
+      "passed": true
+    },
+    {
+      "page": "orders-returns",
+      "path": "/dashboard/orders/returns",
+      "passed": true
+    },
+    {
+      "page": "products-list",
+      "path": "/dashboard/products",
+      "passed": true
+    },
+    {
+      "page": "products-categories",
+      "path": "/dashboard/products/categories",
+      "passed": true
+    },
+    {
+      "page": "products-collections",
+      "path": "/dashboard/products/collections",
+      "passed": true
+    },
+    {
+      "page": "inventory-list",
+      "path": "/dashboard/inventory",
+      "passed": true
+    },
+    {
+      "page": "inventory-adjustments",
+      "path": "/dashboard/inventory/adjustments",
+      "passed": true
+    },
+    {
+      "page": "customers-list",
+      "path": "/dashboard/customers",
+      "passed": true
+    },
+    {
+      "page": "customers-segments",
+      "path": "/dashboard/customers/groups",
+      "passed": true
+    },
+    {
+      "page": "payments-transactions",
+      "path": "/dashboard/payments/transactions",
+      "passed": true
+    },
+    {
+      "page": "payments-refunds",
+      "path": "/dashboard/payments/refunds",
+      "passed": true
+    },
+    {
+      "page": "shipping-shipments",
+      "path": "/dashboard/shipping/shipments",
+      "passed": true
+    },
+    {
+      "page": "marketing-coupons",
+      "path": "/dashboard/marketing/coupons",
+      "passed": true
+    },
+    {
+      "page": "marketing-discounts",
+      "path": "/dashboard/marketing/discounts",
+      "passed": true
+    },
+    {
+      "page": "marketing-analytics",
+      "path": "/dashboard/marketing/analytics",
+      "passed": true
+    },
+    {
+      "page": "marketing-reports",
+      "path": "/dashboard/marketing/reports",
+      "passed": true
+    },
+    {
+      "page": "analytics-customers",
+      "path": "/dashboard/analytics/customers",
+      "passed": true
+    },
+    {
+      "page": "analytics-marketing",
+      "path": "/dashboard/analytics/marketing",
+      "passed": true
+    },
+    {
+      "page": "analytics-products",
+      "path": "/dashboard/analytics/products",
+      "passed": true
+    },
+    {
+      "page": "analytics-sales",
+      "path": "/dashboard/analytics/sales",
+      "passed": true
+    },
+    {
+      "page": "automation-overview",
+      "path": "/dashboard/automation",
+      "passed": true
+    },
+    {
+      "page": "automation-workflows",
+      "path": "/dashboard/automation/workflows",
+      "passed": true
+    },
+    {
+      "page": "automation-history",
+      "path": "/dashboard/automation/history",
+      "passed": true
+    },
+    {
+      "page": "integrations-webhooks",
+      "path": "/dashboard/integrations/webhooks",
+      "passed": true
+    },
+    {
+      "page": "billing-overview",
+      "path": "/dashboard/billing",
+      "passed": true
+    },
+    {
+      "page": "billing-invoices",
+      "path": "/dashboard/billing/invoices",
+      "passed": true
+    },
+    {
+      "page": "billing-plans",
+      "path": "/dashboard/billing/plans",
+      "passed": true
+    },
+    {
+      "page": "store-pages",
+      "path": "/dashboard/store/pages",
+      "passed": true
+    },
+    {
+      "page": "store-domains",
+      "path": "/dashboard/store/domains",
+      "passed": true
+    },
+    {
+      "page": "support-tickets",
+      "path": "/dashboard/support/tickets",
+      "passed": true
+    },
+    {
+      "page": "team-members",
+      "path": "/dashboard/team",
+      "passed": true
+    },
+    {
+      "page": "team-roles",
+      "path": "/dashboard/team/roles",
+      "passed": true
+    }
+  ],
+  "failureDetails": []
+}

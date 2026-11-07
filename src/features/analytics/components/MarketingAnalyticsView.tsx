@@ -123,32 +123,59 @@ export function MarketingAnalyticsView() {
             Revenue generated versus redemption counts for active promotional tools
           </CardDescription>
         </CardHeader>
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/50">
-              <TableHead className="text-xs font-semibold">Campaign Name</TableHead>
-              <TableHead className="text-xs font-semibold">Type</TableHead>
-              <TableHead className="text-xs font-semibold text-center">Redemptions</TableHead>
-              <TableHead className="text-xs font-semibold text-right">Attributed Revenue</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {marketing.campaignPerformance.map((c, idx) => (
-              <TableRow key={idx} className="hover:bg-muted/30">
-                <TableCell className="text-xs font-semibold text-foreground">{c.name}</TableCell>
-                <TableCell className="text-xs">
-                  <Badge variant="secondary" className="text-[10px]">
-                    {c.type}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-xs text-center font-mono">{c.redemptions}</TableCell>
-                <TableCell className="text-xs font-bold text-right text-primary">
-                  ৳{c.revenue.toLocaleString("en-BD")}
-                </TableCell>
+
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead className="text-xs font-semibold">Campaign Name</TableHead>
+                <TableHead className="text-xs font-semibold">Type</TableHead>
+                <TableHead className="text-xs font-semibold text-center">Redemptions</TableHead>
+                <TableHead className="text-xs font-semibold text-right">Attributed Revenue</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {marketing.campaignPerformance.map((c, idx) => (
+                <TableRow key={idx} className="hover:bg-muted/30">
+                  <TableCell className="text-xs font-semibold text-foreground">{c.name}</TableCell>
+                  <TableCell className="text-xs">
+                    <Badge variant="secondary" className="text-[10px]">
+                      {c.type}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-xs text-center font-mono">{c.redemptions}</TableCell>
+                  <TableCell className="text-xs font-bold text-right text-primary">
+                    ৳{c.revenue.toLocaleString("en-BD")}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block md:hidden divide-y divide-border/60">
+          {marketing.campaignPerformance.map((c, idx) => (
+            <div key={idx} className="p-4 space-y-2.5">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-semibold text-xs text-foreground block truncate">{c.name}</span>
+                <Badge variant="secondary" className="text-[10px] shrink-0">
+                  {c.type}
+                </Badge>
+              </div>
+
+              <div className="flex items-center justify-between pt-1 border-t border-border/40 text-xs">
+                <span className="text-[11px] text-muted-foreground">
+                  Redemptions: <strong className="text-foreground font-mono">{c.redemptions}</strong>
+                </span>
+                <span className="font-mono font-bold text-primary">
+                  ৳{c.revenue.toLocaleString("en-BD")}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </Card>
     </div>
   );

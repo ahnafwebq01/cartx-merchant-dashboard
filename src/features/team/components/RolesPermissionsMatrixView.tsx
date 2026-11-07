@@ -65,84 +65,141 @@ export function RolesPermissionsMatrixView() {
             </div>
           </div>
 
-          <div className="rounded-md border border-border overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/50">
-                  <TableHead className="min-w-[220px]">Permission Scope</TableHead>
-                  {ALL_ROLES.map((roleKey) => (
-                    <TableHead key={roleKey} className="text-center min-w-[110px] px-2">
-                      <div className="font-semibold text-xs text-foreground">
-                        {ROLE_DEFINITIONS[roleKey].label}
-                      </div>
-                      {ROLE_DEFINITIONS[roleKey].isSystemProtected && (
-                        <div className="text-[10px] text-amber-600 dark:text-amber-400 font-normal flex items-center justify-center gap-0.5 mt-0.5">
-                          <Lock className="h-3 w-3" /> Protected
+          <div className="rounded-md border border-border overflow-hidden">
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/50">
+                    <TableHead className="min-w-[220px]">Permission Scope</TableHead>
+                    {ALL_ROLES.map((roleKey) => (
+                      <TableHead key={roleKey} className="text-center min-w-[110px] px-2">
+                        <div className="font-semibold text-xs text-foreground">
+                          {ROLE_DEFINITIONS[roleKey].label}
                         </div>
-                      )}
-                    </TableHead>
+                        {ROLE_DEFINITIONS[roleKey].isSystemProtected && (
+                          <div className="text-[10px] text-amber-600 dark:text-amber-400 font-normal flex items-center justify-center gap-0.5 mt-0.5">
+                            <Lock className="h-3 w-3" /> Protected
+                          </div>
+                        )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredGroups.map((group) => (
+                    <React.Fragment key={group.name}>
+                      <TableRow className="bg-muted/30 font-medium hover:bg-muted/40">
+                        <TableCell
+                          colSpan={ALL_ROLES.length + 1}
+                          className="py-2 text-xs font-semibold uppercase tracking-wider text-primary"
+                        >
+                          {group.name} ({group.permissions.length})
+                        </TableCell>
+                      </TableRow>
+                      {group.permissions.map((perm) => (
+                        <TableRow key={perm.id} className="hover:bg-muted/20">
+                          <TableCell className="py-2.5">
+                            <div className="font-medium text-sm text-foreground">
+                              {perm.label}
+                            </div>
+                            <div className="text-xs text-muted-foreground font-mono">
+                              {perm.id}
+                            </div>
+                            <div className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">
+                              {perm.description}
+                            </div>
+                          </TableCell>
+                          {ALL_ROLES.map((roleKey) => {
+                            const hasPerm =
+                              ROLE_DEFINITIONS[roleKey].defaultPermissions.includes(perm.id);
+
+                            return (
+                              <TableCell key={roleKey} className="text-center py-2.5">
+                                {hasPerm ? (
+                                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                                    <Check className="h-4 w-4" />
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-muted text-muted-foreground/40">
+                                    <X className="h-3.5 w-3.5" />
+                                  </span>
+                                )}
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      ))}
+                    </React.Fragment>
                   ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredGroups.map((group) => (
-                  <React.Fragment key={group.name}>
-                    <TableRow className="bg-muted/30 font-medium hover:bg-muted/40">
+
+                  {filteredGroups.length === 0 && (
+                    <TableRow>
                       <TableCell
                         colSpan={ALL_ROLES.length + 1}
-                        className="py-2 text-xs font-semibold uppercase tracking-wider text-primary"
+                        className="text-center py-8 text-muted-foreground"
                       >
-                        {group.name} ({group.permissions.length})
+                        No permissions match your search query &ldquo;{searchTerm}&rdquo;.
                       </TableCell>
                     </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Cards View */}
+            <div className="block lg:hidden divide-y divide-border/60">
+              {filteredGroups.map((group) => (
+                <div key={group.name} className="space-y-3 p-4">
+                  <div className="py-1 px-2.5 rounded bg-muted/60 text-xs font-semibold uppercase tracking-wider text-primary inline-block">
+                    {group.name} ({group.permissions.length})
+                  </div>
+
+                  <div className="space-y-3">
                     {group.permissions.map((perm) => (
-                      <TableRow key={perm.id} className="hover:bg-muted/20">
-                        <TableCell className="py-2.5">
-                          <div className="font-medium text-sm text-foreground">
-                            {perm.label}
+                      <div key={perm.id} className="p-3.5 rounded-lg border border-border/70 bg-card space-y-2.5">
+                        <div>
+                          <div className="flex items-start justify-between gap-2">
+                            <h4 className="font-semibold text-xs text-foreground">{perm.label}</h4>
+                            <span className="font-mono text-[10px] text-muted-foreground shrink-0">{perm.id}</span>
                           </div>
-                          <div className="text-xs text-muted-foreground font-mono">
-                            {perm.id}
-                          </div>
-                          <div className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">
-                            {perm.description}
-                          </div>
-                        </TableCell>
-                        {ALL_ROLES.map((roleKey) => {
-                          const hasPerm =
-                            ROLE_DEFINITIONS[roleKey].defaultPermissions.includes(perm.id);
+                          <p className="text-[11px] text-muted-foreground mt-0.5">{perm.description}</p>
+                        </div>
 
-                          return (
-                            <TableCell key={roleKey} className="text-center py-2.5">
-                              {hasPerm ? (
-                                <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                                  <Check className="h-4 w-4" />
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-muted text-muted-foreground/40">
-                                  <X className="h-3.5 w-3.5" />
-                                </span>
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
+                        <div className="pt-2 border-t border-border/40 grid grid-cols-2 gap-1.5">
+                          {ALL_ROLES.map((roleKey) => {
+                            const hasPerm = ROLE_DEFINITIONS[roleKey].defaultPermissions.includes(perm.id);
+                            return (
+                              <div
+                                key={roleKey}
+                                className={`flex items-center justify-between p-1.5 rounded text-[11px] ${
+                                  hasPerm
+                                    ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-medium"
+                                    : "bg-muted/40 text-muted-foreground"
+                                }`}
+                              >
+                                <span className="truncate">{ROLE_DEFINITIONS[roleKey].label}</span>
+                                {hasPerm ? (
+                                  <Check className="h-3 w-3 text-emerald-600 shrink-0 ml-1" />
+                                ) : (
+                                  <X className="h-3 w-3 text-muted-foreground/40 shrink-0 ml-1" />
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
                     ))}
-                  </React.Fragment>
-                ))}
+                  </div>
+                </div>
+              ))}
 
-                {filteredGroups.length === 0 && (
-                  <TableRow>
-                    <TableCell
-                      colSpan={ALL_ROLES.length + 1}
-                      className="text-center py-8 text-muted-foreground"
-                    >
-                      No permissions match your search query &ldquo;{searchTerm}&rdquo;.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+              {filteredGroups.length === 0 && (
+                <div className="p-8 text-center text-xs text-muted-foreground">
+                  No permissions match your search query &ldquo;{searchTerm}&rdquo;.
+                </div>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>

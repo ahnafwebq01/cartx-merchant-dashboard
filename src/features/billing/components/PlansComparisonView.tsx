@@ -189,38 +189,67 @@ export function PlansComparisonView() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border border-border overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/50">
-                  <TableHead className="min-w-[200px]">Feature & Capability</TableHead>
-                  <TableHead className="text-center min-w-[120px]">Starter</TableHead>
-                  <TableHead className="text-center min-w-[120px] bg-primary/5">
-                    Growth
-                  </TableHead>
-                  <TableHead className="text-center min-w-[120px]">Pro</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {PLAN_COMPARISON_MATRIX.map((row, idx) => (
-                  <TableRow key={idx} className="hover:bg-muted/20">
-                    <TableCell className="py-2.5 font-medium text-xs">
-                      <div>{row.name}</div>
-                      <div className="text-[10px] text-muted-foreground">{row.category}</div>
-                    </TableCell>
-                    <TableCell className="text-center py-2.5 text-xs text-muted-foreground">
-                      {row.starter}
-                    </TableCell>
-                    <TableCell className="text-center py-2.5 text-xs font-semibold text-primary bg-primary/5">
-                      {row.growth}
-                    </TableCell>
-                    <TableCell className="text-center py-2.5 text-xs text-foreground">
-                      {row.pro}
-                    </TableCell>
+          <div className="rounded-md border border-border overflow-hidden">
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/50">
+                    <TableHead className="min-w-[200px]">Feature & Capability</TableHead>
+                    <TableHead className="text-center min-w-[120px]">Starter</TableHead>
+                    <TableHead className="text-center min-w-[120px] bg-primary/5">
+                      Growth
+                    </TableHead>
+                    <TableHead className="text-center min-w-[120px]">Pro</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {PLAN_COMPARISON_MATRIX.map((row, idx) => (
+                    <TableRow key={idx} className="hover:bg-muted/20">
+                      <TableCell className="py-2.5 font-medium text-xs">
+                        <div>{row.name}</div>
+                        <div className="text-[10px] text-muted-foreground">{row.category}</div>
+                      </TableCell>
+                      <TableCell className="text-center py-2.5 text-xs text-muted-foreground">
+                        {row.starter}
+                      </TableCell>
+                      <TableCell className="text-center py-2.5 text-xs font-semibold text-primary bg-primary/5">
+                        {row.growth}
+                      </TableCell>
+                      <TableCell className="text-center py-2.5 text-xs text-foreground">
+                        {row.pro}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Cards View */}
+            <div className="block md:hidden divide-y divide-border/60">
+              {PLAN_COMPARISON_MATRIX.map((row, idx) => (
+                <div key={idx} className="p-3.5 space-y-2 hover:bg-muted/10 transition-colors">
+                  <div>
+                    <p className="font-medium text-xs text-foreground">{row.name}</p>
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{row.category}</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5 pt-1 text-center">
+                    <div className="p-1.5 rounded bg-muted/40 border border-border/50">
+                      <span className="text-[10px] text-muted-foreground block font-medium">Starter</span>
+                      <span className="text-xs text-muted-foreground font-medium">{row.starter}</span>
+                    </div>
+                    <div className="p-1.5 rounded bg-primary/10 border border-primary/20">
+                      <span className="text-[10px] text-primary block font-semibold">Growth</span>
+                      <span className="text-xs text-primary font-bold">{row.growth}</span>
+                    </div>
+                    <div className="p-1.5 rounded bg-muted/40 border border-border/50">
+                      <span className="text-[10px] text-foreground block font-medium">Pro</span>
+                      <span className="text-xs text-foreground font-semibold">{row.pro}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>

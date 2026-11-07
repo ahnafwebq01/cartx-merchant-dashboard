@@ -188,121 +188,218 @@ export function PaymentTransactionsTable({
 
       {/* Transactions Table */}
       <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-        <Table>
-          <TableHeader className="bg-muted/50">
-            <TableRow className="hover:bg-transparent">
-              <TableHead className="text-xs font-semibold">
-                Trx ID / Ref
-              </TableHead>
-              <TableHead className="text-xs font-semibold">Order #</TableHead>
-              <TableHead className="text-xs font-semibold">Customer</TableHead>
-              <TableHead className="text-xs font-semibold">Gateway</TableHead>
-              <TableHead className="text-xs font-semibold">
-                Amount (BDT)
-              </TableHead>
-              <TableHead className="text-xs font-semibold">Status</TableHead>
-              <TableHead className="text-xs font-semibold">Date</TableHead>
-              <TableHead className="text-xs font-semibold text-right">
-                Action
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={8}
-                  className="text-center py-8 text-xs text-muted-foreground"
-                >
-                  <RefreshCw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
-                  Loading payment transactions...
-                </TableCell>
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
+          <Table>
+            <TableHeader className="bg-muted/50">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="text-xs font-semibold">
+                  Trx ID / Ref
+                </TableHead>
+                <TableHead className="text-xs font-semibold">Order #</TableHead>
+                <TableHead className="text-xs font-semibold">Customer</TableHead>
+                <TableHead className="text-xs font-semibold">Gateway</TableHead>
+                <TableHead className="text-xs font-semibold">
+                  Amount (BDT)
+                </TableHead>
+                <TableHead className="text-xs font-semibold">Status</TableHead>
+                <TableHead className="text-xs font-semibold">Date</TableHead>
+                <TableHead className="text-xs font-semibold text-right">
+                  Action
+                </TableHead>
               </TableRow>
-            ) : transactions.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={8}
-                  className="text-center py-8 text-xs text-muted-foreground"
-                >
-                  No payment transactions found matching the selected filters.
-                </TableCell>
-              </TableRow>
-            ) : (
-              transactions.map((tx) => (
-                <TableRow key={tx.id} className="hover:bg-muted/30">
-                  <TableCell className="font-mono text-xs">
-                    <span className="font-semibold text-foreground block">
-                      {tx.id}
-                    </span>
-                    <span className="text-[10px] text-muted-foreground">
-                      {tx.gatewayTransactionId ? (
-                        `TrxID: ${tx.gatewayTransactionId}`
-                      ) : (
-                        <span className="italic">
-                          Ref: {tx.gatewayReference || "N/A"}
-                        </span>
-                      )}
-                    </span>
-                  </TableCell>
-                  <TableCell className="font-mono text-xs">
-                    <Link
-                      href={`/dashboard/orders/${tx.orderId}`}
-                      className="text-primary hover:underline font-semibold flex items-center gap-1"
-                    >
-                      {tx.orderNumber}
-                      <ExternalLink className="h-2.5 w-2.5 opacity-60" />
-                    </Link>
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    <div className="font-medium text-foreground">
-                      {tx.customerName}
-                    </div>
-                    <div className="text-[11px] text-muted-foreground font-mono">
-                      {tx.customerPhone}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    <Badge
-                      variant="secondary"
-                      className="uppercase font-semibold tracking-wider text-[10px]"
-                    >
-                      {tx.provider}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="font-mono text-xs font-bold text-foreground">
-                    ৳{tx.amount.toLocaleString("en-BD")}
-                    {tx.refundedAmount > 0 && (
-                      <span className="block text-[10px] font-normal text-purple-600">
-                        -৳{tx.refundedAmount.toLocaleString("en-BD")} refunded
-                      </span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <PaymentStatusBadge status={tx.status} />
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground font-mono">
-                    {new Date(tx.initiatedAt).toLocaleDateString("en-BD", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setSelectedTx(tx)}
-                      className="h-7 px-2 text-xs gap-1"
-                    >
-                      <Eye className="h-3.5 w-3.5" />
-                      <span>Details</span>
-                    </Button>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={8}
+                    className="text-center py-8 text-xs text-muted-foreground"
+                  >
+                    <RefreshCw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
+                    Loading payment transactions...
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : transactions.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={8}
+                    className="text-center py-8 text-xs text-muted-foreground"
+                  >
+                    No payment transactions found matching the selected filters.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                transactions.map((tx) => (
+                  <TableRow key={tx.id} className="hover:bg-muted/30">
+                    <TableCell className="font-mono text-xs">
+                      <span className="font-semibold text-foreground block">
+                        {tx.id}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground">
+                        {tx.gatewayTransactionId ? (
+                          `TrxID: ${tx.gatewayTransactionId}`
+                        ) : (
+                          <span className="italic">
+                            Ref: {tx.gatewayReference || "N/A"}
+                          </span>
+                        )}
+                      </span>
+                    </TableCell>
+                    <TableCell className="font-mono text-xs">
+                      <Link
+                        href={`/dashboard/orders/${tx.orderId}`}
+                        className="text-primary hover:underline font-semibold flex items-center gap-1"
+                      >
+                        {tx.orderNumber}
+                        <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-xs">
+                      <div className="font-medium text-foreground">
+                        {tx.customerName}
+                      </div>
+                      <div className="text-[11px] text-muted-foreground font-mono">
+                        {tx.customerPhone}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-xs">
+                      <Badge
+                        variant="secondary"
+                        className="uppercase font-semibold tracking-wider text-[10px]"
+                      >
+                        {tx.provider}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="font-mono text-xs font-bold text-foreground">
+                      ৳{tx.amount.toLocaleString("en-BD")}
+                      {tx.refundedAmount > 0 && (
+                        <span className="block text-[10px] font-normal text-purple-600">
+                          -৳{tx.refundedAmount.toLocaleString("en-BD")} refunded
+                        </span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <PaymentStatusBadge status={tx.status} />
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground font-mono">
+                      {new Date(tx.initiatedAt).toLocaleDateString("en-BD", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedTx(tx)}
+                        className="h-7 px-2 text-xs gap-1"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        <span>Details</span>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block lg:hidden">
+          {isLoading ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              <RefreshCw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
+              Loading payment transactions...
+            </div>
+          ) : transactions.length === 0 ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              No payment transactions found matching the selected filters.
+            </div>
+          ) : (
+            <div className="divide-y divide-border/60">
+              {transactions.map((tx) => (
+                <div key={tx.id} className="p-4 space-y-3">
+                  {/* Top: TrxID, Gateway Badge, Status, Details button */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-mono font-bold text-xs text-foreground">
+                          {tx.id}
+                        </span>
+                        <Badge
+                          variant="secondary"
+                          className="uppercase font-semibold tracking-wider text-[10px]"
+                        >
+                          {tx.provider}
+                        </Badge>
+                      </div>
+                      <span className="text-[10px] text-muted-foreground font-mono block mt-0.5">
+                        {tx.gatewayTransactionId ? `TrxID: ${tx.gatewayTransactionId}` : `Ref: ${tx.gatewayReference || "N/A"}`}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <PaymentStatusBadge status={tx.status} />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedTx(tx)}
+                        className="h-7 px-2 text-xs gap-1"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        <span>Details</span>
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Order & Customer */}
+                  <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                    <div>
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Order</span>
+                      <Link
+                        href={`/dashboard/orders/${tx.orderId}`}
+                        className="text-primary hover:underline font-mono font-semibold flex items-center gap-1 mt-0.5"
+                      >
+                        {tx.orderNumber}
+                        <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                      </Link>
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Customer</span>
+                      <span className="font-medium text-foreground block truncate">{tx.customerName}</span>
+                      <span className="text-[10px] text-muted-foreground font-mono">{tx.customerPhone}</span>
+                    </div>
+                  </div>
+
+                  {/* Amount & Date Footer */}
+                  <div className="flex items-center justify-between pt-1 border-t border-border/40 text-xs">
+                    <span className="text-[11px] text-muted-foreground font-mono">
+                      {new Date(tx.initiatedAt).toLocaleDateString("en-BD", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </span>
+                    <div className="text-right">
+                      <span className="font-mono font-bold text-sm text-foreground">
+                        ৳{tx.amount.toLocaleString("en-BD")}
+                      </span>
+                      {tx.refundedAmount > 0 && (
+                        <span className="block text-[10px] font-normal text-purple-600">
+                          -৳{tx.refundedAmount.toLocaleString("en-BD")} refunded
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Clamped Pagination */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-border bg-muted/20 text-xs text-muted-foreground text-center sm:text-left">

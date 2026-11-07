@@ -521,44 +521,82 @@ export default function DashboardPage() {
                     No orders available yet. Orders placed on your store will appear here in real time.
                   </div>
                 ) : (
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-muted/40">
-                        <TableHead className="text-xs font-semibold">Order</TableHead>
-                        <TableHead className="text-xs font-semibold">Customer</TableHead>
-                        <TableHead className="text-xs font-semibold">Method</TableHead>
-                        <TableHead className="text-xs font-semibold">Status</TableHead>
-                        <TableHead className="text-xs font-semibold text-right">Total</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
+                  <>
+                    {/* Desktop Table View */}
+                    <div className="hidden md:block">
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="bg-muted/40">
+                            <TableHead className="text-xs font-semibold">Order</TableHead>
+                            <TableHead className="text-xs font-semibold">Customer</TableHead>
+                            <TableHead className="text-xs font-semibold">Method</TableHead>
+                            <TableHead className="text-xs font-semibold">Status</TableHead>
+                            <TableHead className="text-xs font-semibold text-right">Total</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {recentOrders.map((order) => (
+                            <TableRow key={order.id} className="hover:bg-muted/40 transition-colors">
+                              <TableCell className="text-xs font-semibold font-mono">
+                                <Link
+                                  href="/dashboard/orders"
+                                  className="text-primary hover:underline"
+                                >
+                                  {order.orderNumber}
+                                </Link>
+                              </TableCell>
+                              <TableCell className="text-xs">
+                                <div className="font-medium text-foreground">
+                                  {order.customerName}
+                                </div>
+                                <div className="text-[10px] text-muted-foreground">
+                                  {order.shippingAddress.city}
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-xs">
+                                <Badge
+                                  variant="outline"
+                                  className="text-[10px] uppercase font-mono px-1.5 py-0"
+                                >
+                                  {order.paymentMethod}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="text-xs">
+                                <Badge
+                                  variant={
+                                    order.orderStatus === "delivered"
+                                      ? "success"
+                                      : order.orderStatus === "cancelled"
+                                      ? "destructive"
+                                      : order.orderStatus === "shipped"
+                                      ? "info"
+                                      : "secondary"
+                                  }
+                                  className="text-[10px] capitalize px-1.5 py-0"
+                                >
+                                  {order.orderStatus.replace(/_/g, " ")}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="text-xs font-bold text-right font-mono">
+                                ৳{order.grandTotal.toLocaleString("en-BD")}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+
+                    {/* Mobile Card-Based Transformation View */}
+                    <div className="block md:hidden divide-y divide-border/60">
                       {recentOrders.map((order) => (
-                        <TableRow key={order.id} className="hover:bg-muted/40 transition-colors">
-                          <TableCell className="text-xs font-semibold font-mono">
+                        <div key={order.id} className="p-4 space-y-2.5">
+                          <div className="flex items-center justify-between gap-2">
                             <Link
                               href="/dashboard/orders"
-                              className="text-primary hover:underline"
+                              className="font-mono text-xs font-bold text-primary hover:underline"
                             >
                               {order.orderNumber}
                             </Link>
-                          </TableCell>
-                          <TableCell className="text-xs">
-                            <div className="font-medium text-foreground">
-                              {order.customerName}
-                            </div>
-                            <div className="text-[10px] text-muted-foreground">
-                              {order.shippingAddress.city}
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-xs">
-                            <Badge
-                              variant="outline"
-                              className="text-[10px] uppercase font-mono px-1.5 py-0"
-                            >
-                              {order.paymentMethod}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-xs">
                             <Badge
                               variant={
                                 order.orderStatus === "delivered"
@@ -573,14 +611,35 @@ export default function DashboardPage() {
                             >
                               {order.orderStatus.replace(/_/g, " ")}
                             </Badge>
-                          </TableCell>
-                          <TableCell className="text-xs font-bold text-right font-mono">
-                            ৳{order.grandTotal.toLocaleString("en-BD")}
-                          </TableCell>
-                        </TableRow>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                              <span className="text-[10px] uppercase tracking-wider text-muted-foreground block font-medium">Customer</span>
+                              <span className="font-medium text-foreground">{order.customerName}</span>
+                              <span className="text-[10px] text-muted-foreground block">{order.shippingAddress.city}</span>
+                            </div>
+                            <div className="text-right">
+                              <span className="text-[10px] uppercase tracking-wider text-muted-foreground block font-medium">Method</span>
+                              <Badge
+                                variant="outline"
+                                className="text-[10px] uppercase font-mono px-1.5 py-0 mt-0.5 inline-block"
+                              >
+                                {order.paymentMethod}
+                              </Badge>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between pt-1 border-t border-border/40 text-xs">
+                            <span className="text-muted-foreground text-[11px]">Total Settled</span>
+                            <span className="font-mono font-bold text-foreground">
+                              ৳{order.grandTotal.toLocaleString("en-BD")}
+                            </span>
+                          </div>
+                        </div>
                       ))}
-                    </TableBody>
-                  </Table>
+                    </div>
+                  </>
                 )}
               </CardContent>
             </Card>

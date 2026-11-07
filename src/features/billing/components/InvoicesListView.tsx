@@ -137,43 +137,105 @@ export function InvoicesListView() {
               </p>
             </div>
           ) : (
-            <div className="rounded-md border border-border overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/50">
-                    <TableHead>Invoice #</TableHead>
-                    <TableHead>Issue Date</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Billing Method</TableHead>
-                    <TableHead>Amount (BDT)</TableHead>
-                    <TableHead>Payment Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredInvoices.map((inv) => (
-                    <TableRow key={inv.id} className="hover:bg-muted/20">
-                      <TableCell className="font-mono font-medium text-xs text-foreground">
-                        {inv.invoiceNumber}
-                      </TableCell>
+            <div className="rounded-md border border-border overflow-hidden">
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-muted/50">
+                      <TableHead>Invoice #</TableHead>
+                      <TableHead>Issue Date</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Billing Method</TableHead>
+                      <TableHead>Amount (BDT)</TableHead>
+                      <TableHead>Payment Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredInvoices.map((inv) => (
+                      <TableRow key={inv.id} className="hover:bg-muted/20">
+                        <TableCell className="font-mono font-medium text-xs text-foreground">
+                          {inv.invoiceNumber}
+                        </TableCell>
 
-                      <TableCell className="text-xs text-muted-foreground">
-                        {formatDate(inv.date)}
-                      </TableCell>
+                        <TableCell className="text-xs text-muted-foreground">
+                          {formatDate(inv.date)}
+                        </TableCell>
 
-                      <TableCell className="text-xs text-foreground font-medium">
-                        {inv.planName}
-                      </TableCell>
+                        <TableCell className="text-xs text-foreground font-medium">
+                          {inv.planName}
+                        </TableCell>
 
-                      <TableCell className="text-xs text-muted-foreground">
-                        {inv.paymentMethod}
-                      </TableCell>
+                        <TableCell className="text-xs text-muted-foreground">
+                          {inv.paymentMethod}
+                        </TableCell>
 
-                      <TableCell className="font-mono font-semibold text-xs text-foreground">
-                        ৳{inv.totalBDT.toLocaleString("bn-BD")}
-                      </TableCell>
+                        <TableCell className="font-mono font-semibold text-xs text-foreground">
+                          ৳{inv.totalBDT.toLocaleString("bn-BD")}
+                        </TableCell>
 
-                      <TableCell>
+                        <TableCell>
+                          {inv.status === "paid" && (
+                            <Badge variant="success" className="text-[11px] gap-1">
+                              <CheckCircle2 className="h-3 w-3" /> Paid
+                            </Badge>
+                          )}
+                          {inv.status === "pending" && (
+                            <Badge variant="warning" className="text-[11px] gap-1">
+                              <AlertCircle className="h-3 w-3" /> Pending
+                            </Badge>
+                          )}
+                          {inv.status === "failed" && (
+                            <Badge variant="destructive" className="text-[11px] gap-1">
+                              <XCircle className="h-3 w-3" /> Failed
+                            </Badge>
+                          )}
+                        </TableCell>
+
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {(inv.status === "pending" || inv.status === "failed") && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handlePayOrRetry(inv.id)}
+                                disabled={payMutation.isPending}
+                                className="h-7 text-xs px-2 gap-1 text-primary border-primary/30 hover:bg-primary/10"
+                              >
+                                <RotateCw className="h-3 w-3" />
+                                {inv.status === "failed" ? "Retry" : "Pay Now"}
+                              </Button>
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setSelectedInvoice(inv)}
+                              className="h-7 text-xs px-2 gap-1"
+                            >
+                              <Eye className="h-3 w-3" />
+                              View
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Mobile Cards View */}
+              <div className="block md:hidden divide-y divide-border/60">
+                {filteredInvoices.map((inv) => (
+                  <div key={inv.id} className="p-4 space-y-3 hover:bg-muted/10 transition-colors">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <span className="font-mono text-xs font-semibold text-foreground">
+                          {inv.invoiceNumber}
+                        </span>
+                        <p className="text-xs font-medium text-foreground mt-0.5">{inv.planName}</p>
+                      </div>
+                      <div>
                         {inv.status === "paid" && (
                           <Badge variant="success" className="text-[11px] gap-1">
                             <CheckCircle2 className="h-3 w-3" /> Paid
@@ -189,37 +251,52 @@ export function InvoicesListView() {
                             <XCircle className="h-3 w-3" /> Failed
                           </Badge>
                         )}
-                      </TableCell>
+                      </div>
+                    </div>
 
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          {(inv.status === "pending" || inv.status === "failed") && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handlePayOrRetry(inv.id)}
-                              disabled={payMutation.isPending}
-                              className="h-7 text-xs px-2 gap-1 text-primary border-primary/30 hover:bg-primary/10"
-                            >
-                              <RotateCw className="h-3 w-3" />
-                              {inv.status === "failed" ? "Retry" : "Pay Now"}
-                            </Button>
-                          )}
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setSelectedInvoice(inv)}
-                            className="h-7 text-xs px-2 gap-1"
-                          >
-                            <Eye className="h-3 w-3" />
-                            View
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                    <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                      <div>
+                        <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Issue Date</span>
+                        <span className="text-muted-foreground">{formatDate(inv.date)}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Payment Method</span>
+                        <span className="text-muted-foreground">{inv.paymentMethod}</span>
+                      </div>
+                      <div className="col-span-2 pt-1 flex items-baseline justify-between">
+                        <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Amount:</span>
+                        <span className="font-mono font-bold text-sm text-foreground">
+                          ৳{inv.totalBDT.toLocaleString("bn-BD")}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-border/40">
+                      {(inv.status === "pending" || inv.status === "failed") && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handlePayOrRetry(inv.id)}
+                          disabled={payMutation.isPending}
+                          className="h-8 text-xs px-3 gap-1.5 text-primary border-primary/30 hover:bg-primary/10 flex-1"
+                        >
+                          <RotateCw className="h-3.5 w-3.5" />
+                          {inv.status === "failed" ? "Retry" : "Pay Now"}
+                        </Button>
+                      )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedInvoice(inv)}
+                        className="h-8 text-xs px-3 gap-1.5 flex-1"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </CardContent>

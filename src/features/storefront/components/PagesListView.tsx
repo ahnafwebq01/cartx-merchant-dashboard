@@ -207,65 +207,175 @@ export function PagesListView() {
               />
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="hover:bg-transparent">
-                    <TableHead className="text-xs font-semibold">Page Title</TableHead>
-                    <TableHead className="text-xs font-semibold">Type</TableHead>
-                    <TableHead className="text-xs font-semibold">URL Path / Slug</TableHead>
-                    <TableHead className="text-xs font-semibold">Status</TableHead>
-                    <TableHead className="text-xs font-semibold">Last Updated</TableHead>
-                    <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pages.map((page) => (
-                    <TableRow key={page.id} className="text-xs">
-                      {/* Title */}
-                      <TableCell className="font-medium text-foreground py-3">
-                        <div className="flex items-center gap-2">
-                          {page.pageType === "legal_policy" ? (
-                            <Scale className="h-4 w-4 text-primary shrink-0" />
-                          ) : (
-                            <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
-                          )}
-                          <div>
-                            <Link
-                              href={`/dashboard/store/pages/${page.id}/edit`}
-                              className="font-semibold text-foreground hover:text-primary transition-colors hover:underline block"
-                            >
-                              {page.title}
-                            </Link>
-                            {page.titleBn && (
-                              <span className="text-[11px] text-muted-foreground font-bengali block">
-                                {page.titleBn}
-                              </span>
+            <div>
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="hover:bg-transparent">
+                      <TableHead className="text-xs font-semibold">Page Title</TableHead>
+                      <TableHead className="text-xs font-semibold">Type</TableHead>
+                      <TableHead className="text-xs font-semibold">URL Path / Slug</TableHead>
+                      <TableHead className="text-xs font-semibold">Status</TableHead>
+                      <TableHead className="text-xs font-semibold">Last Updated</TableHead>
+                      <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {pages.map((page) => (
+                      <TableRow key={page.id} className="text-xs">
+                        {/* Title */}
+                        <TableCell className="font-medium text-foreground py-3">
+                          <div className="flex items-center gap-2">
+                            {page.pageType === "legal_policy" ? (
+                              <Scale className="h-4 w-4 text-primary shrink-0" />
+                            ) : (
+                              <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
                             )}
+                            <div>
+                              <Link
+                                href={`/dashboard/store/pages/${page.id}/edit`}
+                                className="font-semibold text-foreground hover:text-primary transition-colors hover:underline block"
+                              >
+                                {page.title}
+                              </Link>
+                              {page.titleBn && (
+                                <span className="text-[11px] text-muted-foreground font-bengali block">
+                                  {page.titleBn}
+                                </span>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
+                        </TableCell>
 
-                      {/* Type */}
-                      <TableCell>
+                        {/* Type */}
+                        <TableCell>
+                          {page.pageType === "legal_policy" ? (
+                            <Badge variant="outline" className="text-[10px] bg-primary/5 text-primary border-primary/20">
+                              Legal Policy
+                            </Badge>
+                          ) : (
+                            <Badge variant="secondary" className="text-[10px]">
+                              Custom CMS
+                            </Badge>
+                          )}
+                        </TableCell>
+
+                        {/* Slug */}
+                        <TableCell className="font-mono text-muted-foreground text-[11px]">
+                          /{page.slug}
+                        </TableCell>
+
+                        {/* Status */}
+                        <TableCell>
+                          {page.status === "published" ? (
+                            <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px]">
+                              ✓ Published
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="text-[10px]">
+                              Draft
+                            </Badge>
+                          )}
+                        </TableCell>
+
+                        {/* Last Updated */}
+                        <TableCell className="text-muted-foreground text-[11px]">
+                          {new Date(page.updatedAt).toLocaleDateString("en-BD", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </TableCell>
+
+                        {/* Actions */}
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setPreviewPage(page)}
+                              className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                              title="Preview Page"
+                            >
+                              <Eye className="h-3.5 w-3.5" />
+                            </Button>
+
+                            <Button
+                              asChild
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                              title="Edit Page"
+                            >
+                              <Link href={`/dashboard/store/pages/${page.id}/edit`}>
+                                <Edit className="h-3.5 w-3.5" />
+                              </Link>
+                            </Button>
+
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-7 w-7 p-0 text-destructive hover:bg-destructive/10"
+                                  title="Delete Page"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete Page?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to delete <strong>{page.title}</strong>? This action will permanently remove this page from your storefront navigation.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => deleteMutation.mutate(page.id)}
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                  >
+                                    Delete Page
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Mobile Cards View */}
+              <div className="block md:hidden divide-y divide-border/60">
+                {pages.map((page) => (
+                  <div key={page.id} className="p-4 space-y-3 hover:bg-muted/10 transition-colors">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-start gap-2 min-w-0">
                         {page.pageType === "legal_policy" ? (
-                          <Badge variant="outline" className="text-[10px] bg-primary/5 text-primary border-primary/20">
-                            Legal Policy
-                          </Badge>
+                          <Scale className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                         ) : (
-                          <Badge variant="secondary" className="text-[10px]">
-                            Custom CMS
-                          </Badge>
+                          <FileText className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
                         )}
-                      </TableCell>
-
-                      {/* Slug */}
-                      <TableCell className="font-mono text-muted-foreground text-[11px]">
-                        /{page.slug}
-                      </TableCell>
-
-                      {/* Status */}
-                      <TableCell>
+                        <div className="min-w-0">
+                          <Link
+                            href={`/dashboard/store/pages/${page.id}/edit`}
+                            className="font-semibold text-xs text-foreground hover:text-primary transition-colors hover:underline block truncate"
+                          >
+                            {page.title}
+                          </Link>
+                          {page.titleBn && (
+                            <span className="text-[11px] text-muted-foreground font-bengali block truncate">
+                              {page.titleBn}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="shrink-0 flex items-center gap-1.5">
                         {page.status === "published" ? (
                           <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px]">
                             ✓ Published
@@ -275,77 +385,83 @@ export function PagesListView() {
                             Draft
                           </Badge>
                         )}
-                      </TableCell>
+                      </div>
+                    </div>
 
-                      {/* Last Updated */}
-                      <TableCell className="text-muted-foreground text-[11px]">
+                    <div className="flex items-center justify-between text-xs pt-1 border-t border-border/40">
+                      <div className="flex items-center gap-2">
+                        {page.pageType === "legal_policy" ? (
+                          <Badge variant="outline" className="text-[10px] bg-primary/5 text-primary border-primary/20">
+                            Legal Policy
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary" className="text-[10px]">
+                            Custom CMS
+                          </Badge>
+                        )}
+                        <span className="font-mono text-muted-foreground text-[11px]">/{page.slug}</span>
+                      </div>
+                      <span className="text-muted-foreground text-[11px]">
                         {new Date(page.updatedAt).toLocaleDateString("en-BD", {
                           day: "numeric",
                           month: "short",
-                          year: "numeric",
                         })}
-                      </TableCell>
+                      </span>
+                    </div>
 
-                      {/* Actions */}
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-1">
+                    <div className="flex items-center justify-end gap-1.5 pt-2 border-t border-border/40">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPreviewPage(page)}
+                        className="h-8 text-xs px-2.5 gap-1.5 flex-1"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        Preview
+                      </Button>
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="h-8 text-xs px-2.5 gap-1.5 flex-1"
+                      >
+                        <Link href={`/dashboard/store/pages/${page.id}/edit`}>
+                          <Edit className="h-3.5 w-3.5" />
+                          Edit
+                        </Link>
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
-                            onClick={() => setPreviewPage(page)}
-                            className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
-                            title="Preview Page"
+                            className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 shrink-0"
                           >
-                            <Eye className="h-3.5 w-3.5" />
+                            <Trash2 className="h-3.5 w-3.5" />
                           </Button>
-
-                          <Button
-                            asChild
-                            variant="ghost"
-                            size="sm"
-                            className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
-                            title="Edit Page"
-                          >
-                            <Link href={`/dashboard/store/pages/${page.id}/edit`}>
-                              <Edit className="h-3.5 w-3.5" />
-                            </Link>
-                          </Button>
-
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-7 w-7 p-0 text-destructive hover:bg-destructive/10"
-                                title="Delete Page"
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Page?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Are you sure you want to delete <strong>{page.title}</strong>? This action will permanently remove this page from your storefront navigation.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => deleteMutation.mutate(page.id)}
-                                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                >
-                                  Delete Page
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Page?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete <strong>{page.title}</strong>? This action will permanently remove this page from your storefront navigation.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteMutation.mutate(page.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete Page
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </CardContent>

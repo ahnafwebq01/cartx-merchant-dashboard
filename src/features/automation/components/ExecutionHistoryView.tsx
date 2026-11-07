@@ -122,70 +122,135 @@ export function ExecutionHistoryView() {
             description="Trigger a &quot;Test Run&quot; on any workflow recipe to generate an audit log entry."
           />
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold">Workflow</TableHead>
-                <TableHead className="text-xs font-semibold">Trigger Event</TableHead>
-                <TableHead className="text-xs font-semibold">Outcome</TableHead>
-                <TableHead className="text-xs font-semibold">Executed Actions / Details</TableHead>
-                <TableHead className="text-xs font-semibold text-center">Duration</TableHead>
-                <TableHead className="text-xs font-semibold text-right">Timestamp</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/50">
+                    <TableHead className="text-xs font-semibold">Workflow</TableHead>
+                    <TableHead className="text-xs font-semibold">Trigger Event</TableHead>
+                    <TableHead className="text-xs font-semibold">Outcome</TableHead>
+                    <TableHead className="text-xs font-semibold">Executed Actions / Details</TableHead>
+                    <TableHead className="text-xs font-semibold text-center">Duration</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Timestamp</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredExecutions.map((exec) => (
+                    <TableRow key={exec.id} className="hover:bg-muted/30">
+                      <TableCell className="text-xs font-semibold text-foreground">
+                        {exec.workflowName}
+                      </TableCell>
+                      <TableCell className="text-xs font-mono text-muted-foreground">
+                        {exec.triggerEvent}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        <Badge
+                          variant="outline"
+                          className={`text-[10px] font-mono capitalize ${
+                            exec.status === "success"
+                              ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200"
+                              : exec.status === "skipped"
+                              ? "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200"
+                              : "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border-rose-200"
+                          }`}
+                        >
+                          {exec.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground max-w-sm">
+                        {exec.executedActions.length > 0 ? (
+                          <ul className="list-disc list-inside space-y-0.5">
+                            {exec.executedActions.map((act, i) => (
+                              <li key={i} className="truncate">
+                                {act}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span className="text-rose-600 dark:text-rose-400 font-mono text-[11px]">
+                            {exec.failureReason || "Condition not met"}
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-xs text-center font-mono text-muted-foreground">
+                        {exec.duration}ms
+                      </TableCell>
+                      <TableCell className="text-xs text-right text-muted-foreground">
+                        {new Date(exec.executedAt).toLocaleString("en-BD", {
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card-Based Transformation View */}
+            <div className="block md:hidden divide-y divide-border/60">
               {filteredExecutions.map((exec) => (
-                <TableRow key={exec.id} className="hover:bg-muted/30">
-                  <TableCell className="text-xs font-semibold text-foreground">
-                    {exec.workflowName}
-                  </TableCell>
-                  <TableCell className="text-xs font-mono text-muted-foreground">
-                    {exec.triggerEvent}
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    <Badge
-                      variant="outline"
-                      className={`text-[10px] font-mono capitalize ${
-                        exec.status === "success"
-                          ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200"
-                          : exec.status === "skipped"
-                          ? "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200"
-                          : "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border-rose-200"
-                      }`}
-                    >
-                      {exec.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground max-w-sm">
+                <div key={exec.id} className="p-4 space-y-2.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <span className="font-semibold text-xs text-foreground block truncate">
+                        {exec.workflowName}
+                      </span>
+                      <span className="text-[10px] font-mono text-muted-foreground block mt-0.5">
+                        {exec.triggerEvent}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <Badge
+                        variant="outline"
+                        className={`text-[10px] font-mono capitalize ${
+                          exec.status === "success"
+                            ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200"
+                            : exec.status === "skipped"
+                            ? "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200"
+                            : "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border-rose-200"
+                        }`}
+                      >
+                        {exec.status}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <div className="text-xs pt-1 border-t border-border/40">
+                    <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Actions Executed</span>
                     {exec.executedActions.length > 0 ? (
-                      <ul className="list-disc list-inside space-y-0.5">
+                      <ul className="list-disc list-inside space-y-0.5 mt-0.5 text-xs text-foreground">
                         {exec.executedActions.map((act, i) => (
-                          <li key={i} className="truncate">
-                            {act}
-                          </li>
+                          <li key={i}>{act}</li>
                         ))}
                       </ul>
                     ) : (
-                      <span className="text-rose-600 dark:text-rose-400 font-mono text-[11px]">
+                      <span className="text-rose-600 dark:text-rose-400 font-mono text-[11px] block mt-0.5">
                         {exec.failureReason || "Condition not met"}
                       </span>
                     )}
-                  </TableCell>
-                  <TableCell className="text-xs text-center font-mono text-muted-foreground">
-                    {exec.duration}ms
-                  </TableCell>
-                  <TableCell className="text-xs text-right text-muted-foreground">
-                    {new Date(exec.executedAt).toLocaleString("en-BD", {
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </TableCell>
-                </TableRow>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1 border-t border-border/40 text-[11px] text-muted-foreground">
+                    <span className="font-mono">Latency: {exec.duration}ms</span>
+                    <span>
+                      {new Date(exec.executedAt).toLocaleString("en-BD", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+                </div>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+          </>
         )}
       </Card>
     </div>

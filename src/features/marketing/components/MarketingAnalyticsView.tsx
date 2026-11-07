@@ -184,35 +184,66 @@ export function MarketingAnalyticsView() {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="text-xs font-semibold">Campaign Name</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Orders</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Revenue (৳)</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Conversion</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {analytics?.topCampaigns?.map((camp) => (
-                  <TableRow key={camp.id} className="text-xs">
-                    <TableCell>
-                      <div className="font-medium text-foreground line-clamp-1">{camp.name}</div>
-                      <div className="text-[10px] text-muted-foreground uppercase">{camp.type}</div>
-                    </TableCell>
-                    <TableCell className="text-right font-mono">{camp.orders}</TableCell>
-                    <TableCell className="text-right font-bold text-foreground">
-                      ৳{camp.revenue.toLocaleString("en-BD")}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Badge variant="success" className="text-[10px] font-mono">
-                        {camp.conversionRate}%
-                      </Badge>
-                    </TableCell>
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="text-xs font-semibold">Campaign Name</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Orders</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Revenue (৳)</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Conversion</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {analytics?.topCampaigns?.map((camp) => (
+                    <TableRow key={camp.id} className="text-xs">
+                      <TableCell>
+                        <div className="font-medium text-foreground line-clamp-1">{camp.name}</div>
+                        <div className="text-[10px] text-muted-foreground uppercase">{camp.type}</div>
+                      </TableCell>
+                      <TableCell className="text-right font-mono">{camp.orders}</TableCell>
+                      <TableCell className="text-right font-bold text-foreground">
+                        ৳{camp.revenue.toLocaleString("en-BD")}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Badge variant="success" className="text-[10px] font-mono">
+                          {camp.conversionRate}%
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card-Based Transformation View */}
+            <div className="block md:hidden divide-y divide-border/60">
+              {analytics?.topCampaigns?.map((camp) => (
+                <div key={camp.id} className="p-4 space-y-2.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <span className="font-semibold text-xs text-foreground block truncate">
+                        {camp.name}
+                      </span>
+                      <span className="text-[10px] uppercase text-muted-foreground font-mono">
+                        {camp.type}
+                      </span>
+                    </div>
+                    <Badge variant="success" className="text-[10px] font-mono shrink-0">
+                      {camp.conversionRate}% Conv.
+                    </Badge>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs pt-1 border-t border-border/40">
+                    <span className="text-muted-foreground text-[11px]">Orders: <strong className="text-foreground font-mono">{camp.orders}</strong></span>
+                    <span className="font-mono font-bold text-foreground">
+                      ৳{camp.revenue.toLocaleString("en-BD")}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
 
@@ -225,30 +256,57 @@ export function MarketingAnalyticsView() {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="text-xs font-semibold">Coupon Code</TableHead>
-                  <TableHead className="text-xs font-semibold">Discount</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Times Used</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Savings Given (৳)</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {analytics?.topCoupons?.map((cpn) => (
-                  <TableRow key={cpn.id} className="text-xs">
-                    <TableCell className="font-mono font-bold text-primary">
-                      {cpn.code}
-                    </TableCell>
-                    <TableCell className="font-semibold">{cpn.discountDisplay}</TableCell>
-                    <TableCell className="text-right font-mono font-bold">{cpn.usedCount}</TableCell>
-                    <TableCell className="text-right text-amber-600 font-medium">
-                      ৳{cpn.totalSavings.toLocaleString("en-BD")}
-                    </TableCell>
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="text-xs font-semibold">Coupon Code</TableHead>
+                    <TableHead className="text-xs font-semibold">Discount</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Times Used</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Savings Given (৳)</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {analytics?.topCoupons?.map((cpn) => (
+                    <TableRow key={cpn.id} className="text-xs">
+                      <TableCell className="font-mono font-bold text-primary">
+                        {cpn.code}
+                      </TableCell>
+                      <TableCell className="font-semibold">{cpn.discountDisplay}</TableCell>
+                      <TableCell className="text-right font-mono font-bold">{cpn.usedCount}</TableCell>
+                      <TableCell className="text-right text-amber-600 font-medium">
+                        ৳{cpn.totalSavings.toLocaleString("en-BD")}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card-Based Transformation View */}
+            <div className="block md:hidden divide-y divide-border/60">
+              {analytics?.topCoupons?.map((cpn) => (
+                <div key={cpn.id} className="p-4 space-y-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <code className="font-mono font-bold text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">
+                      {cpn.code}
+                    </code>
+                    <span className="font-semibold text-xs text-foreground">{cpn.discountDisplay}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs pt-1 border-t border-border/40">
+                    <span className="text-muted-foreground text-[11px]">Times Used: <strong className="text-foreground font-mono">{cpn.usedCount}</strong></span>
+                    <div className="text-right">
+                      <span className="text-[10px] text-muted-foreground block">Total Saved</span>
+                      <span className="font-mono font-bold text-amber-600">
+                        ৳{cpn.totalSavings.toLocaleString("en-BD")}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>

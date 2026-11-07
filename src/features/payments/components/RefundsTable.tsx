@@ -71,73 +71,141 @@ export function RefundsTable({
 
   return (
     <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-      <Table>
-        <TableHeader className="bg-muted/50">
-          <TableRow className="hover:bg-transparent">
-            <TableHead className="text-xs font-semibold">Refund ID</TableHead>
-            <TableHead className="text-xs font-semibold">Order #</TableHead>
-            <TableHead className="text-xs font-semibold">Customer</TableHead>
-            <TableHead className="text-xs font-semibold">Refund Amount</TableHead>
-            <TableHead className="text-xs font-semibold">Reason</TableHead>
-            <TableHead className="text-xs font-semibold">Gateway Ref</TableHead>
-            <TableHead className="text-xs font-semibold">Status</TableHead>
-            <TableHead className="text-xs font-semibold">Date</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isLoading ? (
-            <TableRow>
-              <TableCell colSpan={8} className="text-center py-8 text-xs text-muted-foreground">
-                <RotateCcw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
-                Loading refund records...
-              </TableCell>
+      {/* Desktop Table View */}
+      <div className="hidden lg:block overflow-x-auto">
+        <Table>
+          <TableHeader className="bg-muted/50">
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="text-xs font-semibold">Refund ID</TableHead>
+              <TableHead className="text-xs font-semibold">Order #</TableHead>
+              <TableHead className="text-xs font-semibold">Customer</TableHead>
+              <TableHead className="text-xs font-semibold">Refund Amount</TableHead>
+              <TableHead className="text-xs font-semibold">Reason</TableHead>
+              <TableHead className="text-xs font-semibold">Gateway Ref</TableHead>
+              <TableHead className="text-xs font-semibold">Status</TableHead>
+              <TableHead className="text-xs font-semibold">Date</TableHead>
             </TableRow>
-          ) : refunds.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={8} className="text-center py-8 text-xs text-muted-foreground">
-                No refund requests or records found.
-              </TableCell>
-            </TableRow>
-          ) : (
-            refunds.map((ref) => (
-              <TableRow key={ref.id} className="hover:bg-muted/30">
-                <TableCell className="font-mono text-xs font-semibold text-foreground">
-                  {ref.id}
-                </TableCell>
-                <TableCell className="font-mono text-xs">
-                  <Link
-                    href={`/dashboard/orders/${ref.orderId}`}
-                    className="text-primary hover:underline font-semibold flex items-center gap-1"
-                  >
-                    {ref.orderNumber}
-                    <ExternalLink className="h-2.5 w-2.5 opacity-60" />
-                  </Link>
-                </TableCell>
-                <TableCell className="text-xs font-medium text-foreground">
-                  {ref.customerName}
-                </TableCell>
-                <TableCell className="font-mono text-xs font-bold text-purple-600">
-                  ৳{ref.amount.toLocaleString("en-BD")}
-                </TableCell>
-                <TableCell className="text-xs text-muted-foreground max-w-xs truncate">
-                  {ref.reason}
-                </TableCell>
-                <TableCell className="font-mono text-[11px] text-muted-foreground">
-                  {ref.gatewayRefundId || "N/A"}
-                </TableCell>
-                <TableCell>{getStatusBadge(ref.status)}</TableCell>
-                <TableCell className="font-mono text-xs text-muted-foreground">
-                  {new Date(ref.requestedAt).toLocaleDateString("en-BD", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={8} className="text-center py-8 text-xs text-muted-foreground">
+                  <RotateCcw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
+                  Loading refund records...
                 </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ) : refunds.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={8} className="text-center py-8 text-xs text-muted-foreground">
+                  No refund requests or records found.
+                </TableCell>
+              </TableRow>
+            ) : (
+              refunds.map((ref) => (
+                <TableRow key={ref.id} className="hover:bg-muted/30">
+                  <TableCell className="font-mono text-xs font-semibold text-foreground">
+                    {ref.id}
+                  </TableCell>
+                  <TableCell className="font-mono text-xs">
+                    <Link
+                      href={`/dashboard/orders/${ref.orderId}`}
+                      className="text-primary hover:underline font-semibold flex items-center gap-1"
+                    >
+                      {ref.orderNumber}
+                      <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                    </Link>
+                  </TableCell>
+                  <TableCell className="text-xs font-medium text-foreground">
+                    {ref.customerName}
+                  </TableCell>
+                  <TableCell className="font-mono text-xs font-bold text-purple-600">
+                    ৳{ref.amount.toLocaleString("en-BD")}
+                  </TableCell>
+                  <TableCell className="text-xs text-muted-foreground max-w-xs truncate">
+                    {ref.reason}
+                  </TableCell>
+                  <TableCell className="font-mono text-[11px] text-muted-foreground">
+                    {ref.gatewayRefundId || "N/A"}
+                  </TableCell>
+                  <TableCell>{getStatusBadge(ref.status)}</TableCell>
+                  <TableCell className="font-mono text-xs text-muted-foreground">
+                    {new Date(ref.requestedAt).toLocaleDateString("en-BD", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Mobile Card-Based Transformation View */}
+      <div className="block lg:hidden">
+        {isLoading ? (
+          <div className="p-8 text-center text-xs text-muted-foreground">
+            <RotateCcw className="h-4 w-4 animate-spin mx-auto mb-2 text-primary" />
+            Loading refund records...
+          </div>
+        ) : refunds.length === 0 ? (
+          <div className="p-8 text-center text-xs text-muted-foreground">
+            No refund requests or records found.
+          </div>
+        ) : (
+          <div className="divide-y divide-border/60">
+            {refunds.map((ref) => (
+              <div key={ref.id} className="p-4 space-y-2.5">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <span className="font-mono font-bold text-xs text-foreground block">
+                      {ref.id}
+                    </span>
+                    <Link
+                      href={`/dashboard/orders/${ref.orderId}`}
+                      className="text-primary hover:underline font-mono text-[11px] flex items-center gap-1 mt-0.5"
+                    >
+                      {ref.orderNumber}
+                      <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                    </Link>
+                  </div>
+                  <div>{getStatusBadge(ref.status)}</div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                  <div>
+                    <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Customer</span>
+                    <span className="font-medium text-foreground block truncate">{ref.customerName}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Refund Amount</span>
+                    <span className="font-mono font-bold text-sm text-purple-600">
+                      ৳{ref.amount.toLocaleString("en-BD")}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="text-xs pt-1 border-t border-border/40">
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Reason</span>
+                  <p className="text-muted-foreground text-xs leading-snug mt-0.5">{ref.reason}</p>
+                </div>
+
+                <div className="flex items-center justify-between pt-1 border-t border-border/40 text-[11px] text-muted-foreground font-mono">
+                  <span>Gateway Ref: {ref.gatewayRefundId || "N/A"}</span>
+                  <span>
+                    {new Date(ref.requestedAt).toLocaleDateString("en-BD", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

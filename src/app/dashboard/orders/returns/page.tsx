@@ -132,7 +132,8 @@ export default function OrderReturnsPage() {
         />
       ) : (
         <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto">
             <Table>
               <TableHeader className="bg-muted/40 text-xs">
                 <TableRow>
@@ -228,6 +229,86 @@ export default function OrderReturnsPage() {
               )}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block md:hidden">
+          {isLoading ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              Loading return records...
+            </div>
+          ) : (
+            <div className="divide-y divide-border/60">
+              {returnOrders.map((o) => (
+                <div key={o.id} className="p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <Link
+                        href={`/dashboard/orders/${o.id}`}
+                        className="font-mono font-bold text-xs text-primary hover:underline block"
+                      >
+                        {o.orderNumber}
+                      </Link>
+                      <span className="text-[11px] text-muted-foreground">
+                        {new Date(o.updatedAt).toLocaleDateString("en-BD", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        asChild
+                        className="h-7 text-xs gap-1"
+                      >
+                        <Link href={`/dashboard/orders/${o.id}`}>
+                          <Eye className="h-3.5 w-3.5" />
+                          View
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                    <div>
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Customer</span>
+                      <span className="font-medium text-foreground">{o.customerName}</span>
+                      <span className="text-[10px] text-muted-foreground block">{o.customerPhone}</span>
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Return Reason</span>
+                      <p className="text-foreground text-xs leading-snug">
+                        {o.returnReason ||
+                          o.cancellationReason ||
+                          "Customer return processed by merchant desk"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border/40 text-xs">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <OrderStatusBadge status={o.orderStatus} />
+                      <PaymentStatusBadge
+                        status={o.paymentStatus}
+                        method={o.paymentMethod}
+                      />
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">Value</span>
+                      <span className="font-mono font-bold text-sm text-foreground">
+                        ৳{o.grandTotal.toLocaleString("en-BD")}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       )}

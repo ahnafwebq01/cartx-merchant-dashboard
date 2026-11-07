@@ -98,7 +98,8 @@ export default function CollectionsPage() {
         />
       ) : (
         <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto">
             <Table>
               <TableHeader className="bg-muted/40 text-xs">
                 <TableRow>
@@ -142,6 +143,41 @@ export default function CollectionsPage() {
                 ))}
               </TableBody>
             </Table>
+          </div>
+
+          {/* Mobile Card-Based Transformation View */}
+          <div className="block md:hidden divide-y divide-border/60">
+            {collections.map((col, idx) => (
+              <div key={col.id} className="p-4 space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-primary/10 rounded text-primary shrink-0">
+                      <Layers className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="font-semibold text-xs text-foreground block">{col.title}</span>
+                      <span className="text-[10px] text-muted-foreground font-mono">#{idx + 1} • /collections/{col.slug}</span>
+                    </div>
+                  </div>
+                  <Badge variant="outline" className="text-[10px] text-emerald-600 bg-emerald-500/10 border-emerald-500/30 shrink-0">
+                    Published
+                  </Badge>
+                </div>
+
+                {col.description && (
+                  <p className="text-xs text-muted-foreground pt-1 border-t border-border/40">
+                    {col.description}
+                  </p>
+                )}
+
+                <div className="flex items-center justify-between pt-1 border-t border-border/40 text-xs">
+                  <span className="text-[11px] text-muted-foreground">Merchandise Count</span>
+                  <Badge variant="secondary" className="text-[10px]">
+                    {col.productCount} items
+                  </Badge>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}

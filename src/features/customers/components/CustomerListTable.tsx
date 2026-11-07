@@ -61,7 +61,8 @@ export function CustomerListTable({
 }: CustomerListTableProps) {
   return (
     <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-      <div className="overflow-x-auto">
+      {/* Desktop Table View */}
+      <div className="hidden lg:block overflow-x-auto">
         <Table>
           <TableHeader className="bg-muted/40 text-xs">
             <TableRow>
@@ -228,6 +229,134 @@ export function CustomerListTable({
             )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Mobile Card-Based Transformation View */}
+      <div className="block lg:hidden">
+        {isLoading ? (
+          <div className="p-8 text-center text-xs text-muted-foreground">
+            Loading customers...
+          </div>
+        ) : customers.length === 0 ? (
+          <div className="p-8 text-center text-xs text-muted-foreground">
+            No matching customers found.
+          </div>
+        ) : (
+          <div className="divide-y divide-border/60">
+            {customers.map((c) => (
+              <div key={c.id} className="p-4 space-y-3">
+                {/* Header: Avatar, Name, Segment, Actions */}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="h-9 w-9 rounded-full bg-muted border border-border overflow-hidden shrink-0 relative flex items-center justify-center">
+                      {c.avatarUrl ? (
+                        <Image
+                          src={c.avatarUrl}
+                          alt={c.name}
+                          fill
+                          sizes="36px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <User className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <Link
+                        href={`/dashboard/customers/${c.id}`}
+                        className="font-semibold text-xs text-foreground hover:underline block truncate"
+                      >
+                        {c.name}
+                      </Link>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <Badge variant="outline" className="text-[10px] capitalize px-1.5 py-0">
+                          {c.segment.replace(/_/g, " ")}
+                        </Badge>
+                        <span className="text-[10px] text-muted-foreground">{c.city}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-foreground shrink-0"
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="text-xs w-36">
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href={`/dashboard/customers/${c.id}`}
+                          className="gap-2 cursor-pointer"
+                        >
+                          <Eye className="h-3.5 w-3.5" />
+                          View Profile
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => onManageTags(c)}
+                        className="gap-2 cursor-pointer"
+                      >
+                        <Tag className="h-3.5 w-3.5" />
+                        Edit Tags
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                {/* Contact row */}
+                <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                  <div>
+                    <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Phone</span>
+                    <span className="font-mono text-foreground">{c.phone}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Email</span>
+                    <span className="text-muted-foreground truncate block">{c.email || "—"}</span>
+                  </div>
+                </div>
+
+                {/* Metrics row */}
+                <div className="grid grid-cols-3 gap-2 text-xs pt-1 border-t border-border/40 bg-muted/20 p-2 rounded-md">
+                  <div>
+                    <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">Orders</span>
+                    <span className="font-mono font-bold text-foreground">{c.totalOrders}</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">Spend</span>
+                    <span className="font-mono font-bold text-foreground">৳{c.totalSpend.toLocaleString("en-BD")}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">AOV</span>
+                    <span className="font-mono font-semibold text-muted-foreground">৳{c.averageOrderValue.toLocaleString("en-BD")}</span>
+                  </div>
+                </div>
+
+                {/* Tags and Last Order */}
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-border/40 text-xs">
+                  <div className="flex flex-wrap gap-1">
+                    {c.tags.map((t) => (
+                      <Badge
+                        key={t}
+                        variant="secondary"
+                        className="text-[10px] font-normal px-1.5 py-0"
+                      >
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                  <span className="text-[10px] text-muted-foreground">
+                    Last: {c.lastOrderDate ? new Date(c.lastOrderDate).toLocaleDateString("en-BD", { month: "short", day: "numeric", year: "numeric" }) : "No orders"}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Pagination Footer */}

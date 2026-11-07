@@ -83,7 +83,8 @@ export function ProductListTable({
   return (
     <>
       <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
           <Table>
             <TableHeader className="bg-muted/40 text-xs">
               <TableRow>
@@ -329,6 +330,219 @@ export function ProductListTable({
               )}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block lg:hidden">
+          {/* Mobile Select All Header */}
+          <div className="flex items-center justify-between p-3 bg-muted/40 border-b border-border text-xs">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={isAllSelected}
+                onCheckedChange={(checked) => onSelectAll(Boolean(checked))}
+                aria-label="Select all products on page"
+              />
+              <span className="font-medium text-foreground">Select All</span>
+            </div>
+            <span className="text-[11px] text-muted-foreground">
+              {data.items.length} items
+            </span>
+          </div>
+
+          {data.items.length === 0 ? (
+            <div className="p-8 text-center">
+              <div className="flex flex-col items-center justify-center space-y-3">
+                <div className="p-3 bg-muted rounded-full text-muted-foreground">
+                  <Package className="h-8 w-8" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-semibold text-sm text-foreground">
+                    No products found
+                  </h4>
+                  <p className="text-xs text-muted-foreground max-w-sm">
+                    No items match your active search or filters.
+                  </p>
+                </div>
+                <Button variant="outline" size="sm" onClick={onClearFilters}>
+                  Reset All Filters
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="divide-y divide-border/60">
+              {data.items.map((product) => {
+                const isSelected = selectedIds.includes(product.id);
+                const mainImage =
+                  product.images[0]?.url ||
+                  "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=120&q=80";
+
+                return (
+                  <div
+                    key={product.id}
+                    className={`p-4 space-y-3 transition-colors ${
+                      isSelected ? "bg-primary/5 dark:bg-primary/10" : ""
+                    }`}
+                  >
+                    {/* Top Row: Checkbox, Thumbnail, Title, and Actions */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-2.5 min-w-0">
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={(checked) =>
+                            onSelectId(product.id, Boolean(checked))
+                          }
+                          aria-label={`Select ${product.title}`}
+                          className="mt-1"
+                        />
+                        <div className="relative h-11 w-11 shrink-0 rounded-md overflow-hidden border border-border bg-muted">
+                          <Image
+                            src={mainImage}
+                            alt={product.title}
+                            fill
+                            sizes="44px"
+                            className="object-cover"
+                            unoptimized
+                          />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <Link
+                            href={`/dashboard/products/${product.id}/edit`}
+                            className="font-medium text-xs text-foreground hover:text-primary transition-colors line-clamp-2"
+                          >
+                            {product.title}
+                          </Link>
+                          {product.brand && (
+                            <span className="text-[11px] text-muted-foreground">
+                              {product.brand}
+                            </span>
+                          )}
+                          <span className="font-mono text-[10px] text-muted-foreground bg-muted/60 px-1 py-0.5 rounded w-fit mt-1">
+                            {product.sku}
+                          </span>
+                        </div>
+                      </div>
+
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground hover:text-foreground shrink-0"
+                            aria-label={`Actions for ${product.title}`}
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          align="end"
+                          className="w-40 text-xs"
+                        >
+                          <DropdownMenuLabel className="text-[10px]">
+                            Actions
+                          </DropdownMenuLabel>
+                          <DropdownMenuItem
+                            onClick={() => setViewProduct(product)}
+                          >
+                            <Eye className="h-3.5 w-3.5 mr-2" /> View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link
+                              href={`/dashboard/products/${product.id}/edit`}
+                            >
+                              <Edit className="h-3.5 w-3.5 mr-2" /> Edit
+                              Product
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => onDuplicate(product.id)}
+                          >
+                            <Copy className="h-3.5 w-3.5 mr-2" /> Duplicate
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => onArchive(product.id)}
+                          >
+                            <Archive className="h-3.5 w-3.5 mr-2" />
+                            {product.status === "archived"
+                              ? "Unarchive"
+                              : "Archive"}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => setDeleteProductId(product.id)}
+                            className="text-destructive focus:text-destructive"
+                          >
+                            <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+
+                    {/* Metadata Grid */}
+                    <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                      <div>
+                        <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Category</span>
+                        <span className="font-medium text-foreground">{product.category}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Stock Level</span>
+                        {product.stock === 0 ? (
+                          <Badge
+                            variant="destructive"
+                            className="text-[10px] px-1.5 py-0 mt-0.5"
+                          >
+                            Out of stock
+                          </Badge>
+                        ) : product.stock <= product.lowStockThreshold ? (
+                          <Badge
+                            variant="outline"
+                            className="text-[10px] px-1.5 py-0 border-amber-500/50 bg-amber-500/10 text-amber-600 mt-0.5"
+                          >
+                            Low ({product.stock})
+                          </Badge>
+                        ) : (
+                          <span className="text-xs font-semibold text-foreground">
+                            {product.stock} units
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Footer Row: Status & Price */}
+                    <div className="flex items-center justify-between pt-2 border-t border-border/40 text-xs">
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant={
+                            product.status === "active"
+                              ? "default"
+                              : product.status === "draft"
+                                ? "secondary"
+                                : "outline"
+                          }
+                          className="capitalize text-[10px] px-2 py-0"
+                        >
+                          {product.status}
+                        </Badge>
+                        <span className="text-[10px] text-muted-foreground">
+                          Updated {new Date(product.updatedAt).toLocaleDateString("en-BD", { month: "short", day: "numeric" })}
+                        </span>
+                      </div>
+
+                      <div className="text-right">
+                        <span className="font-semibold text-sm text-foreground">
+                          ৳{(product.salePrice ?? product.price).toLocaleString("en-BD")}
+                        </span>
+                        {product.salePrice && product.salePrice < product.price && (
+                          <span className="text-[10px] text-muted-foreground line-through ml-1.5">
+                            ৳{product.price.toLocaleString("en-BD")}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Pagination Footer */}

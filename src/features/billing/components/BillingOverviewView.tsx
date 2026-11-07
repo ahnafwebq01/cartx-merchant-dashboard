@@ -312,74 +312,122 @@ export function BillingOverviewView() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border border-border overflow-x-auto">
-            <table className="w-full text-xs min-w-[520px]">
-              <thead className="bg-muted/50 border-b border-border">
-                <tr>
-                  <th className="text-left p-3 font-semibold text-foreground">
-                    Invoice #
-                  </th>
-                  <th className="text-left p-3 font-semibold text-foreground">
-                    Date
-                  </th>
-                  <th className="text-left p-3 font-semibold text-foreground">
-                    Plan / Cycle
-                  </th>
-                  <th className="text-left p-3 font-semibold text-foreground">
-                    Amount (BDT)
-                  </th>
-                  <th className="text-left p-3 font-semibold text-foreground">
-                    Status
-                  </th>
-                  <th className="text-right p-3 font-semibold text-foreground">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {recentInvoices.map((inv) => (
-                  <tr key={inv.id} className="hover:bg-muted/20">
-                    <td className="p-3 font-mono font-medium text-foreground">
-                      {inv.invoiceNumber}
-                    </td>
-                    <td className="p-3 text-muted-foreground">
-                      {formatDate(inv.date)}
-                    </td>
-                    <td className="p-3 text-foreground">{inv.planName}</td>
-                    <td className="p-3 font-mono font-semibold text-foreground">
-                      ৳{inv.totalBDT.toLocaleString("bn-BD")}
-                    </td>
-                    <td className="p-3">
-                      {inv.status === "paid" && (
-                        <Badge variant="success" className="text-[10px]">
-                          Paid
-                        </Badge>
-                      )}
-                      {inv.status === "pending" && (
-                        <Badge variant="warning" className="text-[10px]">
-                          Pending
-                        </Badge>
-                      )}
-                      {inv.status === "failed" && (
-                        <Badge variant="destructive" className="text-[10px]">
-                          Failed
-                        </Badge>
-                      )}
-                    </td>
-                    <td className="p-3 text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setSelectedInvoice(inv)}
-                        className="h-7 text-xs px-2"
-                      >
-                        View
-                      </Button>
-                    </td>
+          <div className="rounded-md border border-border overflow-hidden">
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-xs min-w-[520px]">
+                <thead className="bg-muted/50 border-b border-border">
+                  <tr>
+                    <th className="text-left p-3 font-semibold text-foreground">
+                      Invoice #
+                    </th>
+                    <th className="text-left p-3 font-semibold text-foreground">
+                      Date
+                    </th>
+                    <th className="text-left p-3 font-semibold text-foreground">
+                      Plan / Cycle
+                    </th>
+                    <th className="text-left p-3 font-semibold text-foreground">
+                      Amount (BDT)
+                    </th>
+                    <th className="text-left p-3 font-semibold text-foreground">
+                      Status
+                    </th>
+                    <th className="text-right p-3 font-semibold text-foreground">
+                      Action
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {recentInvoices.map((inv) => (
+                    <tr key={inv.id} className="hover:bg-muted/20">
+                      <td className="p-3 font-mono font-medium text-foreground">
+                        {inv.invoiceNumber}
+                      </td>
+                      <td className="p-3 text-muted-foreground">
+                        {formatDate(inv.date)}
+                      </td>
+                      <td className="p-3 text-foreground">{inv.planName}</td>
+                      <td className="p-3 font-mono font-semibold text-foreground">
+                        ৳{inv.totalBDT.toLocaleString("bn-BD")}
+                      </td>
+                      <td className="p-3">
+                        {inv.status === "paid" && (
+                          <Badge variant="success" className="text-[10px]">
+                            Paid
+                          </Badge>
+                        )}
+                        {inv.status === "pending" && (
+                          <Badge variant="warning" className="text-[10px]">
+                            Pending
+                          </Badge>
+                        )}
+                        {inv.status === "failed" && (
+                          <Badge variant="destructive" className="text-[10px]">
+                            Failed
+                          </Badge>
+                        )}
+                      </td>
+                      <td className="p-3 text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSelectedInvoice(inv)}
+                          className="h-7 text-xs px-2"
+                        >
+                          View
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards View */}
+            <div className="block md:hidden divide-y divide-border/60">
+              {recentInvoices.map((inv) => (
+                <div key={inv.id} className="p-3.5 space-y-2 hover:bg-muted/10 transition-colors">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-xs font-semibold text-foreground">
+                      {inv.invoiceNumber}
+                    </span>
+                    {inv.status === "paid" && (
+                      <Badge variant="success" className="text-[10px]">
+                        Paid
+                      </Badge>
+                    )}
+                    {inv.status === "pending" && (
+                      <Badge variant="warning" className="text-[10px]">
+                        Pending
+                      </Badge>
+                    )}
+                    {inv.status === "failed" && (
+                      <Badge variant="destructive" className="text-[10px]">
+                        Failed
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-foreground font-medium">{inv.planName}</span>
+                    <span className="font-mono font-semibold text-foreground">
+                      ৳{inv.totalBDT.toLocaleString("bn-BD")}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border/40">
+                    <span>{formatDate(inv.date)}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedInvoice(inv)}
+                      className="h-6 text-xs px-2 text-primary hover:text-primary"
+                    >
+                      View Details
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>

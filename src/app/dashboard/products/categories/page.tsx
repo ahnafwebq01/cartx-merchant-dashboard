@@ -56,7 +56,8 @@ export default function CategoriesPage() {
         />
       ) : (
         <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto">
             <Table>
               <TableHeader className="bg-muted/40 text-xs">
                 <TableRow>
@@ -96,6 +97,33 @@ export default function CategoriesPage() {
                 ))}
               </TableBody>
             </Table>
+          </div>
+
+          {/* Mobile Card-Based Transformation View */}
+          <div className="block md:hidden divide-y divide-border/60">
+            {categories.map((c, idx) => (
+              <div key={c.id} className="p-4 space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-primary/10 rounded text-primary shrink-0">
+                      <FolderTree className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="font-semibold text-xs text-foreground block">{c.name}</span>
+                      <span className="text-[10px] text-muted-foreground font-mono">#{idx + 1} • /{c.slug}</span>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="text-[10px] shrink-0">
+                    {c.productCount} items
+                  </Badge>
+                </div>
+                {c.description && (
+                  <p className="text-xs text-muted-foreground pt-1 border-t border-border/40">
+                    {c.description}
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       )}

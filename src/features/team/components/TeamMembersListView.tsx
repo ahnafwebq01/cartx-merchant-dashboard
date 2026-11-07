@@ -305,127 +305,233 @@ export function TeamMembersListView() {
                   </p>
                 </div>
               ) : (
-                <div className="rounded-md border border-border overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-muted/50">
-                        <TableHead>Staff Member</TableHead>
-                        <TableHead>Role</TableHead>
-                        <TableHead>Account Status</TableHead>
-                        <TableHead>Security (2FA)</TableHead>
-                        <TableHead>Joined Date</TableHead>
-                        <TableHead>Last Active</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {members.map((member) => {
-                        const roleDef = ROLE_DEFINITIONS[member.role];
+                <div className="rounded-md border border-border overflow-hidden">
+                  {/* Desktop Table View */}
+                  <div className="hidden lg:block overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-muted/50">
+                          <TableHead>Staff Member</TableHead>
+                          <TableHead>Role</TableHead>
+                          <TableHead>Account Status</TableHead>
+                          <TableHead>Security (2FA)</TableHead>
+                          <TableHead>Joined Date</TableHead>
+                          <TableHead>Last Active</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {members.map((member) => {
+                          const roleDef = ROLE_DEFINITIONS[member.role];
 
-                        return (
-                          <TableRow key={member.id} className="hover:bg-muted/20">
-                            <TableCell>
-                              <div className="flex items-center gap-3">
-                                <Avatar className="h-9 w-9 bg-primary/10 text-primary font-semibold text-xs">
-                                  <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                  <div className="font-medium text-sm text-foreground flex items-center gap-1.5">
-                                    {member.name}
-                                    {member.isOwner && (
-                                      <Badge variant="outline" className="text-[10px] py-0 px-1.5 border-primary/40 text-primary">
-                                        Owner
-                                      </Badge>
-                                    )}
-                                  </div>
-                                  <div className="text-xs text-muted-foreground flex items-center gap-2">
-                                    <span>{member.email}</span>
-                                    {member.phone && <span>• {member.phone}</span>}
+                          return (
+                            <TableRow key={member.id} className="hover:bg-muted/20">
+                              <TableCell>
+                                <div className="flex items-center gap-3">
+                                  <Avatar className="h-9 w-9 bg-primary/10 text-primary font-semibold text-xs">
+                                    <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
+                                  </Avatar>
+                                  <div>
+                                    <div className="font-medium text-sm text-foreground flex items-center gap-1.5">
+                                      {member.name}
+                                      {member.isOwner && (
+                                        <Badge variant="outline" className="text-[10px] py-0 px-1.5 border-primary/40 text-primary">
+                                          Owner
+                                        </Badge>
+                                      )}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground flex items-center gap-2">
+                                      <span>{member.email}</span>
+                                      {member.phone && <span>• {member.phone}</span>}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </TableCell>
+                              </TableCell>
 
-                            <TableCell>
-                              <div>
-                                <Badge variant="secondary" className="font-normal text-xs">
-                                  {roleDef?.label || member.role}
-                                </Badge>
-                                {member.customPermissions && member.customPermissions.length > 0 && (
-                                  <div className="text-[10px] text-muted-foreground mt-0.5">
-                                    +{member.customPermissions.length} custom permissions
+                              <TableCell>
+                                <div>
+                                  <Badge variant="secondary" className="font-normal text-xs">
+                                    {roleDef?.label || member.role}
+                                  </Badge>
+                                  {member.customPermissions && member.customPermissions.length > 0 && (
+                                    <div className="text-[10px] text-muted-foreground mt-0.5">
+                                      +{member.customPermissions.length} custom permissions
+                                    </div>
+                                  )}
+                                </div>
+                              </TableCell>
+
+                              <TableCell>
+                                {member.status === "active" && (
+                                  <Badge variant="success" className="text-[11px]">
+                                    Active
+                                  </Badge>
+                                )}
+                                {member.status === "suspended" && (
+                                  <Badge variant="destructive" className="text-[11px]">
+                                    Suspended
+                                  </Badge>
+                                )}
+                                {member.status === "inactive" && (
+                                  <Badge variant="outline" className="text-[11px]">
+                                    Inactive
+                                  </Badge>
+                                )}
+                              </TableCell>
+
+                              <TableCell>
+                                {member.twoFactorEnabled ? (
+                                  <div className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                                    <ShieldCheck className="h-4 w-4" />
+                                    <span>Enabled</span>
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                    <ShieldAlert className="h-4 w-4 text-amber-500" />
+                                    <span>Not setup</span>
                                   </div>
                                 )}
+                              </TableCell>
+
+                              <TableCell className="text-xs text-muted-foreground">
+                                {formatDate(member.joinedAt)}
+                              </TableCell>
+
+                              <TableCell className="text-xs text-muted-foreground">
+                                {formatDate(member.lastActiveAt)}
+                              </TableCell>
+
+                              <TableCell className="text-right">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setEditingMember(member)}>
+                                      Edit Role & Permissions
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                      disabled={member.isOwner}
+                                      onClick={() => setMemberToDelete(member)}
+                                      className="text-destructive focus:text-destructive"
+                                    >
+                                      Remove from Team
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {/* Mobile Cards View */}
+                  <div className="block lg:hidden divide-y divide-border/60">
+                    {members.map((member) => {
+                      const roleDef = ROLE_DEFINITIONS[member.role];
+                      return (
+                        <div key={member.id} className="p-4 space-y-3 hover:bg-muted/10 transition-colors">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <Avatar className="h-10 w-10 bg-primary/10 text-primary font-semibold text-xs shrink-0">
+                                <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
+                              </Avatar>
+                              <div className="min-w-0">
+                                <div className="font-medium text-sm text-foreground flex items-center gap-1.5 flex-wrap">
+                                  <span className="truncate">{member.name}</span>
+                                  {member.isOwner && (
+                                    <Badge variant="outline" className="text-[10px] py-0 px-1.5 border-primary/40 text-primary">
+                                      Owner
+                                    </Badge>
+                                  )}
+                                </div>
+                                <p className="text-xs text-muted-foreground truncate">{member.email}</p>
+                                {member.phone && <p className="text-[11px] text-muted-foreground">{member.phone}</p>}
                               </div>
-                            </TableCell>
+                            </div>
 
-                            <TableCell>
-                              {member.status === "active" && (
-                                <Badge variant="success" className="text-[11px]">
-                                  Active
-                                </Badge>
-                              )}
-                              {member.status === "suspended" && (
-                                <Badge variant="destructive" className="text-[11px]">
-                                  Suspended
-                                </Badge>
-                              )}
-                              {member.status === "inactive" && (
-                                <Badge variant="outline" className="text-[11px]">
-                                  Inactive
-                                </Badge>
-                              )}
-                            </TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => setEditingMember(member)}>
+                                  Edit Role & Permissions
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  disabled={member.isOwner}
+                                  onClick={() => setMemberToDelete(member)}
+                                  className="text-destructive focus:text-destructive"
+                                >
+                                  Remove from Team
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
 
-                            <TableCell>
+                          <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                            <div>
+                              <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Role</span>
+                              <Badge variant="secondary" className="font-normal text-xs mt-0.5">
+                                {roleDef?.label || member.role}
+                              </Badge>
+                              {member.customPermissions && member.customPermissions.length > 0 && (
+                                <p className="text-[10px] text-muted-foreground mt-0.5">
+                                  +{member.customPermissions.length} custom
+                                </p>
+                              )}
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Status</span>
+                              <div className="mt-0.5">
+                                {member.status === "active" && (
+                                  <Badge variant="success" className="text-[11px]">
+                                    Active
+                                  </Badge>
+                                )}
+                                {member.status === "suspended" && (
+                                  <Badge variant="destructive" className="text-[11px]">
+                                    Suspended
+                                  </Badge>
+                                )}
+                                {member.status === "inactive" && (
+                                  <Badge variant="outline" className="text-[11px]">
+                                    Inactive
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">2FA Security</span>
                               {member.twoFactorEnabled ? (
-                                <div className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                                  <ShieldCheck className="h-4 w-4" />
+                                <div className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">
+                                  <ShieldCheck className="h-3.5 w-3.5" />
                                   <span>Enabled</span>
                                 </div>
                               ) : (
-                                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                  <ShieldAlert className="h-4 w-4 text-amber-500" />
+                                <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
+                                  <ShieldAlert className="h-3.5 w-3.5 text-amber-500" />
                                   <span>Not setup</span>
                                 </div>
                               )}
-                            </TableCell>
-
-                            <TableCell className="text-xs text-muted-foreground">
-                              {formatDate(member.joinedAt)}
-                            </TableCell>
-
-                            <TableCell className="text-xs text-muted-foreground">
-                              {formatDate(member.lastActiveAt)}
-                            </TableCell>
-
-                            <TableCell className="text-right">
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuItem onClick={() => setEditingMember(member)}>
-                                    Edit Role & Permissions
-                                  </DropdownMenuItem>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem
-                                    disabled={member.isOwner}
-                                    onClick={() => setMemberToDelete(member)}
-                                    className="text-destructive focus:text-destructive"
-                                  >
-                                    Remove from Team
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Last Active</span>
+                              <span className="text-muted-foreground">{formatDate(member.lastActiveAt)}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </TabsContent>
@@ -443,51 +549,142 @@ export function TeamMembersListView() {
                   </p>
                 </div>
               ) : (
-                <div className="rounded-md border border-border overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-muted/50">
-                        <TableHead>Invitee</TableHead>
-                        <TableHead>Invited Role</TableHead>
-                        <TableHead>Invited By</TableHead>
-                        <TableHead>Sent Date</TableHead>
-                        <TableHead>Expires On</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {invitations.map((inv) => {
-                        const roleDef = ROLE_DEFINITIONS[inv.role];
+                <div className="rounded-md border border-border overflow-hidden">
+                  {/* Desktop Table View */}
+                  <div className="hidden lg:block overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-muted/50">
+                          <TableHead>Invitee</TableHead>
+                          <TableHead>Invited Role</TableHead>
+                          <TableHead>Invited By</TableHead>
+                          <TableHead>Sent Date</TableHead>
+                          <TableHead>Expires On</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {invitations.map((inv) => {
+                          const roleDef = ROLE_DEFINITIONS[inv.role];
 
-                        return (
-                          <TableRow key={inv.id} className="hover:bg-muted/20">
-                            <TableCell>
-                              <div>
-                                <div className="font-medium text-sm text-foreground">{inv.name}</div>
-                                <div className="text-xs text-muted-foreground">{inv.email}</div>
-                              </div>
-                            </TableCell>
+                          return (
+                            <TableRow key={inv.id} className="hover:bg-muted/20">
+                              <TableCell>
+                                <div>
+                                  <div className="font-medium text-sm text-foreground">{inv.name}</div>
+                                  <div className="text-xs text-muted-foreground">{inv.email}</div>
+                                </div>
+                              </TableCell>
 
-                            <TableCell>
-                              <Badge variant="outline" className="font-normal text-xs">
-                                {roleDef?.label || inv.role}
-                              </Badge>
-                            </TableCell>
+                              <TableCell>
+                                <Badge variant="outline" className="font-normal text-xs">
+                                  {roleDef?.label || inv.role}
+                                </Badge>
+                              </TableCell>
 
-                            <TableCell className="text-xs text-muted-foreground">
-                              {inv.invitedBy}
-                            </TableCell>
+                              <TableCell className="text-xs text-muted-foreground">
+                                {inv.invitedBy}
+                              </TableCell>
 
-                            <TableCell className="text-xs text-muted-foreground">
-                              {formatDate(inv.invitedAt)}
-                            </TableCell>
+                              <TableCell className="text-xs text-muted-foreground">
+                                {formatDate(inv.invitedAt)}
+                              </TableCell>
 
-                            <TableCell className="text-xs text-muted-foreground">
-                              {formatDate(inv.expiresAt)}
-                            </TableCell>
+                              <TableCell className="text-xs text-muted-foreground">
+                                {formatDate(inv.expiresAt)}
+                              </TableCell>
 
-                            <TableCell>
+                              <TableCell>
+                                {inv.status === "pending" && (
+                                  <Badge variant="warning" className="text-[11px]">
+                                    Pending
+                                  </Badge>
+                                )}
+                                {inv.status === "accepted" && (
+                                  <Badge variant="success" className="text-[11px]">
+                                    Accepted
+                                  </Badge>
+                                )}
+                                {inv.status === "expired" && (
+                                  <Badge variant="destructive" className="text-[11px]">
+                                    Expired
+                                  </Badge>
+                                )}
+                                {inv.status === "cancelled" && (
+                                  <Badge variant="outline" className="text-[11px]">
+                                    Cancelled
+                                  </Badge>
+                                )}
+                              </TableCell>
+
+                              <TableCell className="text-right">
+                                <div className="flex items-center justify-end gap-1">
+                                  {inv.status === "pending" && (
+                                    <>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => resendInviteMutation.mutate(inv.id)}
+                                        disabled={resendInviteMutation.isPending}
+                                        className="h-8 px-2 text-xs gap-1"
+                                      >
+                                        <RotateCw className="h-3.5 w-3.5" />
+                                        Resend
+                                      </Button>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => acceptInviteMutation.mutate(inv.id)}
+                                        disabled={acceptInviteMutation.isPending}
+                                        className="h-8 px-2 text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-700"
+                                      >
+                                        Simulate Accept
+                                      </Button>
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => setInviteToCancel(inv)}
+                                        className="h-8 px-2 text-xs text-destructive hover:text-destructive"
+                                      >
+                                        Cancel
+                                      </Button>
+                                    </>
+                                  )}
+
+                                  {inv.status === "expired" && (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => resendInviteMutation.mutate(inv.id)}
+                                      disabled={resendInviteMutation.isPending}
+                                      className="h-8 px-2 text-xs gap-1"
+                                    >
+                                      <RotateCw className="h-3.5 w-3.5" />
+                                      Re-invite
+                                    </Button>
+                                  )}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {/* Mobile Cards View */}
+                  <div className="block lg:hidden divide-y divide-border/60">
+                    {invitations.map((inv) => {
+                      const roleDef = ROLE_DEFINITIONS[inv.role];
+                      return (
+                        <div key={inv.id} className="p-4 space-y-3 hover:bg-muted/10 transition-colors">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <p className="font-medium text-sm text-foreground">{inv.name}</p>
+                              <p className="text-xs text-muted-foreground">{inv.email}</p>
+                            </div>
+                            <div>
                               {inv.status === "pending" && (
                                 <Badge variant="warning" className="text-[11px]">
                                   Pending
@@ -508,61 +705,80 @@ export function TeamMembersListView() {
                                   Cancelled
                                 </Badge>
                               )}
-                            </TableCell>
+                            </div>
+                          </div>
 
-                            <TableCell className="text-right">
-                              <div className="flex items-center justify-end gap-1">
-                                {inv.status === "pending" && (
-                                  <>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => resendInviteMutation.mutate(inv.id)}
-                                      disabled={resendInviteMutation.isPending}
-                                      className="h-8 px-2 text-xs gap-1"
-                                    >
-                                      <RotateCw className="h-3.5 w-3.5" />
-                                      Resend
-                                    </Button>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => acceptInviteMutation.mutate(inv.id)}
-                                      disabled={acceptInviteMutation.isPending}
-                                      className="h-8 px-2 text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-700"
-                                    >
-                                      Simulate Accept
-                                    </Button>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => setInviteToCancel(inv)}
-                                      className="h-8 px-2 text-xs text-destructive hover:text-destructive"
-                                    >
-                                      Cancel
-                                    </Button>
-                                  </>
-                                )}
+                          <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                            <div>
+                              <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Invited Role</span>
+                              <Badge variant="outline" className="font-normal text-xs mt-0.5">
+                                {roleDef?.label || inv.role}
+                              </Badge>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Invited By</span>
+                              <span className="text-muted-foreground">{inv.invitedBy}</span>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Sent Date</span>
+                              <span className="text-muted-foreground">{formatDate(inv.invitedAt)}</span>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-muted-foreground uppercase tracking-wider block">Expires On</span>
+                              <span className="text-muted-foreground">{formatDate(inv.expiresAt)}</span>
+                            </div>
+                          </div>
 
-                                {inv.status === "expired" && (
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => resendInviteMutation.mutate(inv.id)}
-                                    disabled={resendInviteMutation.isPending}
-                                    className="h-8 px-2 text-xs gap-1"
-                                  >
-                                    <RotateCw className="h-3.5 w-3.5" />
-                                    Re-invite
-                                  </Button>
-                                )}
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
+                          <div className="flex items-center justify-end gap-1.5 pt-2 border-t border-border/40">
+                            {inv.status === "pending" && (
+                              <>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => resendInviteMutation.mutate(inv.id)}
+                                  disabled={resendInviteMutation.isPending}
+                                  className="h-8 px-2.5 text-xs gap-1 flex-1"
+                                >
+                                  <RotateCw className="h-3.5 w-3.5" />
+                                  Resend
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => acceptInviteMutation.mutate(inv.id)}
+                                  disabled={acceptInviteMutation.isPending}
+                                  className="h-8 px-2.5 text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 flex-1"
+                                >
+                                  Accept
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setInviteToCancel(inv)}
+                                  className="h-8 px-2.5 text-xs text-destructive hover:text-destructive"
+                                >
+                                  Cancel
+                                </Button>
+                              </>
+                            )}
+
+                            {inv.status === "expired" && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => resendInviteMutation.mutate(inv.id)}
+                                disabled={resendInviteMutation.isPending}
+                                className="h-8 px-3 text-xs gap-1.5 flex-1"
+                              >
+                                <RotateCw className="h-3.5 w-3.5" />
+                                Re-invite Member
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </TabsContent>

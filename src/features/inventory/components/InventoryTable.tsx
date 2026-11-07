@@ -86,7 +86,8 @@ export function InventoryTable({ items }: InventoryTableProps) {
 
       {/* Main Inventory Table */}
       <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <Table>
             <TableHeader className="bg-muted/40 text-xs">
               <TableRow>
@@ -239,6 +240,140 @@ export function InventoryTable({ items }: InventoryTableProps) {
               )}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block md:hidden">
+          {filteredItems.length === 0 ? (
+            <div className="p-6 text-center text-xs text-muted-foreground">
+              <p className="font-medium text-foreground">No inventory records match your criteria</p>
+              <p className="text-[11px] text-muted-foreground mt-1">
+                {search || statusFilter !== "all"
+                  ? "Try adjusting your search keyword or stock status filter."
+                  : "No tracked inventory items found in your catalog."}
+              </p>
+              {(search || statusFilter !== "all") && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSearch("");
+                    setStatusFilter("all");
+                  }}
+                  className="mt-3 text-xs h-8"
+                >
+                  Reset Filters
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="divide-y divide-border/60">
+              {filteredItems.map((item) => {
+                const fallbackImg =
+                  item.imageUrl ||
+                  "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=80&q=80";
+
+                const targetCapacity = Math.max(item.lowStockThreshold * 3, 20);
+                const percent = Math.min(100, Math.round((item.stock / targetCapacity) * 100));
+
+                return (
+                  <div key={item.id} className="p-4 space-y-3">
+                    {/* Top Row: Thumbnail, Title, SKU, and Adjust Button */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="relative h-10 w-10 shrink-0 rounded-md overflow-hidden border border-border bg-muted">
+                          <Image
+                            src={fallbackImg}
+                            alt={item.title}
+                            fill
+                            sizes="40px"
+                            className="object-cover"
+                            unoptimized
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="font-medium text-xs text-foreground block truncate">
+                            {item.title}
+                          </span>
+                          <span className="font-mono text-[10px] text-muted-foreground">
+                            {item.sku}
+                          </span>
+                        </div>
+                      </div>
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedItemForAdjust(item)}
+                        className="h-7 text-xs px-2.5 shrink-0"
+                      >
+                        Adjust
+                      </Button>
+                    </div>
+
+                    {/* Stock Health Meter Bar */}
+                    <div className="space-y-1.5 pt-1 border-t border-border/40">
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider">Stock</span>
+                          <span className="font-bold text-foreground">{item.stock} units</span>
+                        </div>
+                        <span className="text-[10px] text-muted-foreground font-mono">{percent}% capacity</span>
+                      </div>
+                      <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+                        <div
+                          className={`h-full transition-all duration-300 rounded-full ${
+                            item.stock === 0
+                              ? "bg-destructive w-full"
+                              : item.stock <= item.lowStockThreshold
+                              ? "bg-amber-500"
+                              : "bg-emerald-500"
+                          }`}
+                          style={{ width: `${Math.max(percent, item.stock > 0 ? 8 : 0)}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Meta Fields: Category, Alert Limit, Status */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border/40 text-xs">
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block">Category</span>
+                        <span className="font-medium text-foreground">{item.category}</span>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block text-center">Alert Limit</span>
+                        <span className="font-mono text-muted-foreground block text-center">≤ {item.lowStockThreshold}</span>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block text-right">Status</span>
+                        {item.status === "out_of_stock" ? (
+                          <Badge variant="destructive" className="text-[10px] gap-1 px-1.5 py-0 mt-0.5">
+                            <XCircle className="h-3 w-3" /> Out
+                          </Badge>
+                        ) : item.status === "low_stock" ? (
+                          <Badge
+                            variant="outline"
+                            className="text-[10px] gap-1 px-1.5 py-0 border-amber-500/50 bg-amber-500/10 text-amber-600 mt-0.5"
+                          >
+                            <AlertTriangle className="h-3 w-3" /> Low
+                          </Badge>
+                        ) : (
+                          <Badge
+                            variant="outline"
+                            className="text-[10px] gap-1 px-1.5 py-0 border-emerald-500/40 bg-emerald-500/10 text-emerald-600 mt-0.5"
+                          >
+                            <CheckCircle2 className="h-3 w-3" /> In Stock
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 

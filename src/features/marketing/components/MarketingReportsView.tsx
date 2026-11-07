@@ -220,218 +220,426 @@ export function MarketingReportsView() {
       {/* Report Data Tables */}
       <Card>
         {activeTab === "products" && (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="text-xs font-semibold">Product Title & SKU</TableHead>
-                  <TableHead className="text-xs font-semibold">Category</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Units Sold</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Gross Sales (৳)</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Discounts (৳)</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Net Sales (৳)</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Promo Orders</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loadingProducts ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
-                      Loading product performance records...
-                    </TableCell>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="text-xs font-semibold">Product Title & SKU</TableHead>
+                    <TableHead className="text-xs font-semibold">Category</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Units Sold</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Gross Sales (৳)</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Discounts (৳)</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Net Sales (৳)</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Promo Orders</TableHead>
                   </TableRow>
-                ) : productReports.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
-                      No matching product records found.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  productReports.map((item) => (
-                    <TableRow key={item.id} className="text-xs">
-                      <TableCell>
-                        <div className="font-semibold text-foreground">{item.title}</div>
-                        <div className="text-[10px] font-mono text-muted-foreground">{item.sku}</div>
+                </TableHeader>
+                <TableBody>
+                  {loadingProducts ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
+                        Loading product performance records...
                       </TableCell>
-                      <TableCell className="text-muted-foreground">{item.category}</TableCell>
-                      <TableCell className="text-right font-mono font-medium">{item.unitsSold}</TableCell>
-                      <TableCell className="text-right font-medium">
-                        ৳{item.grossRevenue.toLocaleString("en-BD")}
-                      </TableCell>
-                      <TableCell className="text-right text-amber-600 font-medium">
-                        ৳{item.discountAmount.toLocaleString("en-BD")}
-                      </TableCell>
-                      <TableCell className="text-right font-bold text-foreground">
-                        ৳{item.netRevenue.toLocaleString("en-BD")}
-                      </TableCell>
-                      <TableCell className="text-right font-mono">{item.campaignAttributedOrders}</TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                  ) : productReports.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
+                        No matching product records found.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    productReports.map((item) => (
+                      <TableRow key={item.id} className="text-xs">
+                        <TableCell>
+                          <div className="font-semibold text-foreground">{item.title}</div>
+                          <div className="text-[10px] font-mono text-muted-foreground">{item.sku}</div>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">{item.category}</TableCell>
+                        <TableCell className="text-right font-mono font-medium">{item.unitsSold}</TableCell>
+                        <TableCell className="text-right font-medium">
+                          ৳{item.grossRevenue.toLocaleString("en-BD")}
+                        </TableCell>
+                        <TableCell className="text-right text-amber-600 font-medium">
+                          ৳{item.discountAmount.toLocaleString("en-BD")}
+                        </TableCell>
+                        <TableCell className="text-right font-bold text-foreground">
+                          ৳{item.netRevenue.toLocaleString("en-BD")}
+                        </TableCell>
+                        <TableCell className="text-right font-mono">{item.campaignAttributedOrders}</TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card-Based Transformation View */}
+            <div className="block lg:hidden">
+              {loadingProducts ? (
+                <div className="p-8 text-center text-xs text-muted-foreground">
+                  Loading product performance records...
+                </div>
+              ) : productReports.length === 0 ? (
+                <div className="p-8 text-center text-xs text-muted-foreground">
+                  No matching product records found.
+                </div>
+              ) : (
+                <div className="divide-y divide-border/60">
+                  {productReports.map((item) => (
+                    <div key={item.id} className="p-4 space-y-2.5">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <span className="font-semibold text-xs text-foreground block truncate">{item.title}</span>
+                          <span className="text-[10px] text-muted-foreground font-mono">{item.sku} • {item.category}</span>
+                        </div>
+                        <Badge variant="outline" className="text-[10px] font-mono shrink-0">
+                          {item.unitsSold} sold
+                        </Badge>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2 text-xs pt-1 border-t border-border/40 bg-muted/20 p-2 rounded-md">
+                        <div>
+                          <span className="text-[10px] text-muted-foreground block uppercase">Gross</span>
+                          <span className="font-mono font-medium text-foreground">৳{item.grossRevenue.toLocaleString("en-BD")}</span>
+                        </div>
+                        <div className="text-center">
+                          <span className="text-[10px] text-muted-foreground block uppercase">Discount</span>
+                          <span className="font-mono font-medium text-amber-600">৳{item.discountAmount.toLocaleString("en-BD")}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-[10px] text-muted-foreground block uppercase">Net</span>
+                          <span className="font-mono font-bold text-foreground">৳{item.netRevenue.toLocaleString("en-BD")}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1 border-t border-border/40 text-xs">
+                        <span className="text-[11px] text-muted-foreground">Promo-Attributed Orders</span>
+                        <span className="font-mono font-semibold text-foreground">{item.campaignAttributedOrders} orders</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
         )}
 
         {activeTab === "campaigns" && (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="text-xs font-semibold">Campaign Name</TableHead>
-                  <TableHead className="text-xs font-semibold">Type</TableHead>
-                  <TableHead className="text-xs font-semibold">Validity</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Orders</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Revenue (৳)</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Savings Given (৳)</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">AOV (৳)</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loadingCampaigns ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
-                      Loading campaign performance...
-                    </TableCell>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="text-xs font-semibold">Campaign Name</TableHead>
+                    <TableHead className="text-xs font-semibold">Type</TableHead>
+                    <TableHead className="text-xs font-semibold">Validity</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Orders</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Revenue (৳)</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Savings Given (৳)</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">AOV (৳)</TableHead>
                   </TableRow>
-                ) : campaignReports.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
-                      No matching campaigns found.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  campaignReports.map((c) => (
-                    <TableRow key={c.id} className="text-xs">
-                      <TableCell className="font-semibold text-foreground">{c.name}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="text-[10px]">
-                          {c.type}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-[11px]">
-                        {c.startDate} to {c.endDate}
-                      </TableCell>
-                      <TableCell className="text-right font-mono font-medium">{c.orders}</TableCell>
-                      <TableCell className="text-right font-bold text-foreground">
-                        ৳{c.revenue.toLocaleString("en-BD")}
-                      </TableCell>
-                      <TableCell className="text-right text-amber-600 font-medium">
-                        ৳{c.discountGiven.toLocaleString("en-BD")}
-                      </TableCell>
-                      <TableCell className="text-right font-mono">
-                        ৳{c.averageOrderValue.toLocaleString("en-BD")}
+                </TableHeader>
+                <TableBody>
+                  {loadingCampaigns ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
+                        Loading campaign performance...
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                  ) : campaignReports.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
+                        No matching campaigns found.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    campaignReports.map((c) => (
+                      <TableRow key={c.id} className="text-xs">
+                        <TableCell className="font-semibold text-foreground">{c.name}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-[10px]">
+                            {c.type}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground text-[11px]">
+                          {c.startDate} to {c.endDate}
+                        </TableCell>
+                        <TableCell className="text-right font-mono font-medium">{c.orders}</TableCell>
+                        <TableCell className="text-right font-bold text-foreground">
+                          ৳{c.revenue.toLocaleString("en-BD")}
+                        </TableCell>
+                        <TableCell className="text-right text-amber-600 font-medium">
+                          ৳{c.discountGiven.toLocaleString("en-BD")}
+                        </TableCell>
+                        <TableCell className="text-right font-mono">
+                          ৳{c.averageOrderValue.toLocaleString("en-BD")}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card-Based Transformation View */}
+            <div className="block lg:hidden">
+              {loadingCampaigns ? (
+                <div className="p-8 text-center text-xs text-muted-foreground">
+                  Loading campaign performance...
+                </div>
+              ) : campaignReports.length === 0 ? (
+                <div className="p-8 text-center text-xs text-muted-foreground">
+                  No matching campaigns found.
+                </div>
+              ) : (
+                <div className="divide-y divide-border/60">
+                  {campaignReports.map((c) => (
+                    <div key={c.id} className="p-4 space-y-2.5">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <span className="font-semibold text-xs text-foreground block truncate">{c.name}</span>
+                          <span className="text-[10px] text-muted-foreground">{c.startDate} to {c.endDate}</span>
+                        </div>
+                        <Badge variant="outline" className="text-[10px] shrink-0">
+                          {c.type}
+                        </Badge>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2 text-xs pt-1 border-t border-border/40 bg-muted/20 p-2 rounded-md">
+                        <div>
+                          <span className="text-[10px] text-muted-foreground block uppercase">Orders</span>
+                          <span className="font-mono font-bold text-foreground">{c.orders}</span>
+                        </div>
+                        <div className="text-center">
+                          <span className="text-[10px] text-muted-foreground block uppercase">Revenue</span>
+                          <span className="font-mono font-bold text-foreground">৳{c.revenue.toLocaleString("en-BD")}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-[10px] text-muted-foreground block uppercase">Savings</span>
+                          <span className="font-mono font-bold text-amber-600">৳{c.discountGiven.toLocaleString("en-BD")}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1 border-t border-border/40 text-xs">
+                        <span className="text-[11px] text-muted-foreground">Average Order Value</span>
+                        <span className="font-mono font-semibold text-foreground">৳{c.averageOrderValue.toLocaleString("en-BD")}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
         )}
 
         {activeTab === "coupons" && (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="text-xs font-semibold">Coupon Code</TableHead>
-                  <TableHead className="text-xs font-semibold">Campaign Name</TableHead>
-                  <TableHead className="text-xs font-semibold">Discount</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Redemptions</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Total Savings (৳)</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">AOV (৳)</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Last Used</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loadingCoupons ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
-                      Loading coupon records...
-                    </TableCell>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="text-xs font-semibold">Coupon Code</TableHead>
+                    <TableHead className="text-xs font-semibold">Campaign Name</TableHead>
+                    <TableHead className="text-xs font-semibold">Discount</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Redemptions</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Total Savings (৳)</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">AOV (৳)</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Last Used</TableHead>
                   </TableRow>
-                ) : couponReports.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
-                      No coupon redemptions found.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  couponReports.map((item) => (
-                    <TableRow key={item.id} className="text-xs">
-                      <TableCell className="font-mono font-bold text-primary">{item.code}</TableCell>
-                      <TableCell className="font-medium text-foreground">{item.campaignName}</TableCell>
-                      <TableCell className="font-semibold">{item.discountValue}</TableCell>
-                      <TableCell className="text-right font-mono font-bold">{item.redemptions}</TableCell>
-                      <TableCell className="text-right text-amber-600 font-medium">
-                        ৳{item.totalDiscountGiven.toLocaleString("en-BD")}
-                      </TableCell>
-                      <TableCell className="text-right font-mono">
-                        ৳{item.averageOrderValue.toLocaleString("en-BD")}
-                      </TableCell>
-                      <TableCell className="text-right text-muted-foreground text-[11px]">
-                        {item.lastUsedDate}
+                </TableHeader>
+                <TableBody>
+                  {loadingCoupons ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
+                        Loading coupon records...
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                  ) : couponReports.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
+                        No coupon redemptions found.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    couponReports.map((item) => (
+                      <TableRow key={item.id} className="text-xs">
+                        <TableCell className="font-mono font-bold text-primary">{item.code}</TableCell>
+                        <TableCell className="font-medium text-foreground">{item.campaignName}</TableCell>
+                        <TableCell className="font-semibold">{item.discountValue}</TableCell>
+                        <TableCell className="text-right font-mono font-bold">{item.redemptions}</TableCell>
+                        <TableCell className="text-right text-amber-600 font-medium">
+                          ৳{item.totalDiscountGiven.toLocaleString("en-BD")}
+                        </TableCell>
+                        <TableCell className="text-right font-mono">
+                          ৳{item.averageOrderValue.toLocaleString("en-BD")}
+                        </TableCell>
+                        <TableCell className="text-right text-muted-foreground text-[11px]">
+                          {item.lastUsedDate}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card-Based Transformation View */}
+            <div className="block lg:hidden">
+              {loadingCoupons ? (
+                <div className="p-8 text-center text-xs text-muted-foreground">
+                  Loading coupon records...
+                </div>
+              ) : couponReports.length === 0 ? (
+                <div className="p-8 text-center text-xs text-muted-foreground">
+                  No coupon redemptions found.
+                </div>
+              ) : (
+                <div className="divide-y divide-border/60">
+                  {couponReports.map((item) => (
+                    <div key={item.id} className="p-4 space-y-2.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <code className="font-mono font-bold text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">
+                          {item.code}
+                        </code>
+                        <span className="font-semibold text-xs text-foreground">{item.discountValue}</span>
+                      </div>
+
+                      <div className="text-xs pt-1 border-t border-border/40">
+                        <span className="text-[10px] text-muted-foreground uppercase block font-medium">Campaign</span>
+                        <span className="font-medium text-foreground">{item.campaignName}</span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40 bg-muted/20 p-2 rounded-md">
+                        <div>
+                          <span className="text-[10px] text-muted-foreground block uppercase">Redemptions</span>
+                          <span className="font-mono font-bold text-foreground">{item.redemptions}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-[10px] text-muted-foreground block uppercase">Savings Given</span>
+                          <span className="font-mono font-bold text-amber-600">
+                            ৳{item.totalDiscountGiven.toLocaleString("en-BD")}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1 border-t border-border/40 text-[11px] text-muted-foreground font-mono">
+                        <span>AOV: ৳{item.averageOrderValue.toLocaleString("en-BD")}</span>
+                        <span>Used: {item.lastUsedDate}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
         )}
 
         {activeTab === "discounts" && (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="text-xs font-semibold">Rule Name</TableHead>
-                  <TableHead className="text-xs font-semibold">Scope</TableHead>
-                  <TableHead className="text-xs font-semibold">Rate</TableHead>
-                  <TableHead className="text-xs font-semibold">Status</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Orders</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Total Savings (৳)</TableHead>
-                  <TableHead className="text-xs font-semibold text-right">Revenue (৳)</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loadingDiscounts ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
-                      Loading discount performance...
-                    </TableCell>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="text-xs font-semibold">Rule Name</TableHead>
+                    <TableHead className="text-xs font-semibold">Scope</TableHead>
+                    <TableHead className="text-xs font-semibold">Rate</TableHead>
+                    <TableHead className="text-xs font-semibold">Status</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Orders</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Total Savings (৳)</TableHead>
+                    <TableHead className="text-xs font-semibold text-right">Revenue (৳)</TableHead>
                   </TableRow>
-                ) : discountReports.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
-                      No discount records found.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  discountReports.map((d) => (
-                    <TableRow key={d.id} className="text-xs">
-                      <TableCell className="font-semibold text-foreground">{d.name}</TableCell>
-                      <TableCell className="capitalize">{d.scope}</TableCell>
-                      <TableCell className="font-semibold text-foreground">{d.discountValue}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="text-[10px]">
-                          {d.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right font-mono font-medium">{d.ordersCount}</TableCell>
-                      <TableCell className="text-right text-amber-600 font-medium">
-                        ৳{d.totalSavings.toLocaleString("en-BD")}
-                      </TableCell>
-                      <TableCell className="text-right font-bold text-foreground">
-                        ৳{d.revenueGenerated.toLocaleString("en-BD")}
+                </TableHeader>
+                <TableBody>
+                  {loadingDiscounts ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
+                        Loading discount performance...
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                  ) : discountReports.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-32 text-center text-xs text-muted-foreground">
+                        No discount records found.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    discountReports.map((d) => (
+                      <TableRow key={d.id} className="text-xs">
+                        <TableCell className="font-semibold text-foreground">{d.name}</TableCell>
+                        <TableCell className="capitalize">{d.scope}</TableCell>
+                        <TableCell className="font-semibold text-foreground">{d.discountValue}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-[10px]">
+                            {d.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right font-mono font-medium">{d.ordersCount}</TableCell>
+                        <TableCell className="text-right text-amber-600 font-medium">
+                          ৳{d.totalSavings.toLocaleString("en-BD")}
+                        </TableCell>
+                        <TableCell className="text-right font-bold text-foreground">
+                          ৳{d.revenueGenerated.toLocaleString("en-BD")}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card-Based Transformation View */}
+            <div className="block lg:hidden">
+              {loadingDiscounts ? (
+                <div className="p-8 text-center text-xs text-muted-foreground">
+                  Loading discount performance...
+                </div>
+              ) : discountReports.length === 0 ? (
+                <div className="p-8 text-center text-xs text-muted-foreground">
+                  No discount records found.
+                </div>
+              ) : (
+                <div className="divide-y divide-border/60">
+                  {discountReports.map((d) => (
+                    <div key={d.id} className="p-4 space-y-2.5">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <span className="font-semibold text-xs text-foreground block truncate">{d.name}</span>
+                          <span className="text-[10px] text-muted-foreground capitalize">{d.scope}</span>
+                        </div>
+                        <Badge variant="outline" className="text-[10px] shrink-0">
+                          {d.status}
+                        </Badge>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs pt-1 border-t border-border/40">
+                        <span className="text-[11px] text-muted-foreground">Discount Rate</span>
+                        <span className="font-bold text-foreground">{d.discountValue}</span>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2 text-xs pt-1 border-t border-border/40 bg-muted/20 p-2 rounded-md">
+                        <div>
+                          <span className="text-[10px] text-muted-foreground block uppercase">Orders</span>
+                          <span className="font-mono font-bold text-foreground">{d.ordersCount}</span>
+                        </div>
+                        <div className="text-center">
+                          <span className="text-[10px] text-muted-foreground block uppercase">Savings</span>
+                          <span className="font-mono font-bold text-amber-600">৳{d.totalSavings.toLocaleString("en-BD")}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-[10px] text-muted-foreground block uppercase">Revenue</span>
+                          <span className="font-mono font-bold text-foreground">৳{d.revenueGenerated.toLocaleString("en-BD")}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
         )}
       </Card>
     </div>

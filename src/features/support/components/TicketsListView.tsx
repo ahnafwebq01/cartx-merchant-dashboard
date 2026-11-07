@@ -159,89 +159,154 @@ export function TicketsListView() {
               </p>
             </div>
           ) : (
-            <div className="rounded-md border border-border overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/50">
-                    <TableHead>Ticket ID</TableHead>
-                    <TableHead>Subject</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Priority</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Updated</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {tickets.map((t) => (
-                    <TableRow key={t.id} className="hover:bg-muted/20">
-                      <TableCell className="font-mono text-xs font-semibold text-foreground">
-                        {t.id}
-                      </TableCell>
-
-                      <TableCell className="text-xs">
-                        <Link
-                          href={`/dashboard/support/tickets/${t.id}`}
-                          className="font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1.5"
-                        >
-                          <span>{t.subject}</span>
-                          <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                            <MessageSquare className="h-3 w-3" /> {t.messages.length}
-                          </span>
-                        </Link>
-                      </TableCell>
-
-                      <TableCell>
-                        <Badge variant="outline" className="text-[10px] capitalize">
-                          {t.category.replace("_", " ")}
-                        </Badge>
-                      </TableCell>
-
-                      <TableCell>
-                        {t.priority === "urgent" && (
-                          <Badge variant="destructive" className="text-[10px]">Urgent</Badge>
-                        )}
-                        {t.priority === "high" && (
-                          <Badge variant="warning" className="text-[10px]">High</Badge>
-                        )}
-                        {t.priority === "medium" && (
-                          <Badge variant="secondary" className="text-[10px]">Medium</Badge>
-                        )}
-                        {t.priority === "low" && (
-                          <Badge variant="outline" className="text-[10px]">Low</Badge>
-                        )}
-                      </TableCell>
-
-                      <TableCell>
-                        {t.status === "open" && (
-                          <Badge variant="default" className="text-[10px]">Open</Badge>
-                        )}
-                        {t.status === "in_progress" && (
-                          <Badge variant="warning" className="text-[10px]">In Progress</Badge>
-                        )}
-                        {t.status === "resolved" && (
-                          <Badge variant="success" className="text-[10px]">Resolved</Badge>
-                        )}
-                        {t.status === "closed" && (
-                          <Badge variant="outline" className="text-[10px]">Closed</Badge>
-                        )}
-                      </TableCell>
-
-                      <TableCell className="text-xs text-muted-foreground">
-                        {formatDate(t.updatedAt)}
-                      </TableCell>
-
-                      <TableCell className="text-right">
-                        <Link href={`/dashboard/support/tickets/${t.id}`}>
-                          <Button variant="ghost" size="sm" className="h-7 text-xs px-2 gap-1">
-                            View <ArrowRight className="h-3 w-3" />
-                          </Button>
-                        </Link>
-                      </TableCell>
+            <div className="rounded-md border border-border overflow-hidden">
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-muted/50">
+                      <TableHead>Ticket ID</TableHead>
+                      <TableHead>Subject</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Priority</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Updated</TableHead>
+                      <TableHead className="text-right">Action</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {tickets.map((t) => (
+                      <TableRow key={t.id} className="hover:bg-muted/20">
+                        <TableCell className="font-mono text-xs font-semibold text-foreground">
+                          {t.id}
+                        </TableCell>
+
+                        <TableCell className="text-xs">
+                          <Link
+                            href={`/dashboard/support/tickets/${t.id}`}
+                            className="font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1.5"
+                          >
+                            <span>{t.subject}</span>
+                            <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                              <MessageSquare className="h-3 w-3" /> {t.messages.length}
+                            </span>
+                          </Link>
+                        </TableCell>
+
+                        <TableCell>
+                          <Badge variant="outline" className="text-[10px] capitalize">
+                            {t.category.replace("_", " ")}
+                          </Badge>
+                        </TableCell>
+
+                        <TableCell>
+                          {t.priority === "urgent" && (
+                            <Badge variant="destructive" className="text-[10px]">Urgent</Badge>
+                          )}
+                          {t.priority === "high" && (
+                            <Badge variant="warning" className="text-[10px]">High</Badge>
+                          )}
+                          {t.priority === "medium" && (
+                            <Badge variant="secondary" className="text-[10px]">Medium</Badge>
+                          )}
+                          {t.priority === "low" && (
+                            <Badge variant="outline" className="text-[10px]">Low</Badge>
+                          )}
+                        </TableCell>
+
+                        <TableCell>
+                          {t.status === "open" && (
+                            <Badge variant="default" className="text-[10px]">Open</Badge>
+                          )}
+                          {t.status === "in_progress" && (
+                            <Badge variant="warning" className="text-[10px]">In Progress</Badge>
+                          )}
+                          {t.status === "resolved" && (
+                            <Badge variant="success" className="text-[10px]">Resolved</Badge>
+                          )}
+                          {t.status === "closed" && (
+                            <Badge variant="outline" className="text-[10px]">Closed</Badge>
+                          )}
+                        </TableCell>
+
+                        <TableCell className="text-xs text-muted-foreground">
+                          {formatDate(t.updatedAt)}
+                        </TableCell>
+
+                        <TableCell className="text-right">
+                          <Link href={`/dashboard/support/tickets/${t.id}`}>
+                            <Button variant="ghost" size="sm" className="h-7 text-xs px-2 gap-1">
+                              View <ArrowRight className="h-3 w-3" />
+                            </Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Mobile Cards View */}
+              <div className="block md:hidden divide-y divide-border/60">
+                {tickets.map((t) => (
+                  <div key={t.id} className="p-4 space-y-2.5 hover:bg-muted/10 transition-colors">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-xs font-semibold text-foreground">
+                        {t.id}
+                      </span>
+                      {t.status === "open" && (
+                        <Badge variant="default" className="text-[10px]">Open</Badge>
+                      )}
+                      {t.status === "in_progress" && (
+                        <Badge variant="warning" className="text-[10px]">In Progress</Badge>
+                      )}
+                      {t.status === "resolved" && (
+                        <Badge variant="success" className="text-[10px]">Resolved</Badge>
+                      )}
+                      {t.status === "closed" && (
+                        <Badge variant="outline" className="text-[10px]">Closed</Badge>
+                      )}
+                    </div>
+
+                    <Link
+                      href={`/dashboard/support/tickets/${t.id}`}
+                      className="block font-medium text-xs text-foreground hover:text-primary transition-colors"
+                    >
+                      {t.subject}
+                    </Link>
+
+                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                      <Badge variant="outline" className="text-[10px] capitalize">
+                        {t.category.replace("_", " ")}
+                      </Badge>
+                      {t.priority === "urgent" && (
+                        <Badge variant="destructive" className="text-[10px]">Urgent</Badge>
+                      )}
+                      {t.priority === "high" && (
+                        <Badge variant="warning" className="text-[10px]">High</Badge>
+                      )}
+                      {t.priority === "medium" && (
+                        <Badge variant="secondary" className="text-[10px]">Medium</Badge>
+                      )}
+                      {t.priority === "low" && (
+                        <Badge variant="outline" className="text-[10px]">Low</Badge>
+                      )}
+                      <span className="text-[10px] text-muted-foreground flex items-center gap-0.5 ml-auto">
+                        <MessageSquare className="h-3 w-3" /> {t.messages.length} messages
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-1.5 border-t border-border/40">
+                      <span className="text-[11px]">Updated {formatDate(t.updatedAt)}</span>
+                      <Button asChild variant="ghost" size="sm" className="h-7 text-xs px-2 gap-1 text-primary hover:text-primary">
+                        <Link href={`/dashboard/support/tickets/${t.id}`}>
+                          View Thread <ArrowRight className="h-3 w-3" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </CardContent>

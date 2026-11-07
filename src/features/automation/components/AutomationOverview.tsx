@@ -222,26 +222,69 @@ export function AutomationOverview() {
             <Link href="/dashboard/automation/history">View All</Link>
           </Button>
         </CardHeader>
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/50">
-              <TableHead className="text-xs font-semibold">Workflow</TableHead>
-              <TableHead className="text-xs font-semibold">Trigger Event</TableHead>
-              <TableHead className="text-xs font-semibold">Status</TableHead>
-              <TableHead className="text-xs font-semibold">Executed Actions</TableHead>
-              <TableHead className="text-xs font-semibold text-right">Time</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {recentExecutions.map((exec) => (
-              <TableRow key={exec.id} className="hover:bg-muted/30">
-                <TableCell className="text-xs font-semibold text-foreground">
-                  {exec.workflowName}
-                </TableCell>
-                <TableCell className="text-xs font-mono text-muted-foreground">
-                  {exec.triggerEvent}
-                </TableCell>
-                <TableCell className="text-xs">
+
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead className="text-xs font-semibold">Workflow</TableHead>
+                <TableHead className="text-xs font-semibold">Trigger Event</TableHead>
+                <TableHead className="text-xs font-semibold">Status</TableHead>
+                <TableHead className="text-xs font-semibold">Executed Actions</TableHead>
+                <TableHead className="text-xs font-semibold text-right">Time</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {recentExecutions.map((exec) => (
+                <TableRow key={exec.id} className="hover:bg-muted/30">
+                  <TableCell className="text-xs font-semibold text-foreground">
+                    {exec.workflowName}
+                  </TableCell>
+                  <TableCell className="text-xs font-mono text-muted-foreground">
+                    {exec.triggerEvent}
+                  </TableCell>
+                  <TableCell className="text-xs">
+                    <Badge
+                      variant="outline"
+                      className={`text-[10px] font-mono capitalize ${
+                        exec.status === "success"
+                          ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200"
+                          : exec.status === "skipped"
+                          ? "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200"
+                          : "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border-rose-200"
+                      }`}
+                    >
+                      {exec.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-xs text-muted-foreground truncate max-w-xs">
+                    {exec.executedActions.length > 0 ? exec.executedActions.join(", ") : exec.failureReason || "None"}
+                  </TableCell>
+                  <TableCell className="text-xs text-right text-muted-foreground">
+                    {new Date(exec.executedAt).toLocaleTimeString("en-BD", { hour: "2-digit", minute: "2-digit" })}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block md:hidden divide-y divide-border/60">
+          {recentExecutions.map((exec) => (
+            <div key={exec.id} className="p-4 space-y-2.5">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <span className="font-semibold text-xs text-foreground block truncate">
+                    {exec.workflowName}
+                  </span>
+                  <span className="text-[10px] font-mono text-muted-foreground block mt-0.5">
+                    {exec.triggerEvent}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5 shrink-0">
                   <Badge
                     variant="outline"
                     className={`text-[10px] font-mono capitalize ${
@@ -254,17 +297,25 @@ export function AutomationOverview() {
                   >
                     {exec.status}
                   </Badge>
-                </TableCell>
-                <TableCell className="text-xs text-muted-foreground truncate max-w-xs">
+                </div>
+              </div>
+
+              <div className="text-xs pt-1 border-t border-border/40">
+                <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Executed Actions</span>
+                <p className="text-muted-foreground text-xs leading-snug mt-0.5">
                   {exec.executedActions.length > 0 ? exec.executedActions.join(", ") : exec.failureReason || "None"}
-                </TableCell>
-                <TableCell className="text-xs text-right text-muted-foreground">
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between pt-1 border-t border-border/40 text-[11px] text-muted-foreground">
+                <span>Execution Time</span>
+                <span className="font-mono">
                   {new Date(exec.executedAt).toLocaleTimeString("en-BD", { hour: "2-digit", minute: "2-digit" })}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </Card>
     </div>
   );

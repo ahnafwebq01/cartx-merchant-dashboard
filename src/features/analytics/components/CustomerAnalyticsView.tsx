@@ -12,6 +12,7 @@ import {
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
   Table,
@@ -149,32 +150,65 @@ export function CustomerAnalyticsView() {
               Highest contributing shoppers and their regional locations
             </CardDescription>
           </CardHeader>
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold">Customer</TableHead>
-                <TableHead className="text-xs font-semibold">District</TableHead>
-                <TableHead className="text-xs font-semibold text-center">Orders</TableHead>
-                <TableHead className="text-xs font-semibold text-right">Lifetime Spend</TableHead>
-                <TableHead className="text-xs font-semibold text-right">Average Order</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {customers.topCustomers.map((c) => (
-                <TableRow key={c.id} className="hover:bg-muted/30">
-                  <TableCell className="text-xs font-semibold">{c.name}</TableCell>
-                  <TableCell className="text-xs text-muted-foreground">{c.city}</TableCell>
-                  <TableCell className="text-xs text-center font-mono">{c.orders}</TableCell>
-                  <TableCell className="text-xs font-bold text-right text-primary">
-                    ৳{c.spend.toLocaleString("en-BD")}
-                  </TableCell>
-                  <TableCell className="text-xs text-right font-mono text-muted-foreground">
-                    ৳{c.aov.toLocaleString("en-BD")}
-                  </TableCell>
+
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/50">
+                  <TableHead className="text-xs font-semibold">Customer</TableHead>
+                  <TableHead className="text-xs font-semibold">District</TableHead>
+                  <TableHead className="text-xs font-semibold text-center">Orders</TableHead>
+                  <TableHead className="text-xs font-semibold text-right">Lifetime Spend</TableHead>
+                  <TableHead className="text-xs font-semibold text-right">Average Order</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {customers.topCustomers.map((c) => (
+                  <TableRow key={c.id} className="hover:bg-muted/30">
+                    <TableCell className="text-xs font-semibold">{c.name}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{c.city}</TableCell>
+                    <TableCell className="text-xs text-center font-mono">{c.orders}</TableCell>
+                    <TableCell className="text-xs font-bold text-right text-primary">
+                      ৳{c.spend.toLocaleString("en-BD")}
+                    </TableCell>
+                    <TableCell className="text-xs text-right font-mono text-muted-foreground">
+                      ৳{c.aov.toLocaleString("en-BD")}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Mobile Card-Based Transformation View */}
+          <div className="block md:hidden divide-y divide-border/60">
+            {customers.topCustomers.map((c) => (
+              <div key={c.id} className="p-4 space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-semibold text-xs text-foreground">{c.name}</span>
+                  <Badge variant="outline" className="text-[10px] text-muted-foreground">
+                    {c.city}
+                  </Badge>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-xs pt-1 border-t border-border/40 bg-muted/20 p-2 rounded-md">
+                  <div>
+                    <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">Orders</span>
+                    <span className="font-mono font-bold text-foreground">{c.orders}</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">Spend</span>
+                    <span className="font-mono font-bold text-primary">৳{c.spend.toLocaleString("en-BD")}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">AOV</span>
+                    <span className="font-mono font-semibold text-muted-foreground">৳{c.aov.toLocaleString("en-BD")}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </Card>
       </div>
     </div>

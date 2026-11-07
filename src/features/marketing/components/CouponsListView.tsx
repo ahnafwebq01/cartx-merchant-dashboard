@@ -152,7 +152,7 @@ export function CouponsListView() {
 
       {/* Coupons Data Table */}
       <Card>
-        <div className="overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/30">
@@ -402,6 +402,173 @@ export function CouponsListView() {
               )}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block lg:hidden">
+          {isLoading ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              Loading coupons...
+            </div>
+          ) : coupons.length === 0 ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              No discount coupons found matching the selected filters.
+            </div>
+          ) : (
+            <div className="divide-y divide-border/60">
+              {coupons.map((coupon) => {
+                const now = new Date();
+                const isExpired = new Date(coupon.endDate) < now;
+                const effectiveStatus = isExpired ? "expired" : coupon.status;
+
+                return (
+                  <div key={coupon.id} className="p-4 space-y-3">
+                    {/* Top: Code, Copy, Status, Actions */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <code className="font-mono font-bold text-xs bg-muted px-2 py-0.5 rounded border border-border">
+                          {coupon.code}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+                          onClick={() => handleCopyCode(coupon.code)}
+                          title="Copy Code"
+                        >
+                          <Copy className="h-3 w-3" />
+                        </Button>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <Badge
+                          variant={
+                            effectiveStatus === "active"
+                              ? "success"
+                              : effectiveStatus === "expired"
+                                ? "outline"
+                                : "secondary"
+                          }
+                          className="capitalize text-[10px]"
+                        >
+                          {effectiveStatus}
+                        </Badge>
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          asChild
+                          className="h-7 w-7 p-0"
+                        >
+                          <Link href={`/dashboard/marketing/coupons/${coupon.id}/edit`}>
+                            <Edit2 className="h-3.5 w-3.5" />
+                          </Link>
+                        </Button>
+
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-7 w-7 p-0"
+                            >
+                              <Power className="h-3.5 w-3.5" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            {coupon.status !== "active" && (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  toggleMutation.mutate({
+                                    id: coupon.id,
+                                    status: "active",
+                                  })
+                                }
+                              >
+                                Activate Coupon
+                              </DropdownMenuItem>
+                            )}
+                            {coupon.status === "active" && (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  toggleMutation.mutate({
+                                    id: coupon.id,
+                                    status: "inactive",
+                                  })
+                                }
+                              >
+                                Deactivate Coupon
+                              </DropdownMenuItem>
+                            )}
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              className="text-destructive focus:text-destructive"
+                              onClick={() => setCouponToDelete(coupon)}
+                            >
+                              <Trash2 className="h-3.5 w-3.5 mr-2" />
+                              Delete Coupon
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </div>
+
+                    {/* Campaign & Discount */}
+                    <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                      <div>
+                        <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Campaign</span>
+                        <span className="font-medium text-foreground block truncate">{coupon.campaignName}</span>
+                        <span className="text-[10px] text-muted-foreground capitalize">
+                          {coupon.customerEligibility.replace("_", " ")}
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Discount</span>
+                        <span className="font-bold text-sm text-foreground">
+                          {coupon.discountType === "percentage"
+                            ? `${coupon.discountValue}% OFF`
+                            : `৳${coupon.discountValue.toLocaleString("en-BD")} OFF`}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Spend rules & Usage */}
+                    <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                      <div>
+                        <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Min Spend / Cap</span>
+                        <span className="text-foreground">
+                          {coupon.minOrderAmount > 0 ? `Min: ৳${coupon.minOrderAmount.toLocaleString("en-BD")}` : "No min"}
+                        </span>
+                        {coupon.maxDiscountCap && (
+                          <span className="text-[10px] text-muted-foreground block">
+                            Cap: ৳{coupon.maxDiscountCap.toLocaleString("en-BD")}
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Usage</span>
+                        <span className="font-medium text-foreground">
+                          {coupon.usedCount}{coupon.usageLimit ? ` / ${coupon.usageLimit}` : " / ∞"}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground block">
+                          Saved: ৳{(coupon.totalDiscountGiven || 0).toLocaleString("en-BD")}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Validity Period Footer */}
+                    <div className="flex items-center justify-between pt-1 border-t border-border/40 text-[11px] text-muted-foreground">
+                      <span>Validity</span>
+                      <span>
+                        {new Date(coupon.startDate).toLocaleDateString("en-BD", { month: "short", day: "numeric" })} -{" "}
+                        {new Date(coupon.endDate).toLocaleDateString("en-BD", { month: "short", day: "numeric", year: "numeric" })}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </Card>
 

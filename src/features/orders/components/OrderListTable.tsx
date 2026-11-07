@@ -154,7 +154,8 @@ export function OrderListTable({
 
       {/* Main Orders Table */}
       <div className="rounded-lg border border-border bg-card overflow-hidden shadow-xs">
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
           <Table>
             <TableHeader className="bg-muted/40 text-xs">
               <TableRow>
@@ -419,6 +420,238 @@ export function OrderListTable({
               )}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Mobile Card-Based Transformation View */}
+        <div className="block lg:hidden">
+          {/* Mobile Select All & Header */}
+          <div className="flex items-center justify-between p-3 bg-muted/40 border-b border-border text-xs">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={
+                  isAllSelected
+                    ? true
+                    : isSomeSelected
+                      ? "indeterminate"
+                      : false
+                }
+                onCheckedChange={(checked) => onSelectAll(Boolean(checked))}
+                aria-label="Select all orders on mobile"
+              />
+              <span className="font-medium text-foreground">Select All</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() =>
+                  onSortChange(
+                    currentSort === "date_desc" ? "date_asc" : "date_desc",
+                  )
+                }
+                className="flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground font-medium"
+              >
+                Date <ArrowUpDown className="h-3 w-3" />
+              </button>
+              <span className="text-border">|</span>
+              <button
+                onClick={() =>
+                  onSortChange(
+                    currentSort === "total_desc" ? "total_asc" : "total_desc",
+                  )
+                }
+                className="flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground font-medium"
+              >
+                Total <ArrowUpDown className="h-3 w-3" />
+              </button>
+            </div>
+          </div>
+
+          {isLoading ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              Loading orders...
+            </div>
+          ) : orders.length === 0 ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              No matching orders found.
+            </div>
+          ) : (
+            <div className="divide-y divide-border/60">
+              {orders.map((order) => {
+                const isSelected = selectedIds.includes(order.id);
+                const totalItemsCount = order.items.reduce(
+                  (acc, i) => acc + i.quantity,
+                  0,
+                );
+
+                return (
+                  <div
+                    key={order.id}
+                    className={`p-4 space-y-3 transition-colors ${
+                      isSelected ? "bg-primary/5 dark:bg-primary/10" : ""
+                    }`}
+                  >
+                    {/* Top Row: Checkbox, Order Number, Date & Dropdown Menu */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-start gap-2.5 min-w-0">
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={(checked) =>
+                            onSelectOne(order.id, Boolean(checked))
+                          }
+                          aria-label={`Select order ${order.orderNumber}`}
+                          className="mt-0.5"
+                        />
+                        <div className="min-w-0">
+                          <Link
+                            href={`/dashboard/orders/${order.id}`}
+                            className="font-mono font-bold text-xs text-primary hover:underline block truncate"
+                          >
+                            {order.orderNumber}
+                          </Link>
+                          <span className="text-[11px] text-muted-foreground block">
+                            {new Date(order.createdAt).toLocaleDateString("en-BD", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}{" "}
+                            •{" "}
+                            {new Date(order.createdAt).toLocaleTimeString("en-BD", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <OrderStatusBadge status={order.orderStatus} />
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent
+                            align="end"
+                            className="text-xs w-44"
+                          >
+                            <DropdownMenuItem asChild>
+                              <Link
+                                href={`/dashboard/orders/${order.id}`}
+                                className="gap-2 cursor-pointer"
+                              >
+                                <Eye className="h-3.5 w-3.5" />
+                                View Details
+                              </Link>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem
+                              onClick={() => onPrintInvoice(order)}
+                              className="gap-2 cursor-pointer"
+                            >
+                              <Printer className="h-3.5 w-3.5" />
+                              Print Invoice
+                            </DropdownMenuItem>
+
+                            {order.orderStatus === "pending" && (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  onQuickStatusChange(order.id, "confirmed")
+                                }
+                                className="gap-2 cursor-pointer text-blue-600"
+                              >
+                                <CheckCircle2 className="h-3.5 w-3.5" />
+                                Confirm Order
+                              </DropdownMenuItem>
+                            )}
+
+                            {order.orderStatus === "confirmed" && (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  onQuickStatusChange(order.id, "processing")
+                                }
+                                className="gap-2 cursor-pointer text-indigo-600"
+                              >
+                                <Package className="h-3.5 w-3.5" />
+                                Start Processing
+                              </DropdownMenuItem>
+                            )}
+
+                            {order.orderStatus === "processing" && (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  onQuickStatusChange(order.id, "ready_to_ship")
+                                }
+                                className="gap-2 cursor-pointer text-purple-600"
+                              >
+                                <Package className="h-3.5 w-3.5" />
+                                Ready to Ship
+                              </DropdownMenuItem>
+                            )}
+
+                            {(order.orderStatus === "pending" ||
+                              order.orderStatus === "confirmed" ||
+                              order.orderStatus === "processing" ||
+                              order.orderStatus === "ready_to_ship") && (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={() => onCancelOrder(order)}
+                                  className="gap-2 cursor-pointer text-destructive focus:text-destructive"
+                                >
+                                  <XCircle className="h-3.5 w-3.5" />
+                                  Cancel Order
+                                </DropdownMenuItem>
+                              </>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </div>
+
+                    {/* Customer & Items Fields */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1 border-t border-border/40">
+                      <div>
+                        <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Customer</span>
+                        <span className="font-medium text-foreground">{order.customerName}</span>
+                        <span className="text-[10px] text-muted-foreground block truncate">
+                          {order.shippingAddress.city} • {order.customerPhone}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider block">Items</span>
+                        <span className="font-medium text-foreground">
+                          {totalItemsCount} item{totalItemsCount > 1 ? "s" : ""}
+                        </span>
+                        <p className="text-muted-foreground text-[10px] truncate">
+                          {order.items.map((i) => i.title).join(", ")}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Payment & Grand Total Row */}
+                    <div className="flex items-center justify-between pt-2 border-t border-border/40 text-xs">
+                      <div className="flex items-center gap-1.5">
+                        <PaymentStatusBadge
+                          status={order.paymentStatus}
+                          method={order.paymentMethod}
+                        />
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] uppercase text-muted-foreground tracking-wider block">Grand Total</span>
+                        <span className="font-mono font-bold text-sm text-foreground">
+                          ৳{order.grandTotal.toLocaleString("en-BD")}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Pagination Footer */}
